@@ -25,6 +25,8 @@ Local setup required one extra environment variable; documented it in `docs/ENV_
 
 - **Decisions touched / proposed:** none.
 - **Product docs touched:** `docs/PRODUCT.md` setup constraint clarified.
+- **Coordination touched:** update `docs/COORDINATION.md` if another active session, branch, or worktree was waiting on
+  this setup.
 - **Plans created or queued:** none.
 
 ## Follow-ups

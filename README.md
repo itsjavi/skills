@@ -6,8 +6,9 @@ folder format, with a strong focus on spec-driven development.
 ## Available skills
 
 - `setup-planning-workflow` - bootstraps a docs-first development workflow for new or under-documented projects. It
-  creates or adapts product docs, milestones, decision records, implementation plans, checkpoints, research/setup docs,
-  environment and security notes, templates, and coding-agent instructions for keeping implementation and docs aligned.
+  creates or adapts product docs, milestones, coordination docs, decision records, implementation plans, checkpoints,
+  research/setup docs, environment and security notes, templates, and coding-agent instructions for keeping
+  implementation and docs aligned.
 - `create-design-guidelines` - creates or updates a project design guide, usually `DESIGN.md`, for web or mobile UI
   work. It inspects the codebase when available, then writes an opinionated design-system reference covering visual
   direction, colors, typography, components, accessibility, and implementation notes for future humans and agents.
