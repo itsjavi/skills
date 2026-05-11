@@ -1,8 +1,13 @@
 # Design System Specification: The Architectural Flow
 
-> **Theme:** The Architectural Flow **Product:** Formbricks **Framework:** React + Next.js **Styling:** Tailwind CSS
-> **UI library:** shadcn/ui (Base UI primitives) **Primary color:** `#006a61` (deep teal) **Platform:** Web
-> (desktop-first, responsive)
+- **Theme:** The Architectural Flow
+- **Product:** Formbricks
+- **Framework:** React + Next.js
+- **Styling:** Tailwind CSS
+- **UI library:** shadcn/ui (Base UI primitives)
+- **Primary color:** `#006a61` (deep teal)
+- **Supported color schemes:** light, dark
+- **Platform:** Web (desktop-first, responsive, mobile-friendly)
 
 ## 1. Overview & Creative North Star
 

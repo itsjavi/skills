@@ -152,13 +152,19 @@ If you're unsure whether to include an optional section, ask the user briefly be
 
 ### The metadata block
 
-Place this right under the title, before the Overview. Use a blockquote so it visually separates from the body. **Omit
-any line you don't have a confident value for** — do not write "TBD" everywhere, do not invent.
+Place this right under the title, before the Overview, as a short bullet list (same shape as `assets/example.md` and
+`assets/template.md`). **Omit any line you don't have a confident value for** — do not write "TBD" everywhere, do not
+invent.
 
 ```markdown
-> **Theme:** The Architectural Flow **Product:** Formbricks **Framework:** React + Next.js **Styling:** Tailwind CSS
-> **UI library:** shadcn/ui (Base UI primitives) **Primary color:** `#006a61` (deep teal) **Platform:** Web
-> (desktop-first, responsive)
+- **Theme:** The Architectural Flow
+- **Product:** Formbricks
+- **Framework:** React + Next.js
+- **Styling:** Tailwind CSS
+- **UI library:** shadcn/ui (Base UI primitives)
+- **Primary color:** `#006a61` (deep teal)
+- **Supported color schemes:** light, dark
+- **Platform:** Web (desktop-first, responsive, mobile-friendly)
 ```
 
 If, say, you don't know the UI library and the user didn't mention one, drop that line entirely.

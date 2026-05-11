@@ -20,6 +20,7 @@ The workflow creates a lightweight project memory system:
 - `plans/` describes how a specific chunk of work should be implemented.
 - `checkpoints/` captures completed phase handoffs.
 - `research/` holds useful exploration that may become stale.
+- `setup/` holds local development, production hosting/deployment, self-hosting, and operational setup guides.
 - `ENV_VARS.md` makes configuration visible: what the project needs, where values come from, and which values are
   sensitive.
 - `SECURITY.md` explains how the whole application is meant to stay secure, and how those claims are verified.

@@ -50,6 +50,8 @@ Required generated or adapted files:
 - `<planning-root>/GUIDE.md`
 - `<planning-root>/ENV_VARS.md`
 - `<planning-root>/SECURITY.md`
+- `<planning-root>/setup/local-development.md`
+- `<planning-root>/setup/production-hosting-and-deployment.md`
 - `<planning-root>/templates/DECISION.md`
 - `<planning-root>/templates/PLAN.md`
 - `<planning-root>/templates/PLAN_CHECKPOINT.md`
@@ -90,6 +92,8 @@ workflow instructions so future agents know where to look.
   plans/
   checkpoints/
   setup/
+    local-development.md
+    production-hosting-and-deployment.md
 ```
 
 ## Document Roles
@@ -109,7 +113,7 @@ workflow instructions so future agents know where to look.
 - `checkpoints/`: implementation checkpoints for plan phases. Capture what changed, checks run, surprises, and
   follow-ups.
 - `research/`: brainstorms, AI chats, spike notes, comparisons, rough thinking. Can become stale.
-- `setup/`: local dev, self-hosting, deployment, and operational setup guides.
+- `setup/`: local development, production hosting, deployment, self-hosting, and operational setup guides.
 - `ENV_VARS.md`: env var catalog with purpose, default, required/optional, scope, and security notes.
 - `SECURITY.md`: security model, threat assumptions, secret handling, reporting process, and operational hardening.
 - `DESIGN.md`: master design guidelines. If present, follow it for UI work; if missing and UI work is requested, suggest
@@ -122,6 +126,9 @@ workflow instructions so future agents know where to look.
    - package/framework hints
    - README
    - existing setup/security/env files
+   - scripts for dev, test, build, migrations, code generation, and deployment
+   - hosting/deployment manifests such as Dockerfiles, Compose files, Kubernetes manifests, Terraform, serverless, PaaS
+     config, process managers, CI/CD workflows, or release scripts
 2. Choose the planning root:
    - Use the user's requested directory when provided.
    - Otherwise prefer the existing planning-docs directory if one clearly exists.
@@ -134,12 +141,19 @@ workflow instructions so future agents know where to look.
 6. Adapt `blueprint/GUIDE.md` to `<planning-root>/GUIDE.md`. Do not create per-directory README files; `GUIDE.md`
    supersedes them.
 7. Fill any required file without a one-to-one example with concise, reusable structure.
-8. Seed `PRODUCT.md`, `MILESTONES.md`, `COORDINATION.md`, `ENV_VARS.md`, and `SECURITY.md` with what can be inferred;
-   mark unknowns as `TBD`.
-9. Add or update an agent guide (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, or equivalent) with the workflow in **Agent
-   Guide Requirements** below.
-10. Run formatter/checks appropriate for markdown if available.
-11. Confirm in the final response that `COORDINATION.md` was created or updated and that the agent guide references it.
+8. Seed `PRODUCT.md`, `MILESTONES.md`, `COORDINATION.md`, `ENV_VARS.md`, `SECURITY.md`, and the setup guides with what
+   can be inferred; mark unknowns as `TBD`.
+9. Scaffold setup guides by inference:
+   - `setup/local-development.md`: how a contributor gets the project running from a checkout.
+   - `setup/production-hosting-and-deployment.md`: how an operator hosts and deploys a production-like instance.
+   - Keep hosting guidance generic. Mention Docker, Compose, Kubernetes, serverless, PaaS, SSH servers, package
+     artifacts, or static hosting only when the repo actually indicates that path.
+   - If production deployment is not yet defined, create the guide with inferred prerequisites, open decisions, and safe
+     TBD placeholders instead of inventing an architecture.
+10. Add or update an agent guide (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, or equivalent) with the workflow in **Agent
+    Guide Requirements** below.
+11. Run formatter/checks appropriate for markdown if available.
+12. Confirm in the final response that `COORDINATION.md` was created or updated and that the agent guide references it.
 
 ## Agent Guide Requirements
 
@@ -173,6 +187,7 @@ Start each session by reading:
 5. `.specs/COORDINATION.md` for active parallel work, blockers, ownership, and handoffs.
 6. The active plan and latest relevant checkpoints.
 7. `.specs/DESIGN.md` for UI work, if present.
+8. The relevant `.specs/setup/` guide for local setup, deployment, hosting, or operations work.
 
 Operating rules:
 
@@ -244,6 +259,11 @@ Operating rules:
 - verification strategy: tests, checks, checkpoints, or audits that prove the security claims
 - links to relevant PRD sections, decision records, plans, checkpoints, setup docs, and env var docs
 
+`<planning-root>/setup/local-development.md` and `<planning-root>/setup/production-hosting-and-deployment.md` should be
+adapted from the matching blueprint files. Use `blueprint/GUIDE.md` for the detailed setup guide conventions, required
+sections, and guidance on adding more setup guides. Keep all setup docs inferred from repo evidence; mark unknowns as
+`TBD` instead of inventing a hosting or deployment architecture.
+
 `<planning-root>/GUIDE.md` should include:
 
 - planning root and mental model
@@ -277,7 +297,8 @@ Operating rules:
 - required checkpoint content
 - how checkpoints link back to plans
 - research guidance: what belongs in research, staleness warning, and promotion rules for durable conclusions
-- setup guidance: setup guide index, how to choose the right guide, and links to `ENV_VARS.md` and `SECURITY.md`
+- setup guidance: setup guide index, how to choose the right guide, when to add more setup guides, and links to
+  `ENV_VARS.md` and `SECURITY.md`
 - security reminder to use placeholders only and never commit real secrets, tokens, passwords, private keys, or
   production URLs
 
@@ -340,6 +361,8 @@ copy sample rows literally; replace them with repo-specific content or `TBD`.
 - `blueprint/ENV_VARS.md`
 - `blueprint/SECURITY.md`
 - `blueprint/GUIDE.md`
+- `blueprint/setup/local-development.md`
+- `blueprint/setup/production-hosting-and-deployment.md`
 - `blueprint/decisions/0001-runtime-and-storage.md`
 - `blueprint/plans/01-vertical-slice.md`
 - `blueprint/checkpoints/01-vertical-slice-A.md`

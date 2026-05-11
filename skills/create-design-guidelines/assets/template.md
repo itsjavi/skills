@@ -1,8 +1,13 @@
 # Design System Specification: <THEME NAME OR PRODUCT NAME>
 
-> **Theme:** <e.g., The Architectural Flow> **Product:** <product name> **Framework:** <e.g., React + Next.js>
-> **Styling:** <e.g., Tailwind CSS> **UI library:** <e.g., shadcn/ui (Base UI primitives)> **Primary color:** `<#hex>`
-> (<short description>) **Platform:** <web / mobile / desktop / dashboard>
+- **Theme:** <e.g., The Architectural Flow>
+- **Product:** <product name>
+- **Framework:** <e.g., React + Next.js>
+- **Styling:** <e.g., Tailwind CSS>
+- **UI library:** <e.g., shadcn/ui (Base UI primitives)>
+- **Primary color:** `<#hex>` (<short description>)
+- **Supported color schemes:** light, dark
+- **Platform:** Web (desktop-first, responsive, mobile-friendly)
 
 <!--
   Authoring notes (delete before shipping):

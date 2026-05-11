@@ -35,7 +35,7 @@ layout.
   and follow-ups.
 - `.specs/research/`: brainstorms, comparisons, spike notes, AI chat summaries, and rough thinking. Research can become
   stale and should be promoted into decisions or plans when it becomes load-bearing.
-- `.specs/setup/`: local development, deployment, self-hosting, and operational setup guides.
+- `.specs/setup/`: local development, production hosting, deployment, self-hosting, and operational setup guides.
 
 ## Context Discipline
 
@@ -57,7 +57,7 @@ Prefer updating indexes and latest checkpoint links over pasting full plan conte
 | `plans/`       | Scoped implementation plans with phases and acceptance checks.                        | `templates/PLAN.md`            |
 | `checkpoints/` | Completed plan phase handoffs.                                                        | `templates/PLAN_CHECKPOINT.md` |
 | `research/`    | Spikes, comparisons, brainstorms, AI chat summaries, and notes that may become stale. | None                           |
-| `setup/`       | Local development, deployment, self-hosting, and operational setup guides.            | None                           |
+| `setup/`       | Local development, production hosting/deployment, and operational setup guides.       | None                           |
 | `templates/`   | Canonical starting points for decisions, plans, and checkpoints.                      | Not applicable                 |
 
 Do not create directory-level README files in these folders. This guide is the shared index and convention document for
@@ -240,15 +240,52 @@ capture it in a plan.
 
 ## `setup/`
 
-Purpose: operator-facing and developer-facing setup guides.
+Purpose: operator-facing and developer-facing setup guides. Setup guides should be concrete enough to follow, while
+staying honest about what is not yet decided.
 
 - Link required environment variables from [ENV_VARS.md](ENV_VARS.md).
 - Link security-sensitive setup expectations from [SECURITY.md](SECURITY.md).
 - Use placeholder values only. Never commit real secrets, tokens, passwords, private keys, or production URLs.
+- Do not assume Docker, Compose, Kubernetes, serverless, static hosting, SSH servers, or a specific cloud/PaaS unless
+  the repo indicates that path.
+
+Use the local development guide when working from a source checkout. Use the production hosting and deployment guide
+when installing, releasing, or operating a production-like instance. Add more focused setup guides only when a project
+has a distinct operator path, for example `ci.md`, `preview-environments.md`, `self-hosting.md`, `kubernetes.md`, or
+`backup-and-restore.md`.
+
+### Local Development Guide
+
+`setup/local-development.md` should explain:
+
+- what runs locally: apps, services, workers, databases, queues, emulators, or external dependencies
+- prerequisites: runtime versions, package manager, database, containers, CLIs, or platform tools
+- install/bootstrap commands
+- environment setup linked to [ENV_VARS.md](ENV_VARS.md)
+- how to start the app and any supporting services
+- expected local URLs, ports, health checks, and first login/bootstrap steps
+- common checks: format, lint, typecheck, tests, build, or smoke tests
+- safe reset/cleanup steps and common troubleshooting notes
+
+### Production Hosting And Deployment Guide
+
+`setup/production-hosting-and-deployment.md` should explain:
+
+- intended hosting model and any undecided parts marked as `TBD`
+- topology: request path, runtime processes, persistent stores, background jobs, queues, object storage, static assets,
+  observability, and external services
+- production prerequisites: runtime, host/provider account, database, DNS/TLS, secrets manager, CI/CD, artifacts,
+  backups, and access controls as applicable
+- configuration checklist linked to [ENV_VARS.md](ENV_VARS.md) and [SECURITY.md](SECURITY.md)
+- deployment flow: build/package/publish artifacts, provision infrastructure, run migrations, start or roll out the app,
+  and verify health
+- rollback, upgrade, backup/restore, restart/recovery, and smoke-check expectations
+- security notes for TLS, trusted origins, public/private ports, admin endpoints, secret handling, logging, and
+  least-privilege access
 
 ### Setup Index
 
-| Guide             | Scope                | Status | Link |
-| ----------------- | -------------------- | ------ | ---- |
-| Local development | Local                | TBD    | TBD  |
-| Deployment        | Staging / production | TBD    | TBD  |
+| Guide                             | Scope                 | Status | Link                                                                               |
+| --------------------------------- | --------------------- | ------ | ---------------------------------------------------------------------------------- |
+| Local development                 | Local source checkout | Draft  | [local-development.md](setup/local-development.md)                                 |
+| Production hosting and deployment | Staging / production  | Draft  | [production-hosting-and-deployment.md](setup/production-hosting-and-deployment.md) |
