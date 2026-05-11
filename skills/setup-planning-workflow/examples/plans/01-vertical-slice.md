@@ -23,7 +23,7 @@ Deliver the smallest end-to-end workflow that proves the product architecture.
 - [ ] A user can complete the primary MVP action.
 - [ ] The workflow is covered by automated tests.
 - [ ] Setup docs explain how to run it locally.
-- [ ] `docs/COORDINATION.md` is updated or cleared for any active parallel work this plan created.
+- [ ] `.specs/COORDINATION.md` is updated or cleared for any active parallel work this plan created.
 
 ## Out Of Scope
 
@@ -39,7 +39,7 @@ Deliver the smallest end-to-end workflow that proves the product architecture.
 **Files.**
 
 - `README.md` — quickstart.
-- `docs/setup/local-development.md` — local setup.
+- `.specs/setup/local-development.md` — local setup.
 
 **Acceptance.** Baseline format/typecheck/test commands pass.
 
@@ -83,5 +83,5 @@ Deliver the smallest end-to-end workflow that proves the product architecture.
 
 - **Scope creep.** Keep the first workflow intentionally narrow.
 - **Docs drift.** Update docs in the same turn as behavior changes.
-- **Parallel work drift.** If another session, branch, or worktree depends on this plan, keep `docs/COORDINATION.md`
+- **Parallel work drift.** If another session, branch, or worktree depends on this plan, keep `.specs/COORDINATION.md`
   current and create checkpoints before others rely on completed phases.

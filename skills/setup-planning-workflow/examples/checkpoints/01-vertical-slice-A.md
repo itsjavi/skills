@@ -9,7 +9,7 @@ Established the project foundation, local setup docs, and baseline checks for th
 ## Files
 
 - `README.md` — added quickstart.
-- `docs/setup/local-development.md` — added local setup guide.
+- `.specs/setup/local-development.md` — added local setup guide.
 
 ## Checks
 
@@ -19,14 +19,14 @@ Established the project foundation, local setup docs, and baseline checks for th
 
 ## Notes / Surprises
 
-Local setup required one extra environment variable; documented it in `docs/ENV_VARS.md`.
+Local setup required one extra environment variable; documented it in `.specs/ENV_VARS.md`.
 
 ## Implications
 
 - **Decisions touched / proposed:** none.
-- **Product docs touched:** `docs/PRODUCT.md` setup constraint clarified.
-- **Coordination touched:** update `docs/COORDINATION.md` if another active session, branch, or worktree was waiting on
-  this setup.
+- **Product docs touched:** `.specs/PRODUCT.md` setup constraint clarified.
+- **Coordination touched:** update `.specs/COORDINATION.md` if another active session, branch, or worktree was waiting
+  on this setup.
 - **Plans created or queued:** none.
 
 ## Follow-ups

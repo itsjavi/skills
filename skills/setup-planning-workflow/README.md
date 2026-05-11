@@ -15,6 +15,8 @@ The workflow creates a lightweight project memory system:
 - `decisions/` captures durable choices and tradeoffs.
 - `MILESTONES.md` tracks the stable roadmap, sub-milestones/phases, ordering, status, and durable dependencies.
 - `COORDINATION.md` tracks active parallel work: who or what is moving right now, where, and with what blockers.
+- `GUIDE.md` centralizes conventions, indexes, and directory roles instead of scattering README files across
+  directories.
 - `plans/` describes how a specific chunk of work should be implemented.
 - `checkpoints/` captures completed phase handoffs.
 - `research/` holds useful exploration that may become stale.
@@ -22,8 +24,11 @@ The workflow creates a lightweight project memory system:
   sensitive.
 - `SECURITY.md` explains how the whole application is meant to stay secure, and how those claims are verified.
 
-The default root is `docs/`, but the same model works under another planning docs directory when a project wants a
-different layout.
+The default root is `.specs/`, which avoids colliding with `docs/` directories used for published project documentation.
+The same model works under another planning directory when a project wants a different layout.
+
+`SKILL.md` defines the exact required file contract. The files under `examples/` are templates and guidance to adapt for
+those required outputs, not optional layout suggestions.
 
 ## Why It Helps
 

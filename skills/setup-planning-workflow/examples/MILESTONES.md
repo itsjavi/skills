@@ -2,17 +2,12 @@
 
 Durable project roadmap, milestone state, and recommended execution order.
 
-For active parallel work across sessions, branches, or worktrees, see [Coordination](COORDINATION.md).
+For workflow conventions, plan creation, templates, and resume rules, see [Guide](GUIDE.md). For active parallel work,
+see [Coordination](COORDINATION.md).
 
 ## Status Legend
 
 `Proposed` · `Active` · `Complete` · `Paused` · `Cancelled` · `Future`
-
-## Mental Model
-
-- `MILESTONES.md`: durable roadmap, sub-milestones/phases, plan order, and dependency state.
-- `COORDINATION.md`: current active work, session/branch/worktree locations, blockers, and handoff links.
-- `checkpoints/`: completed phase handoffs that let another agent or human resume safely.
 
 ## Drafted Plans
 
@@ -52,24 +47,3 @@ Recommended order:
 - UI work may use the mock API strategy from Plan 01 until the first API contract checkpoint is complete.
 - Auth work should not start until Plan 01 final review is complete.
 - Observability can start after the first API route exists, but should check `COORDINATION.md` for active backend work.
-
-## How To Resume Work
-
-1. Find the first `Active` plan in **Drafted Plans**.
-2. Read [Coordination](COORDINATION.md) to see active sessions, branches, worktrees, and blockers.
-3. Open the plan and its latest checkpoint in `checkpoints/`.
-4. Continue from the first non-complete phase.
-5. If no plan is active, pick the first `Proposed` plan in recommended order.
-
-## Creating A New Plan
-
-1. Pick `NN` as the next unused two-digit number.
-2. Copy `templates/PLAN.md` to `plans/NN-slug.md`.
-3. Add a row to this file.
-4. Ensure the final phase is **Final review pass**.
-
-## Templates
-
-- [Decision template](templates/DECISION.md)
-- [Plan template](templates/PLAN.md)
-- [Checkpoint template](templates/PLAN_CHECKPOINT.md)
