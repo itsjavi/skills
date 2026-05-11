@@ -18,6 +18,9 @@ The workflow creates a lightweight project memory system:
 - `plans/` describes how a specific chunk of work should be implemented.
 - `checkpoints/` captures completed phase handoffs.
 - `research/` holds useful exploration that may become stale.
+- `ENV_VARS.md` makes configuration visible: what the project needs, where values come from, and which values are
+  sensitive.
+- `SECURITY.md` explains how the whole application is meant to stay secure, and how those claims are verified.
 
 The default root is `docs/`, but the same model works under another planning docs directory when a project wants a
 different layout.

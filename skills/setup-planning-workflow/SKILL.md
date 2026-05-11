@@ -105,7 +105,8 @@ workflow instructions so future agents know where to look.
 3. Preserve existing content. Do not overwrite useful docs; merge or add dated sections.
 4. Create missing directories and files from the target structure.
 5. Fill templates with concise, reusable structure.
-6. Seed `PRODUCT.md`, `MILESTONES.md`, and `COORDINATION.md` with what can be inferred; mark unknowns as `TBD`.
+6. Seed `PRODUCT.md`, `MILESTONES.md`, `COORDINATION.md`, `ENV_VARS.md`, and `SECURITY.md` with what can be inferred;
+   mark unknowns as `TBD`.
 7. Add or update an agent guide (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, or equivalent) with the workflow in **Agent
    Guide Requirements** below.
 8. Run formatter/checks appropriate for markdown if available.
@@ -151,6 +152,32 @@ When adding it to `AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, or another guide:
 - note that uncommitted work in another isolated workspace is usually invisible until summarized in `COORDINATION.md`,
   captured in a checkpoint, committed, or explicitly provided by the user
 - reminder that durable completion details belong in checkpoints, not in the coordination board
+
+`<docs-root>/ENV_VARS.md` should include:
+
+- the environments it covers, such as local development, tests, CI, staging, production, containers, or self-hosting
+- grouped tables by subsystem or runtime surface, for example app core, database, auth, email, observability, build, and
+  tests
+- variable name, accepted values or format, default/fallback, whether it is required in production, and description
+- security notes for secrets, tokens, keys, connection URLs, and variables that must not be logged or committed
+- deployment-specific variables for Docker Compose, Kubernetes, PaaS, CI, or build arguments when relevant
+- internal/helper variables that tooling sets automatically, separated from operator-facing configuration
+- links to setup docs, security docs, decisions, or plans that explain sensitive or non-obvious configuration
+- placeholder examples only; never include real secrets, API keys, passwords, tokens, private keys, or production URLs
+
+`<docs-root>/SECURITY.md` should include:
+
+- a plain-language overview of the project's security posture and what would be serious if compromised
+- security goals and non-goals
+- pragmatic threat model and trust boundaries
+- secret handling, encryption, key management, credential storage, and backup expectations
+- authentication and authorization model, including session/token behavior and privileged actions
+- data protection, validation, tenancy/isolation, and API boundary controls when applicable
+- runtime, deployment, infrastructure, container, and supply-chain security assumptions when applicable
+- logging, audit, observability, and error-handling expectations that avoid leaking sensitive material
+- security-relevant operational flows, such as onboarding, admin actions, incident response, rotation, and recovery
+- verification strategy: tests, checks, checkpoints, or audits that prove the security claims
+- links to relevant PRD sections, decision records, plans, checkpoints, setup docs, and env var docs
 
 `<docs-root>/decisions/README.md` should include:
 
@@ -228,6 +255,8 @@ Example files live in `examples/`. Use them as patterns, not as literal project 
 - `examples/PRODUCT.md`
 - `examples/MILESTONES.md`
 - `examples/COORDINATION.md`
+- `examples/ENV_VARS.md`
+- `examples/SECURITY.md`
 - `examples/decisions/0001-runtime-and-storage.md`
 - `examples/plans/01-vertical-slice.md`
 - `examples/checkpoints/01-vertical-slice-A.md`
