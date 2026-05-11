@@ -69,22 +69,11 @@ If this project uses a different planning docs root, replace `docs/` paths below
 
 ## Cross-session awareness for parallel agents
 
-When multiple agents or humans work in parallel sessions, branches, or worktrees, keep these kinds of state separate:
+When multiple agents or humans work in parallel sessions, branches, or worktrees, use the document roles above:
+`MILESTONES.md` for durable roadmap state, `COORDINATION.md` for active work, and checkpoints for completed handoffs.
 
-- `docs/MILESTONES.md` is the durable roadmap and phase state: milestones, sub-milestones/phases, plan order,
-  dependencies, and what is next.
-- `docs/COORDINATION.md` is the active parallel-work board: who/what is currently working, in which session, branch, or
-  worktree, with which blockers and handoff links.
-- `docs/checkpoints/` is the durable "save game": completed phase handoffs that another agent or human can resume from
-  without relying on chat history.
-
-At the start of every session:
-
-- Read `docs/MILESTONES.md` before choosing implementation work.
-- Read `docs/COORDINATION.md` if it exists to see active sessions, branches, worktrees, and current blockers.
-- Check the active plan and latest checkpoints for your assigned area.
-- If your work depends on another session, branch, or worktree, confirm whether that dependency is complete before
-  integrating against it.
+- Before integrating against work from another session, branch, or worktree, confirm whether that dependency is
+  complete.
 - If the dependency is not ready, continue with the fallback or mocking strategy documented in the plan.
 
 To inspect parallel progress without changing work context:

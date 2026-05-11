@@ -9,13 +9,6 @@ This file is intentionally more volatile than `MILESTONES.md`. Keep durable road
 
 Last reviewed: YYYY-MM-DD HH:mm TZ
 
-## Mental Model
-
-- `MILESTONES.md`: what the project is trying to complete next, in durable roadmap order.
-- `COORDINATION.md`: who/what is moving right now, in which session, branch, or worktree, and whether others can rely on
-  it.
-- `checkpoints/`: what has been completed and can be resumed from without chat history.
-
 ## Active Work
 
 | Owner / agent  | Branch                 | Workspace / session | Task               | Files / area owned | Depends on         | Status      | Last update      | Handoff |

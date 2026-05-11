@@ -33,7 +33,6 @@ After bootstrapping, future coding agents should understand how to:
 - create checkpoints after phases
 - coordinate parallel sessions, branches, or worktrees without relying on chat history
 - add dated implementation updates when code changes make docs stale
-- avoid touching git staging unless explicitly asked
 - fetch current library/tool documentation with Context7 before answering library-specific questions or implementing
   against unfamiliar/current APIs
 

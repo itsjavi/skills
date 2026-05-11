@@ -31,4 +31,4 @@ Local setup required one extra environment variable; documented it in `docs/ENV_
 
 ## Follow-ups
 
-- [ ] Phase B should implement the first workflow against this setup.
+- [ ] Phase B should implement the first API contract against this setup.
