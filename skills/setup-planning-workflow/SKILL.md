@@ -128,9 +128,10 @@ workflow instructions so future agents know where to look.
    - Otherwise use `.specs/`.
 3. Preserve existing content. Do not overwrite useful docs; merge or add dated sections.
 4. Create missing directories and every required file from **Required Output Contract**.
-5. Adapt the matching files from `examples/` wherever an example exists. The examples are source templates to adapt, not
-   optional inspiration. Replace placeholder paths, names, dates, and sample rows with repo-specific content or `TBD`.
-6. Adapt `examples/GUIDE.md` to `<planning-root>/GUIDE.md`. Do not create per-directory README files; `GUIDE.md`
+5. Adapt the matching files from `blueprint/` wherever a blueprint file exists. The blueprint files are canonical
+   scaffold sources to adapt, not optional inspiration. Replace placeholder paths, names, dates, and sample rows with
+   repo-specific content or `TBD`.
+6. Adapt `blueprint/GUIDE.md` to `<planning-root>/GUIDE.md`. Do not create per-directory README files; `GUIDE.md`
    supersedes them.
 7. Fill any required file without a one-to-one example with concise, reusable structure.
 8. Seed `PRODUCT.md`, `MILESTONES.md`, `COORDINATION.md`, `ENV_VARS.md`, and `SECURITY.md` with what can be inferred;
@@ -328,20 +329,20 @@ subdirectories unless the user explicitly requests that layout.
   generated path and link.
 - Do not invent major product requirements. Mark unknowns as `TBD`.
 
-## Examples
+## Blueprint Files
 
-Example files live in `examples/`. Adapt the matching example whenever creating the same project file. Do not copy
-sample rows literally; replace them with repo-specific content or `TBD`.
+Blueprint files live in `blueprint/`. Adapt the matching blueprint file whenever creating the same project file. Do not
+copy sample rows literally; replace them with repo-specific content or `TBD`.
 
-- `examples/PRODUCT.md`
-- `examples/MILESTONES.md`
-- `examples/COORDINATION.md`
-- `examples/ENV_VARS.md`
-- `examples/SECURITY.md`
-- `examples/GUIDE.md`
-- `examples/decisions/0001-runtime-and-storage.md`
-- `examples/plans/01-vertical-slice.md`
-- `examples/checkpoints/01-vertical-slice-A.md`
-- `examples/templates/DECISION.md`
-- `examples/templates/PLAN.md`
-- `examples/templates/PLAN_CHECKPOINT.md`
+- `blueprint/PRODUCT.md`
+- `blueprint/MILESTONES.md`
+- `blueprint/COORDINATION.md`
+- `blueprint/ENV_VARS.md`
+- `blueprint/SECURITY.md`
+- `blueprint/GUIDE.md`
+- `blueprint/decisions/0001-runtime-and-storage.md`
+- `blueprint/plans/01-vertical-slice.md`
+- `blueprint/checkpoints/01-vertical-slice-A.md`
+- `blueprint/templates/DECISION.md`
+- `blueprint/templates/PLAN.md`
+- `blueprint/templates/PLAN_CHECKPOINT.md`

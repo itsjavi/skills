@@ -27,8 +27,8 @@ The workflow creates a lightweight project memory system:
 The default root is `.specs/`, which avoids colliding with `docs/` directories used for published project documentation.
 The same model works under another planning directory when a project wants a different layout.
 
-`SKILL.md` defines the exact required file contract. The files under `examples/` are templates and guidance to adapt for
-those required outputs, not optional layout suggestions.
+`SKILL.md` defines the exact required file contract. The files under `blueprint/` are canonical scaffold sources to
+adapt for those required outputs, not optional layout suggestions.
 
 ## Why It Helps
 
