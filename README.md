@@ -1,8 +1,7 @@
 # itsjavi/skills
 
 Personal and reusable coding-agent skills for Codex, Claude Code, Cursor, and other agents that support the `SKILL.md`
-folder format, with a strong focus on spec-driven development: product docs, design guides, decision records,
-implementation plans, checkpoints, and handoff prompts that keep humans and agents aligned.
+folder format, with a strong focus on spec-driven development.
 
 ## Available skills
 
