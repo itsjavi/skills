@@ -13,13 +13,13 @@ Create a new `docs/plans/NN-slug.md` plan that matches this repo's plan workflow
 
 1. Read:
    - `AGENTS.md`
-   - `docs/PRD.md`
+   - `docs/PRODUCT.md`
    - `docs/decisions/README.md`
    - `docs/plans/README.md`
    - related existing plans/checkpoints/ADRs for the feature area
    - `docs/DESIGN.md` for UI plans
 2. Pick `NN` as the next monotonic two-digit plan number unless the user specifies one.
-3. Copy the structure of `docs/plans/_template-plan.md`.
+3. Copy the structure of `docs/templates/PLAN.md`.
 4. Draft phases A, B, C... with the final phase named **Final review pass**.
 5. Add the plan row to `docs/plans/README.md`.
 6. If this plan updates an existing completed/pending plan instead of creating a new one, add a dated section such as:

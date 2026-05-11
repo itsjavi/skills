@@ -5,13 +5,15 @@ import { fileURLToPath } from "node:url"
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..")
 const skillsDir = join(repoRoot, "skills")
 
-type Target = "codex" | "claude" | "repo-codex" | "repo-claude"
+type Target = "codex" | "claude" | "cursor" | "repo-codex" | "repo-claude" | "repo-cursor"
 
 const target = (process.argv[2] ?? "codex") as Target
-const cwd = process.cwd()
+const cwd = process.env.SKILLS_INSTALL_CWD ?? process.cwd()
 
 function usage(): never {
-  console.error("Usage: pnpm tsx scripts/install.ts [codex|claude|repo-codex|repo-claude] [skill-name]")
+  console.error(
+    "Usage: pnpm tsx scripts/install.ts [codex|claude|cursor|repo-codex|repo-claude|repo-cursor] [skill-name]"
+  )
   process.exit(1)
 }
 
@@ -27,10 +29,14 @@ function getDestination(target: Target): string {
       return join(homeDir(), ".agents", "skills")
     case "claude":
       return join(homeDir(), ".claude", "skills")
+    case "cursor":
+      return join(homeDir(), ".cursor", "skills")
     case "repo-codex":
       return join(cwd, ".agents", "skills")
     case "repo-claude":
       return join(cwd, ".claude", "skills")
+    case "repo-cursor":
+      return join(cwd, ".cursor", "skills")
     default:
       usage()
   }

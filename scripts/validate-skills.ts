@@ -15,6 +15,7 @@ type Registry = {
 }
 
 const errors: string[] = []
+const discoveredSkills = new Map<string, { path: string; description: string }>()
 
 function parseFrontmatter(content: string): Record<string, string> | null {
   const match = content.match(/^---\n([\s\S]*?)\n---/)
@@ -53,6 +54,13 @@ if (!existsSync(skillsDir)) {
     if (frontmatter.description && frontmatter.description.length < 40) {
       errors.push(`${skill.name}: description is too short to be useful for auto-selection`)
     }
+
+    if (frontmatter.name && frontmatter.description) {
+      discoveredSkills.set(frontmatter.name, {
+        path: `skills/${skill.name}`,
+        description: frontmatter.description,
+      })
+    }
   }
 }
 
@@ -65,6 +73,25 @@ if (!existsSync(registryPath)) {
     const expectedPath = join(repoRoot, skill.path)
     if (!existsSync(expectedPath)) errors.push(`registry: missing path for ${skill.name}: ${skill.path}`)
     if (!existsSync(join(expectedPath, "SKILL.md"))) errors.push(`registry: missing SKILL.md for ${skill.name}`)
+
+    const discovered = discoveredSkills.get(skill.name)
+    if (!discovered) {
+      errors.push(`registry: extra or unknown skill "${skill.name}"`)
+      continue
+    }
+
+    if (skill.path !== discovered.path) {
+      errors.push(`registry: ${skill.name} path is "${skill.path}", expected "${discovered.path}"`)
+    }
+
+    if (skill.description !== discovered.description) {
+      errors.push(`registry: ${skill.name} description is out of sync with SKILL.md`)
+    }
+  }
+
+  for (const [skillName] of discoveredSkills) {
+    const registryEntry = registry.skills?.find((skill) => skill.name === skillName)
+    if (!registryEntry) errors.push(`registry: missing skill "${skillName}"`)
   }
 }
 

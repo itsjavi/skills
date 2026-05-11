@@ -40,9 +40,15 @@ Run the narrowest script that matches the change:
 - `pnpm typecheck`: type-check the TypeScript maintenance scripts.
 - `pnpm format`: format the repository and sort `package.json`.
 - `pnpm skills:install codex`: install all skills into `~/.agents/skills` for manual local testing.
-- `pnpm tsx scripts/install.ts claude`: install all skills into `~/.claude/skills` for manual Claude Code testing.
+- `pnpm skills:install claude`: install all skills into `~/.claude/skills` for manual Claude Code testing.
+- `pnpm skills:install cursor`: install all skills into `~/.cursor/skills` for manual Cursor testing.
 
 If a sandbox blocks `tsx` from opening its local IPC pipe, rerun the same command outside the sandbox with approval.
+
+## Formatting And Checks
+
+When changing code or other formatted files, run `pnpm format` before finishing. For the general verification flow, run
+`pnpm typecheck` first, then run `pnpm format`, then rerun any validation command whose output may have changed.
 
 ## Expected Workflows
 
@@ -54,6 +60,7 @@ For a new skill:
 4. Run `pnpm generate-registry`.
 5. Run `pnpm skills:validate`.
 6. Run `pnpm typecheck` if scripts changed.
+7. Run `pnpm format`.
 
 For an existing skill:
 
@@ -62,16 +69,21 @@ For an existing skill:
 3. Update `agents/openai.yaml`, `README.md`, and `registry.json` when the public meaning or metadata changes.
 4. Run `pnpm skills:validate`.
 5. Run `pnpm typecheck` if scripts changed.
+6. Run `pnpm format`.
 
 For installer, registry, or validation script changes:
 
 1. Run `pnpm typecheck`.
-2. Run `pnpm skills:validate`.
-3. Run `pnpm generate-registry` if registry output or frontmatter parsing changed.
-4. Optionally test install behavior with `pnpm skills:install codex <skill-name>` or
-   `pnpm tsx scripts/install.ts repo-codex <skill-name>` from a temporary project.
+2. Run `pnpm format`.
+3. Run `pnpm skills:validate`.
+4. Run `pnpm generate-registry` if registry output or frontmatter parsing changed, then rerun `pnpm skills:validate`.
+5. Optionally test install behavior with `pnpm skills:install codex <skill-name>` or
+   `/path/to/skills/scripts/install.sh repo-codex <skill-name>` from a temporary project. Use `claude`, `cursor`,
+   `repo-claude`, or `repo-cursor` when changing platform-specific install behavior.
 
-## Git
+## Git usage rules
 
-Do not stage, unstage, commit, amend, reset, or otherwise alter the git index unless the user explicitly asks. This repo
-may have staged files that belong to the human.
+- Do not stage, unstage, commit, amend, reset, or otherwise alter the git index unless the user explicitly asks. This
+  repo may have staged files that belong to the human.
+- When generating commit messages, use one-line Conventional Commit format:
+  `<type>(optional-scope): <imperative summary>`. Do not add a body unless the user explicitly asks for one.
