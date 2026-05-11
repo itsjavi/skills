@@ -1,0 +1,7 @@
+interface:
+  display_name: "Design Guidelines"
+  short_description: "Generate or edit design guidelines for websites and webapps"
+  icon_small: "./assets/icon.png"
+  icon_large: "./assets/icon.png"
+  default_prompt:
+    "Use $create-design-guidelines to propose, make or edit a design guidelines document for this project."

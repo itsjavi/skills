@@ -1,0 +1,27 @@
+{
+  "name": "itsjavi/skills",
+  "repository": "https://github.com/itsjavi/skills",
+  "generatedAt": "2026-05-11T01:36:19.709Z",
+  "skills": [
+    {
+      "name": "create-design-guidelines",
+      "path": "skills/create-design-guidelines",
+      "description": "Create a design guide / design system spec document (typically DESIGN.md) for a web or mobile UI project. Trigger whenever the user asks to \"create a design guide\", \"write a design system doc\", \"create DESIGN.md\", \"write design guidelines\", \"draft a style guide\", or wants any general visual / UX style document an LLM or developer can use as a reference when building components, pages, or screens. Also trigger for design specs for a webapp, SPA, mobile app, dashboard, or component library — even when they don't say \"design guide\" verbatim. Accepts optional context like framework (React, Vue), styling (Tailwind, CSS), UI library (shadcn/ui, Base UI, Radix, MUI), brand color, theme name, and product name. With no arguments, inspects the current project to infer them; missing fields are left open rather than guessed."
+    },
+    {
+      "name": "create-plan",
+      "path": "skills/create-plan",
+      "description": "Use when the user asks to create, draft, add, or plan a new project implementation plan under docs/plans, including choosing the next plan number, updating the plan index, and creating a phase/checkpoint-ready plan file."
+    },
+    {
+      "name": "setup-planning-workflow",
+      "path": "skills/setup-planning-workflow",
+      "description": "Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including PRODUCT.md, MILESTONES.md, decision records, plans, checkpoints, research notes, setup docs, ENV_VARS, SECURITY, templates, and coding-agent instructions for following the workflow."
+    },
+    {
+      "name": "start-implementing",
+      "path": "skills/start-implementing",
+      "description": "Use when the user asks for a prompt to start a fresh chat/agent for implementing an existing project plan, e.g. \"write a prompt for Plan 16\", \"create the next plan implementation prompt\", or \"handoff prompt for docs/plans/NN-*.md\". Also useful to continue a plan implementation that was stopped and is still in progress."
+    }
+  ]
+}
