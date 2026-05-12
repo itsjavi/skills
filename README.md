@@ -102,6 +102,28 @@ Some agents support installing from a GitHub folder URL:
 $skill-installer install https://github.com/itsjavi/skills/tree/main/skills/create-design-guidelines
 ```
 
+## Install tools
+
+The repository also includes command-line helpers under `tools/`. Install symlinks into `/usr/local/bin` by default:
+
+```bash
+scripts/install-tools.sh
+```
+
+To use a different bin directory:
+
+```bash
+scripts/install-tools.sh --bin-dir "$HOME/.local/bin"
+```
+
+To copy files instead of symlinking them:
+
+```bash
+scripts/install-tools.sh --no-symlink
+```
+
+Files ending in `.sh` are installed without the `.sh` suffix, so `tools/create-worktree.sh` becomes `create-worktree`.
+
 ## Validate skills
 
 ```bash

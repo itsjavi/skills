@@ -39,6 +39,9 @@ Run the narrowest script that matches the change:
   renames, or description changes.
 - `pnpm typecheck`: type-check the TypeScript maintenance scripts.
 - `pnpm format`: format the repository and sort `package.json`.
+- `pnpm tools:install`: symlink top-level tools into `/usr/local/bin` by default. Pass a bin dir with
+  `scripts/install-tools.sh --bin-dir <dir>` when a user-local or custom location is preferred, or pass `--no-symlink`
+  to copy files instead.
 - `pnpm skills:install codex`: install all skills into `~/.agents/skills` for manual local testing.
 - `pnpm skills:install claude`: install all skills into `~/.claude/skills` for manual Claude Code testing.
 - `pnpm skills:install cursor`: install all skills into `~/.cursor/skills` for manual Cursor testing.

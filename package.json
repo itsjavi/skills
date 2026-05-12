@@ -5,6 +5,7 @@
     "generate-registry": "tsx scripts/generate-registry.ts",
     "skills:install": "tsx scripts/install.ts",
     "skills:validate": "tsx scripts/validate-skills.ts",
+    "tools:install": "scripts/install-tools.sh",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
