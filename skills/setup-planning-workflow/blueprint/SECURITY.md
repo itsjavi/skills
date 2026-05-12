@@ -4,8 +4,8 @@ Example App handles user data and operational credentials, so its security postu
 than an afterthought. A compromised server, database, deployment token, or admin account should be treated as a serious
 incident.
 
-This document is a human-readable overview. Detailed requirements and decisions should link back to the PRD, decision
-records, implementation plans, setup docs, and checkpoints.
+This document is a human-readable overview. Detailed requirements and decisions should link back to the PRD, business
+rules, decision records, implementation plans, setup docs, and checkpoints.
 
 ## Security Goals
 
@@ -49,7 +49,7 @@ Server routes, background jobs, webhooks, and admin actions should check authori
 perform. Client-side hiding is not a security boundary.
 
 Role, permission, tenant, workspace, or ownership checks should be documented in the relevant product requirements,
-decisions, or plans.
+business rules, decisions, or plans.
 
 ## Data Protection
 

@@ -1,7 +1,7 @@
 {
   "name": "itsjavi/skills",
   "repository": "https://github.com/itsjavi/skills",
-  "generatedAt": "2026-05-11T03:03:51.593Z",
+  "generatedAt": "2026-05-12T05:12:43.713Z",
   "skills": [
     {
       "name": "create-design-guidelines",
@@ -16,7 +16,7 @@
     {
       "name": "setup-planning-workflow",
       "path": "skills/setup-planning-workflow",
-      "description": "Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including PRODUCT.md, MILESTONES.md, COORDINATION.md, decision records, plans, checkpoints, research notes, setup docs, ENV_VARS, SECURITY, templates, and coding-agent instructions for following the workflow."
+      "description": "Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including PRODUCT.md, MILESTONES.md, milestone records, BUSINESS_RULES.md, business-rule records, COORDINATION.md, decision records, plans, checkpoints, research notes, setup docs, ENV_VARS, SECURITY, templates, and coding-agent instructions for following the workflow."
     },
     {
       "name": "start-implementing",

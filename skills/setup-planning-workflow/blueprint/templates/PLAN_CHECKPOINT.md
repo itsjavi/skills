@@ -20,7 +20,7 @@ What changed in this completed phase?
 
 ## Implications
 
-Decisions, product docs, milestones, future plans, security, or configuration implications:
+Decisions, business rules, product docs, milestones, future plans, security, or configuration implications:
 
 - TBD
 

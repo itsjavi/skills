@@ -13,7 +13,10 @@ The workflow creates a lightweight project memory system:
 
 - `PRODUCT.md` explains what the product is trying to become and why.
 - `decisions/` captures durable choices and tradeoffs.
-- `MILESTONES.md` tracks the stable roadmap, sub-milestones/phases, ordering, status, and durable dependencies.
+- `MILESTONES.md` is the stable roadmap index: milestones, ordering, status, plan order, and durable dependencies.
+- `milestones/` holds detailed milestone records when an index row is not enough.
+- `BUSINESS_RULES.md` is the index of current product/domain rules.
+- `business-rules/` captures current rules the system must obey, separate from decision history.
 - `COORDINATION.md` tracks active parallel work: who or what is moving right now, where, and with what blockers.
 - `GUIDE.md` centralizes conventions, indexes, and directory roles instead of scattering README files across
   directories.
@@ -49,7 +52,16 @@ The workflow makes specification work practical for agents:
 `MILESTONES.md` and `COORDINATION.md` intentionally serve different kinds of truth.
 
 `MILESTONES.md` is durable project state. It should stay stable enough to act as the execution map: what milestones
-exist, what depends on what, what is active, and what comes next.
+exist, what depends on what, what is active, what comes next, and which detailed milestone record has the deeper
+context.
+
+`BUSINESS_RULES.md` and `business-rules/` are current product truth. They state what the system must currently do in
+domain language, with examples, edge cases, implementation links, and test links when known. This keeps product rules
+out of ADRs while still making them durable enough for agents and humans to implement against.
+
+`decisions/` is the rationale layer. A decision explains why a choice was made, what alternatives were rejected, and
+what consequences the team accepted. If a rule changes because of a meaningful tradeoff, update the rule and add or
+supersede the related decision.
 
 `COORDINATION.md` is intentionally more volatile. It is the live board for active sessions, branches, worktrees,
 blockers, ownership, and handoff links. Keeping this separate prevents the roadmap from turning into a noisy live ops

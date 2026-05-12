@@ -1,9 +1,9 @@
 # Milestones
 
-Durable project roadmap, milestone state, and recommended execution order.
+Durable project roadmap index, milestone state, and recommended execution order.
 
 For workflow conventions, plan creation, templates, and resume rules, see [Guide](GUIDE.md). For active parallel work,
-see [Coordination](COORDINATION.md).
+see [Coordination](COORDINATION.md). For detailed milestone records, see `milestones/`.
 
 ## Status Legend
 
@@ -15,6 +15,12 @@ see [Coordination](COORDINATION.md).
 | --- | -------------------------------------------- | --------- | ------ | ------ | ---------- | --------------------------------------- |
 | 01  | [Vertical slice](plans/01-vertical-slice.md) | M1        | Active | 1/5    | None       | First end-to-end loop; proves the shape |
 | 02  | [Auth foundation](plans/02-auth.md)          | M1        | Future | 0/5    | Plan 01    | Route/session model after slice exists  |
+
+## Milestone Records
+
+| #    | Milestone      | Status | Summary                    | Record                                                      |
+| ---- | -------------- | ------ | -------------------------- | ----------------------------------------------------------- |
+| 0001 | MVP Foundation | Active | First useful product loop. | [0001-mvp-foundation.md](milestones/0001-mvp-foundation.md) |
 
 ## Current Focus
 

@@ -22,6 +22,8 @@ Deliver the smallest end-to-end workflow that proves the product architecture.
 
 - [ ] A user can complete the primary MVP action.
 - [ ] The workflow is covered by automated tests.
+- [ ] Current product/domain rules introduced by the workflow are captured in `.specs/BUSINESS_RULES.md` or
+      `.specs/business-rules/`.
 - [ ] Setup docs explain how to run it locally.
 - [ ] `.specs/COORDINATION.md` is updated or cleared for any active parallel work this plan created.
 
@@ -69,7 +71,7 @@ Deliver the smallest end-to-end workflow that proves the product architecture.
 
 **Goal.** Fill coverage and update docs based on implementation details.
 
-**Acceptance.** Docs match the implemented behavior; tests cover success and failure paths.
+**Acceptance.** Docs and business rules match the implemented behavior; tests cover success and failure paths.
 
 ### Phase E — Final Review Pass
 

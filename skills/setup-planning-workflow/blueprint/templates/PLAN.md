@@ -7,6 +7,7 @@
 | Status            | Draft |
 | Owner             | TBD   |
 | Related milestone | TBD   |
+| Related rules     | TBD   |
 | Related decisions | TBD   |
 | Latest checkpoint | TBD   |
 
@@ -39,7 +40,7 @@ Status: Not started
 Acceptance checks:
 
 - [ ] Docs reflect behavior, architecture, configuration, APIs, operational flows, and user-facing workflows.
-- [ ] Relevant decisions, milestones, coordination rows, and checkpoints are updated.
+- [ ] Relevant decisions, business rules, milestones, coordination rows, and checkpoints are updated.
 - [ ] Tests or validation commands have been run and recorded.
 - [ ] Follow-ups are documented.
 

@@ -24,6 +24,7 @@ Local setup required one extra environment variable; documented it in `.specs/EN
 ## Implications
 
 - **Decisions touched / proposed:** none.
+- **Business rules touched:** none.
 - **Product docs touched:** `.specs/PRODUCT.md` setup constraint clarified.
 - **Coordination touched:** update `.specs/COORDINATION.md` if another active session, branch, or worktree was waiting
   on this setup.
