@@ -124,8 +124,9 @@ workflow instructions so future agents know where to look.
 - `business-rules/`: current normative product/domain rules. These state what the system must currently do. They are
   different from decisions, which explain why a choice was made and what alternatives were rejected.
 - `COORDINATION.md`: active parallel-work board. Who/what is currently working, session/branch/worktree location,
-  current task state, blockers, handoff links, and short-lived coordination notes. This file is allowed to be more
-  volatile than `MILESTONES.md`.
+  project/worktree directory, current task state, blockers, handoff links, and short-lived coordination notes. This file
+  is allowed to be more volatile than `MILESTONES.md`. It is manual by default, or an exported snapshot when the
+  optional `plan-coord` live coordinator is installed.
 - `GUIDE.md`: centralized planning workflow guide. It replaces per-directory README files and explains naming,
   lifecycles, indexes, plan/checkpoint workflows, research promotion, and setup guide conventions.
 - `decisions/`: architecture/product decision records. Durable, load-bearing decisions and tradeoff history.
@@ -263,12 +264,14 @@ Operating rules:
 `<planning-root>/COORDINATION.md` should include:
 
 - last reviewed timestamp
-- active work table with owner/agent, branch, workspace/worktree/session, task, dependency, status, last update, and
-  handoff link
+- active work table with owner/agent, branch, project directory/worktree path, workspace/session, task, dependency,
+  status, last update, and handoff link
 - blocked/waiting work
 - a short rule block for keeping rows brief, updating active work, and removing stale rows
 - reminder that durable completion details belong in checkpoints, not in the coordination board
 - link to `GUIDE.md` for branch/worktree inspection and cross-session rules
+- note that `COORDINATION.md` may be maintained manually or exported from `plan-coord` when the optional live
+  coordinator is available
 
 `<planning-root>/ENV_VARS.md` should include:
 
@@ -333,7 +336,7 @@ sections, and guidance on adding more setup guides. Keep all setup docs inferred
 - phase workflow
 - final review workflow
 - docs-sync rule for implementation updates
-- cross-session coordination rules and branch/worktree inspection commands
+- cross-session coordination rules, optional `plan-coord` live backend guidance, and branch/worktree inspection commands
 - rule that uncommitted state in another workspace is invisible unless published, summarized, committed, checkpointed,
   or explicitly provided by the user
 - checkpoint naming convention

@@ -4,17 +4,18 @@ Active parallel-work board for humans and agents.
 
 Planning root: `.specs/`.
 
-This is a live board. Keep durable roadmap state in [Milestones](MILESTONES.md), current product/domain rules in
-[Business Rules](BUSINESS_RULES.md), workflow rules in [Guide](GUIDE.md), and completed phase handoffs in
+This is the human-readable coordination snapshot. It may be edited manually, or exported from `plan-coord` when the
+local live coordinator is available. Keep durable roadmap state in [Milestones](MILESTONES.md), current product/domain
+rules in [Business Rules](BUSINESS_RULES.md), workflow rules in [Guide](GUIDE.md), and completed phase handoffs in
 `checkpoints/`.
 
 Last reviewed: YYYY-MM-DD HH:mm TZ
 
 ## Active Work
 
-| Owner / agent | Branch | Workspace / session | Task | Files / area owned | Depends on | Status      | Last update      | Handoff |
-| ------------- | ------ | ------------------- | ---- | ------------------ | ---------- | ----------- | ---------------- | ------- |
-| TBD           | TBD    | TBD                 | TBD  | TBD                | TBD        | 🧭 Proposed | YYYY-MM-DD HH:mm | TBD     |
+| Owner / agent | Branch | Project dir / worktree | Workspace / session | Task | Files / area owned | Depends on | Status      | Last update      | Handoff |
+| ------------- | ------ | ---------------------- | ------------------- | ---- | ------------------ | ---------- | ----------- | ---------------- | ------- |
+| TBD           | TBD    | TBD                    | TBD                 | TBD  | TBD                | TBD        | 🧭 Proposed | YYYY-MM-DD HH:mm | TBD     |
 
 ## Blocked Or Waiting
 
@@ -25,6 +26,7 @@ Last reviewed: YYYY-MM-DD HH:mm TZ
 ## Coordination Rules
 
 - Add or update your row when starting, pausing, blocking, resuming, or completing active work.
+- If `plan-coord` is available, use it for live register, claim, update, release, and export operations.
 - If multiple agents share the same working directory, claim file or area ownership before editing.
 - Keep rows brief; link to plans and checkpoints for details.
 - Remove or archive stale rows after the work has a checkpoint and no longer needs active coordination.

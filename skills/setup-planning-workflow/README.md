@@ -69,6 +69,11 @@ supersede the related decision.
 blockers, ownership, and handoff links. Keeping this separate prevents the roadmap from turning into a noisy live ops
 board.
 
+When the optional `plan-coord` tool is installed, coordination becomes a two-layer model: workflow docs stay canonical
+for roadmap/spec state, while a local SQLite database tracks live sessions, project directories, branches, claims,
+blockers, and transient handoffs. `COORDINATION.md` remains the readable snapshot that can be manually edited or
+exported from `plan-coord` before handoff.
+
 `checkpoints/` are the handoff layer between the two. A checkpoint says what was actually completed, what was checked,
 what changed, and what another agent can safely rely on. This is the "save game" that lets work resume without replaying
 the previous conversation.

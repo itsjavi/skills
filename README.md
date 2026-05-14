@@ -134,7 +134,16 @@ To copy files instead of symlinking them:
 scripts/install-tools.sh --no-symlink
 ```
 
-Files ending in `.sh` are installed without the `.sh` suffix, so `tools/create-worktree.sh` becomes `create-worktree`.
+Files ending in `.sh` are installed without the `.sh` suffix, so `tools/create-worktree.sh` becomes `create-worktree`
+and `tools/plan-coord.sh` becomes `plan-coord`.
+
+Available tools:
+
+- `create-worktree`: create and optionally launch an agent in a Git worktree.
+- `plan-coord`: coordinate live planning-workflow sessions across local worktrees with Bun and SQLite.
+
+`plan-coord` stores its local SQLite database at `$XDG_STATE_HOME/plan-coord/coord.sqlite`, or
+`~/.local/state/plan-coord/coord.sqlite` when `XDG_STATE_HOME` is unset. Set `PLAN_COORD_DB` to override the path.
 
 ## Validate skills
 

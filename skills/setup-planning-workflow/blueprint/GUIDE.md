@@ -264,9 +264,34 @@ Phase work ends with verification and documentation, not a commit.
 When multiple agents or humans work in parallel sessions, branches, or worktrees, use:
 
 - [MILESTONES.md](MILESTONES.md) for durable milestone roadmap, cross-milestone ordering, and active milestone focus.
-- [COORDINATION.md](COORDINATION.md) for active work, ownership, blockers, branch/worktree/session location, and handoff
-  links.
+- [COORDINATION.md](COORDINATION.md) for the human-readable active-work snapshot: ownership, blockers, project
+  directories, branch/worktree/session location, and handoff links.
 - `checkpoints/` for completed phase handoffs that others can safely rely on.
+
+### Live Coordination Backend
+
+Docs remain the source of truth for milestones, milestone records, plans, checkpoints, business rules, and decisions.
+Agents in separate worktrees cannot see each other's uncommitted docs, so `COORDINATION.md` is manual by default and may
+be exported from a local live coordinator when `plan-coord` is installed.
+
+By default, `plan-coord` stores local coordination state at `$XDG_STATE_HOME/plan-coord/coord.sqlite`, or
+`~/.local/state/plan-coord/coord.sqlite` when `XDG_STATE_HOME` is unset. Set `PLAN_COORD_DB` to override the path.
+
+When `plan-coord` is available:
+
+```bash
+plan-coord init --planning-root .specs
+plan-coord sync-docs
+plan-coord register --agent "<name>" --task "<current task>"
+plan-coord claim --area "<file-or-area>" --task "<current task>"
+plan-coord update --status active
+plan-coord export-md --out .specs/COORDINATION.md
+```
+
+Use `plan-coord update --status paused|complete`, `plan-coord update --status blocked --blocker "<dependency>"`,
+`plan-coord release --area "<file-or-area>"`, and `plan-coord list` as work changes. Export
+[COORDINATION.md](COORDINATION.md) before handoff so humans and agents without the local SQLite database still have a
+readable snapshot.
 
 Before integrating against work from another session, branch, or worktree, confirm whether that dependency is complete.
 If it is not complete, continue with the fallback or mocking strategy documented in the plan.
