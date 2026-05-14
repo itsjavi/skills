@@ -15,7 +15,9 @@ When adding or modifying a skill, keep these files in sync:
   default prompt, or user-facing positioning changes.
 - `skills/<skill-name>/assets/`, `references/`, `scripts/`, and `examples/`: keep bundled support files aligned with the
   workflow described in `SKILL.md`. Remove stale examples instead of preserving misleading ones.
-- `README.md`: update the skill catalog when adding, removing, renaming, or materially repositioning a skill.
+- `README.md`: keep the public catalog accurate and concise. Update the skill table when adding, removing, renaming, or
+  materially repositioning a skill; update the tools table or install/maintenance notes when tool or script behavior
+  changes; update the rules table when rule files are added, removed, renamed, or materially changed.
 - `registry.json`: regenerate after adding/removing skills, renaming skill folders, or changing any skill frontmatter
   description.
 
@@ -59,7 +61,7 @@ For a new skill:
 
 1. Create `skills/<skill-name>/SKILL.md` with focused frontmatter and concise instructions.
 2. Add only the assets, examples, references, or scripts that directly support the skill.
-3. Update `README.md`.
+3. Update `README.md` with a concise catalog row.
 4. Run `pnpm generate-registry`.
 5. Run `pnpm skills:validate`.
 6. Run `pnpm typecheck` if scripts changed.
@@ -69,7 +71,8 @@ For an existing skill:
 
 1. Update `SKILL.md` first.
 2. Adjust supporting files that would otherwise become stale.
-3. Update `agents/openai.yaml`, `README.md`, and `registry.json` when the public meaning or metadata changes.
+3. Update `agents/openai.yaml`, `README.md`, and `registry.json` when the public meaning, trigger, behavior, or metadata
+   changes.
 4. Run `pnpm skills:validate`.
 5. Run `pnpm typecheck` if scripts changed.
 6. Run `pnpm format`.
@@ -77,12 +80,19 @@ For an existing skill:
 For installer, registry, or validation script changes:
 
 1. Run `pnpm typecheck`.
-2. Run `pnpm format`.
-3. Run `pnpm skills:validate`.
-4. Run `pnpm generate-registry` if registry output or frontmatter parsing changed, then rerun `pnpm skills:validate`.
-5. Optionally test install behavior with `pnpm skills:install codex <skill-name>` or
+2. Update `README.md` when user-facing commands, install targets, tool behavior, or maintenance rules changed.
+3. Run `pnpm format`.
+4. Run `pnpm skills:validate`.
+5. Run `pnpm generate-registry` if registry output or frontmatter parsing changed, then rerun `pnpm skills:validate`.
+6. Optionally test install behavior with `pnpm skills:install codex <skill-name>` or
    `/path/to/skills/scripts/install-skills.sh repo-codex <skill-name>` from a temporary project. Use `claude`, `cursor`,
    `repo-claude`, or `repo-cursor` when changing platform-specific install behavior.
+
+For rule changes:
+
+1. Update files under `rules/`.
+2. Update the `README.md` rules table when adding, removing, renaming, or materially changing a rule.
+3. Run `pnpm format`.
 
 ## Git usage rules
 
