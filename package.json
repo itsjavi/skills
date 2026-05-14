@@ -3,7 +3,7 @@
   "scripts": {
     "format": "oxfmt --write . && sort-package-json",
     "generate-registry": "tsx scripts/generate-registry.ts",
-    "skills:install": "tsx scripts/install.ts",
+    "skills:install": "tsx scripts/install-skills.ts",
     "skills:validate": "tsx scripts/validate-skills.ts",
     "tools:install": "scripts/install-tools.sh",
     "typecheck": "tsc --noEmit"

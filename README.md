@@ -15,9 +15,9 @@ folder format, with a strong focus on spec-driven development.
 - `create-plan` - creates the next numbered implementation plan under `docs/plans/`. It reads the existing product,
   decision, and plan context, drafts a phase/checkpoint-ready plan with acceptance checks and a final review pass, and
   updates the plan index.
-- `start-implementing` - drafts a paste-ready handoff prompt for a fresh agent or chat to implement an existing plan. It
-  resolves a plan by number or by the next pending plan, pulls in the relevant workflow and checkpoint context, and
-  includes the execution rules, validation expectations, and cautions the next agent should follow.
+- `create-implementation-prompt` - drafts a paste-ready handoff prompt for a fresh agent or chat to implement an
+  existing plan. It resolves a plan by number or by the next pending plan, pulls in the relevant workflow and checkpoint
+  context, and includes the execution rules, validation expectations, and cautions the next agent should follow.
 
 ## Structure
 
@@ -81,9 +81,9 @@ Installs into:
 From the target project root:
 
 ```bash
-/path/to/skills/scripts/install.sh repo-codex
-/path/to/skills/scripts/install.sh repo-claude
-/path/to/skills/scripts/install.sh repo-cursor
+/path/to/skills/scripts/install-skills.sh repo-codex
+/path/to/skills/scripts/install-skills.sh repo-claude
+/path/to/skills/scripts/install-skills.sh repo-cursor
 ```
 
 These install into:
@@ -92,6 +92,18 @@ These install into:
 ./.agents/skills
 ./.claude/skills
 ./.cursor/skills
+```
+
+Skill directories are symlinked by default. To copy skill directories instead:
+
+```bash
+pnpm skills:install codex --no-symlink
+```
+
+To preview planned installs:
+
+```bash
+pnpm skills:install codex --dry-run
 ```
 
 ## Install one skill from GitHub

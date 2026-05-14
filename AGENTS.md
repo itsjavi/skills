@@ -42,9 +42,9 @@ Run the narrowest script that matches the change:
 - `pnpm tools:install`: symlink top-level tools into `/usr/local/bin` by default. Pass a bin dir with
   `scripts/install-tools.sh --bin-dir <dir>` when a user-local or custom location is preferred, or pass `--no-symlink`
   to copy files instead.
-- `pnpm skills:install codex`: install all skills into `~/.agents/skills` for manual local testing.
-- `pnpm skills:install claude`: install all skills into `~/.claude/skills` for manual Claude Code testing.
-- `pnpm skills:install cursor`: install all skills into `~/.cursor/skills` for manual Cursor testing.
+- `pnpm skills:install codex`: symlink all skills into `~/.agents/skills` for manual local testing.
+- `pnpm skills:install claude`: symlink all skills into `~/.claude/skills` for manual Claude Code testing.
+- `pnpm skills:install cursor`: symlink all skills into `~/.cursor/skills` for manual Cursor testing.
 
 If a sandbox blocks `tsx` from opening its local IPC pipe, rerun the same command outside the sandbox with approval.
 
@@ -81,7 +81,7 @@ For installer, registry, or validation script changes:
 3. Run `pnpm skills:validate`.
 4. Run `pnpm generate-registry` if registry output or frontmatter parsing changed, then rerun `pnpm skills:validate`.
 5. Optionally test install behavior with `pnpm skills:install codex <skill-name>` or
-   `/path/to/skills/scripts/install.sh repo-codex <skill-name>` from a temporary project. Use `claude`, `cursor`,
+   `/path/to/skills/scripts/install-skills.sh repo-codex <skill-name>` from a temporary project. Use `claude`, `cursor`,
    `repo-claude`, or `repo-cursor` when changing platform-specific install behavior.
 
 ## Git usage rules
