@@ -36,6 +36,13 @@ The same model works under another planning directory when a project wants a dif
 `SKILL.md` defines the exact required file contract. The files under `blueprint/` are canonical scaffold sources to
 adapt for those required outputs, not optional layout suggestions.
 
+In skill instructions, `blueprint/...` means the bundled files in this skill directory. Target project docs are always
+referenced as `<planning-root>/...`.
+
+For projects that already have an older version of this workflow, use [UPGRADING.md](UPGRADING.md). It explains which
+files can be replaced from the blueprint, which project-truth files must be merged, and how to initialize the optional
+`plan-coord` live coordinator.
+
 ## Why It Helps
 
 The workflow makes specification work practical for agents:

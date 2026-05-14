@@ -17,6 +17,7 @@ Describe the scoped outcome this plan should deliver.
 - [ ] Phase deliverables are completed, intentionally deferred, or marked not applicable.
 - [ ] Human QA steps are documented in **How to QA**.
 - [ ] Relevant docs are updated.
+- [ ] Decision record needs are resolved in **Decision Records**.
 - [ ] Verification checks have run or skipped checks are explained.
 
 ## Out of Scope
@@ -47,6 +48,7 @@ Deliverables:
 Acceptance checks:
 
 - [ ] Relevant docs and code areas identified.
+- [ ] Existing decisions reviewed; **Decision Records** is set to `Needed`, `Not needed`, `Created`, or `Superseded`.
 - [ ] Plan updated if discovery changes scope.
 
 ### Phase B — Implementation
@@ -63,6 +65,7 @@ Deliverables:
 Acceptance checks:
 
 - [ ] Implementation matches project conventions.
+- [ ] Major durable choices made during implementation are captured or superseded in `../decisions/`.
 - [ ] Docs-sync needs are handled.
 
 ### Phase C — Validation and Docs
@@ -79,6 +82,7 @@ Acceptance checks:
 
 - [ ] Checks pass or failures are documented.
 - [ ] **How to QA** describes the manual workflow a human should follow.
+- [ ] Decision links are current in this plan and any checkpoint created in this phase.
 - [ ] Relevant docs are updated.
 
 ### Phase D — Final Review Pass
@@ -95,6 +99,7 @@ Acceptance checks:
 
 - [ ] Diff is scoped.
 - [ ] Checkpoint exists for completed phases.
+- [ ] **Decision Records** is no longer `TBD`; linked decisions exist or the plan explains why none were needed.
 - [ ] Handoff is clear.
 
 ## Test / Validation Plan
@@ -116,6 +121,16 @@ relevant area, command, route, or workflow, the user/operator/developer intent, 
 ## Risk Notes
 
 - TBD.
+
+## Decision Records
+
+- Decision check: `TBD` (`Needed`, `Not needed`, `Created`, or `Superseded`).
+- Related decisions: `TBD`.
+- New decision records: `TBD`.
+- Superseded decisions: `TBD`.
+- Notes: if this plan chooses between major durable project approaches, create or supersede a decision record in
+  `../decisions/`. Routine endpoint fields, small schema additions, local sequencing choices, and phase-level
+  implementation details can stay in this plan or its checkpoints.
 
 ## Documentation Updates
 

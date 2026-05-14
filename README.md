@@ -12,12 +12,19 @@ folder format, with a strong focus on spec-driven development.
 - `create-design-guidelines` - creates or updates a project design guide, usually `DESIGN.md`, for web or mobile UI
   work. It inspects the codebase when available, then writes an opinionated design-system reference covering visual
   direction, colors, typography, components, accessibility, and implementation notes for future humans and agents.
+- `create-milestone` - creates or updates milestones inside an established planning workflow. It follows the project
+  `GUIDE.md`, chooses the next three-digit milestone number, creates or updates `milestones/NNN-slug.md`, and keeps
+  `MILESTONES.md` as an index.
+- `document-decision` - documents durable architecture, product, security, or operational decisions inside an
+  established planning workflow. It creates or supersedes `decisions/NNN-slug.md` records when a choice is
+  decision-worthy.
 - `create-plan` - creates the next numbered implementation plan under `docs/plans/`. It reads the existing product,
   decision, and plan context, drafts a phase/checkpoint-ready plan with acceptance checks and a final review pass, and
-  updates the plan index.
+  updates the plan index, then asks whether implementation should start.
 - `create-implementation-prompt` - drafts a paste-ready handoff prompt for a fresh agent or chat to implement an
   existing plan. It resolves a plan by number or by the next pending plan, pulls in the relevant workflow and checkpoint
-  context, and includes the execution rules, validation expectations, and cautions the next agent should follow.
+  context, includes the execution rules, validation expectations, and cautions the next agent should follow, then asks
+  whether implementation should start.
 
 ## Structure
 

@@ -4,7 +4,7 @@ description:
   Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including
   PRODUCT.md, MILESTONES.md, milestone records, BUSINESS_RULES.md, business-rule records, COORDINATION.md, decision
   records, plans, checkpoints, research notes, setup docs, ENV_VARS, SECURITY, templates, and coding-agent instructions
-  for following the workflow.
+  for following the workflow; also use when upgrading an older existing planning workflow to the current conventions.
 ---
 
 # Dev Pairing Workflow Bootstrap
@@ -15,10 +15,31 @@ yet have one.
 See `README.md` in this skill folder for the rationale behind the workflow, especially the document mental model,
 parallel-work coordination, and checkpoint "save game" pattern.
 
+## Resource Path Rules
+
+This skill has two different file roots. Keep them separate:
+
+- **Skill resources:** files bundled with this skill, resolved relative to this `SKILL.md` file. This includes
+  `README.md`, `UPGRADING.md`, and everything under this skill's `blueprint/` directory.
+- **Target project files:** files in the repository being bootstrapped or upgraded, under the chosen planning root such
+  as `.specs/`, `docs/`, `project-specs/`, `.agents/specs/`, or `ai/`.
+
+When these instructions say to read or copy from `blueprint/...`, read from this skill folder's bundled `blueprint/`
+directory, not from the target project. When these instructions say `<planning-root>/...`, read or write the target
+project file.
+
 ## When To Use
 
 Use this skill when asked to add planning conventions, ADRs/decision records, PRD/product docs, plan/checkpoint
-workflows to a new or under-documented repo.
+workflows to a new or under-documented repo, or when asked to upgrade an existing older planning workflow to the current
+conventions.
+
+When the user asks to upgrade, refresh, migrate, modernize, or bring up to date an existing project planning workflow,
+planning docs directory, spec workflow, or older setup-planning-workflow installation, read this skill folder's
+`UPGRADING.md` before editing. Preserve project-truth files, replace workflow-rule files from this skill folder's
+`blueprint/` directory where instructed, and report what was replaced, merged, initialized, renamed, created with `TBD`,
+or left for human review. For upgrades, follow `UPGRADING.md` as the migration workflow before applying the bootstrap
+workflow below.
 
 Do not use it for implementing an existing plan. Use the plan handoff or plan creator skills for that.
 
@@ -157,12 +178,12 @@ workflow instructions so future agents know where to look.
    - Otherwise use `.specs/`.
 3. Preserve existing content. Do not overwrite useful docs; merge or add dated sections.
 4. Create missing directories and every required file from **Required Output Contract**.
-5. Adapt the matching files from `blueprint/` wherever a blueprint file exists. The blueprint files are canonical
-   scaffold sources to adapt, not optional inspiration. Replace placeholder paths, names, dates, and sample rows with
-   repo-specific content or `TBD`.
-6. Copy `blueprint/GUIDE.md` to `<planning-root>/GUIDE.md` nearly verbatim. The copied guide must remain standalone so
-   future users can say things like "following `docs/GUIDE.md`, elaborate a milestone/plan for ...", even if the project
-   has no root agent guide. Only adapt these touch points:
+5. Adapt the matching files from this skill folder's bundled `blueprint/` directory wherever a blueprint file exists.
+   The blueprint files are canonical scaffold sources to adapt, not optional inspiration. Replace placeholder paths,
+   names, dates, and sample rows with repo-specific content or `TBD`.
+6. Copy this skill folder's bundled `blueprint/GUIDE.md` to `<planning-root>/GUIDE.md` nearly verbatim. The copied guide
+   must remain standalone so future users can say things like "following `docs/GUIDE.md`, elaborate a milestone/plan for
+   ...", even if the project has no root agent guide. Only adapt these touch points:
    - planning root paths, such as `.specs/`
    - `[project name]`
    - links or examples that must change because the planning root is not `.specs/`
@@ -300,9 +321,9 @@ Operating rules:
 - links to relevant PRD sections, business rules, decision records, plans, checkpoints, setup docs, and env var docs
 
 `<planning-root>/setup/local-development.md` and `<planning-root>/setup/production-hosting-and-deployment.md` should be
-adapted from the matching blueprint files. Use `blueprint/GUIDE.md` for the detailed setup guide conventions, required
-sections, and guidance on adding more setup guides. Keep all setup docs inferred from repo evidence; mark unknowns as
-`TBD` instead of inventing a hosting or deployment architecture.
+adapted from the matching blueprint files bundled in this skill folder. Use this skill folder's `blueprint/GUIDE.md` for
+the detailed setup guide conventions, required sections, and guidance on adding more setup guides. Keep all setup docs
+inferred from repo evidence; mark unknowns as `TBD` instead of inventing a hosting or deployment architecture.
 
 `<planning-root>/GUIDE.md` should include:
 
@@ -330,6 +351,8 @@ sections, and guidance on adding more setup guides. Keep all setup docs inferred
 - plan filename convention using three-digit milestone and plan ids, e.g. `003-001-plan-title-slug.md`
 - how to create a new plan, including choosing the next number, copying the plan template, updating the target milestone
   record's **Drafted Plans** section, and updating `MILESTONES.md` only when cross-milestone focus changes
+- decision-record maintenance in plans: when major durable choices need decisions, when routine changes do not, when to
+  mark decisions as needed, not needed, created, or superseded, and how to link decisions from plans and checkpoints
 - how to resume work from `MILESTONES.md`, the active milestone record, `COORDINATION.md`, the active plan, and latest
   checkpoints
 - phase/checkpoint convention
@@ -391,6 +414,7 @@ subdirectories unless the user explicitly requests that layout.
 - phases with acceptance checks
 - test/validation plan
 - risk notes
+- decision-record check with links to created or superseded decisions
 - final review phase
 
 `PLAN_CHECKPOINT.md`:
@@ -419,8 +443,10 @@ subdirectories unless the user explicitly requests that layout.
 
 ## Blueprint Files
 
-Blueprint files live in `blueprint/`. Adapt the matching blueprint file whenever creating the same project file. Do not
-copy sample rows literally; replace them with repo-specific content or `TBD`.
+Blueprint files live in this skill folder's bundled `blueprint/` directory. Adapt the matching blueprint file whenever
+creating the same target project file. Do not copy sample rows literally; replace them with repo-specific content or
+`TBD`. Do not treat a target project's `<planning-root>/templates/` or any target-project `blueprint/` directory as the
+source for this skill's canonical blueprints.
 
 - `blueprint/PRODUCT.md`
 - `blueprint/MILESTONES.md`

@@ -195,7 +195,21 @@ Use [templates/PLAN.md](templates/PLAN.md) when drafting a new plan.
 - Checkpoints live in `checkpoints/` and are named `MMM-PPP-slug-LETTER.md`.
 
 A good plan includes goal, definition of done, out of scope, phase status table, phase files and acceptance checks,
-validation plan, risk notes, and a final **Final review pass** phase.
+validation plan, decision-record check, risk notes, and a final **Final review pass** phase.
+
+### Decision Record Maintenance
+
+Plans must actively check whether major durable decisions need to be created, superseded, or linked.
+
+- When drafting a plan, review relevant existing decisions and fill the plan's **Decision Records** section with
+  `Needed`, `Not needed`, `Created`, or `Superseded`.
+- Use `Not needed` when the plan follows existing decisions, involves local sequencing, or only makes routine endpoint,
+  schema, field, validation, UI copy, configuration, or bug-fix changes with no project-level tradeoff.
+- Use `Needed` when the plan is expected to choose between meaningful approaches during discovery or implementation.
+- Use `Created` or `Superseded` once the decision record exists, and link the decision file from the plan.
+- Prefer decision records for big refactors, architecture direction, persistence/auth/security/deployment changes, API
+  or data-model strategy, tenancy, long-lived conventions, or choices that affect multiple milestones/plans/systems.
+- Do not leave the decision check as `TBD` after the final review pass.
 
 ### Creating A New Plan
 
@@ -230,13 +244,23 @@ When completing a phase:
 
 1. Run the phase-specific acceptance check listed in the plan.
 2. Run the relevant verification commands.
-3. Create a checkpoint from [templates/PLAN_CHECKPOINT.md](templates/PLAN_CHECKPOINT.md) in `checkpoints/`.
-4. Update the plan status table: set the phase to `✅ Complete`, fill in `Completed`, and link the checkpoint.
-5. Update the milestone record if plan status, phase count, dependencies, or recommended order changed. Update
+3. Check whether this phase made or changed a major durable architecture, product, security, operational, API strategy,
+   data-model strategy, or convention choice. If yes, create or supersede the decision record before checkpointing the
+   phase. Routine endpoint fields, small schema additions, bug fixes, and local implementation details do not need
+   decision records.
+4. Create a checkpoint from [templates/PLAN_CHECKPOINT.md](templates/PLAN_CHECKPOINT.md) in `checkpoints/`, linking any
+   new or superseded decision records in the checkpoint's **Implications** section.
+5. Update the plan status table: set the phase to `✅ Complete`, fill in `Completed`, and link the checkpoint.
+6. Update the plan's **Decision Records** section when a decision was created, superseded, confirmed as not needed, or
+   deferred.
+7. Update the milestone record if plan status, phase count, dependencies, or recommended order changed. Update
    [MILESTONES.md](MILESTONES.md) only when cross-milestone focus, status, ordering, latest checkpoint, or overview
    changed.
 
-The final phase of every plan is always **Final review pass**. It is verification-only unless it finds defects.
+The final phase of every plan is always **Final review pass**. It is verification-only unless it finds defects. During
+final review, verify the plan's **Decision Records** section is resolved, linked decisions exist, superseded decisions
+cross-link correctly, and related business rules, setup, security, env, or design docs were updated when the decision
+changed current behavior.
 
 ### Docs Sync
 
@@ -245,6 +269,9 @@ Keep implementation and specs in sync in the same turn.
 - If working inside a plan, use the plan status table and checkpoint workflow.
 - If a change affects behavior, architecture, configuration, APIs, operational flows, or user-facing workflows, update
   the closest relevant spec.
+- If a plan or implementation chooses between major durable project approaches, add or supersede a decision record in
+  `decisions/`, then link it from the plan and the relevant checkpoint. Routine endpoint fields, small schema additions,
+  local sequencing choices, and phase-level implementation details can stay in the plan or checkpoint.
 - If a change affects current product/domain behavior, update [BUSINESS_RULES.md](BUSINESS_RULES.md) or the matching
   `business-rules/` record.
 - For post-plan changes, add a dated section such as `## Implementation update (2026-05-11)` instead of rewriting

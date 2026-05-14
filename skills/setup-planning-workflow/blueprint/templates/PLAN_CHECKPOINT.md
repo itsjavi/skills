@@ -31,7 +31,7 @@ What changed in this phase?
 ## Implications
 
 - **Product:** TBD.
-- **Decisions:** TBD.
+- **Decisions:** New or superseded decision records, or `None`.
 - **Future plans:** TBD.
 - **Security / env / operations:** TBD.
 
