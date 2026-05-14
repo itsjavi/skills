@@ -1,12 +1,12 @@
 ---
-name: start-implementing
+name: create-implementation-prompt
 description:
   Use when the user asks for a prompt to start a fresh chat/agent for implementing an existing project plan, e.g. "write
   a prompt for Plan 16", "create the next plan implementation prompt", or "handoff prompt for docs/plans/NN-*.md". Also
   useful to continue a plan implementation that was stopped and is still in progress.
 ---
 
-# Create Plan Handoff Prompt
+# Create Implementation / Plan Handoff Prompt
 
 Create a concise copy-paste prompt for a new coding-agent chat to implement an existing plan.
 
