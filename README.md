@@ -13,6 +13,7 @@ The collection focuses on docs-first planning workflows, implementation handoffs
 | `create-implementation-prompt` | Draft a paste-ready prompt for implementing an existing plan, then ask whether implementation should start.                                                                                   |
 | `document-decision`            | Capture or supersede major durable architecture/product/security/operational decisions when they are decision-worthy.                                                                         |
 | `create-design-guidelines`     | Create or update a project `DESIGN.md` / design-system guide for web or mobile UI work.                                                                                                       |
+| `find-docs`                    | Retrieve current documentation, API references, and examples for libraries, frameworks, SDKs, CLIs, and cloud services with Context7.                                                         |
 
 Each skill lives in `skills/<skill-name>/SKILL.md`. The registry is generated from skill frontmatter.
 
