@@ -1,55 +1,43 @@
 # Milestones
 
-Durable project roadmap index, milestone state, and recommended execution order.
+General milestone index, durable project roadmap, and recommended execution order. Milestone phase maps and drafted-plan
+registries live in the linked records under `milestones/`, not in this overview.
 
 For workflow conventions, plan creation, templates, and resume rules, see [Guide](GUIDE.md). For active parallel work,
-see [Coordination](COORDINATION.md). For detailed milestone records, see `milestones/`.
+see [Coordination](COORDINATION.md). For current product/domain rules, see [Business Rules](BUSINESS_RULES.md).
+
+Last reviewed: YYYY-MM-DD
 
 ## Status Legend
 
-`Proposed` · `Active` · `Complete` · `Paused` · `Cancelled` · `Future`
-
-## Drafted Plans
-
-| #   | Plan                                         | Milestone | Status | Phases | Depends on | Notes                                   |
-| --- | -------------------------------------------- | --------- | ------ | ------ | ---------- | --------------------------------------- |
-| 01  | [Vertical slice](plans/01-vertical-slice.md) | M1        | Active | 1/5    | None       | First end-to-end loop; proves the shape |
-| 02  | [Auth foundation](plans/02-auth.md)          | M1        | Future | 0/5    | Plan 01    | Route/session model after slice exists  |
-
-## Milestone Records
-
-| #    | Milestone      | Status | Summary                    | Record                                                      |
-| ---- | -------------- | ------ | -------------------------- | ----------------------------------------------------------- |
-| 0001 | MVP Foundation | Active | First useful product loop. | [0001-mvp-foundation.md](milestones/0001-mvp-foundation.md) |
+`🧭 Proposed` · `🚧 Active` · `⛔ Blocked` · `⏸️ Paused` · `✅ Complete` · `🛑 Cancelled`
 
 ## Current Focus
 
-- **Active / next plan:** [Plan 01 — Vertical slice](plans/01-vertical-slice.md)
+- **Active milestone:** [0001 - MVP Foundation](milestones/0001-mvp-foundation.md)
+- **Recommended next plan:** [01 - Vertical slice](plans/01-vertical-slice.md)
 - **Latest checkpoint:** [Plan 01 Phase A](checkpoints/01-vertical-slice-A.md)
 - **Coordination board:** [COORDINATION.md](COORDINATION.md)
+- **Business-rule index:** [BUSINESS_RULES.md](BUSINESS_RULES.md)
 
-## Milestone 1 — MVP Foundation
+## Milestone Index
 
-Goal: prove the smallest useful loop before adding breadth.
+| #    | Milestone      | Status    | Record                                                                 | Summary                    |
+| ---- | -------------- | --------- | ---------------------------------------------------------------------- | -------------------------- |
+| 0001 | MVP Foundation | 🚧 Active | [milestones/0001-mvp-foundation.md](milestones/0001-mvp-foundation.md) | First useful product loop. |
 
-Recommended order:
+Milestone objectives, scope, drafted plans, phase maps, risks, acceptance criteria, and checkpoint rollups live in the
+linked milestone records under `milestones/`. Keep this file focused on the overview and cross-milestone ordering.
 
-1. **Plan 01 — Vertical slice**: build the first end-to-end path.
-2. **Plan 02 — Auth**: make subsequent routes auth-aware.
-3. **Plan 03 — Observability**: make operations visible.
+## Recommended Execution Order
 
-### Sub-milestones / Phases
-
-| Sub-milestone      | Status   | Source plan | Durable dependency |
-| ------------------ | -------- | ----------- | ------------------ |
-| Repo foundation    | Complete | Plan 01     | None               |
-| First API contract | Active   | Plan 01     | Repo foundation    |
-| First UI flow      | Proposed | Plan 01     | First API contract |
-| Tests and docs     | Proposed | Plan 01     | First UI flow      |
-| Final review pass  | Proposed | Plan 01     | All Plan 01 phases |
-
-## Durable Dependencies
-
-- UI work may use the mock API strategy from Plan 01 until the first API contract checkpoint is complete.
-- Auth work should not start until Plan 01 final review is complete.
-- Observability can start after the first API route exists, but should check `COORDINATION.md` for active backend work.
+1. Keep [COORDINATION.md](COORDINATION.md) current for active work.
+2. Read [BUSINESS_RULES.md](BUSINESS_RULES.md) before changing product/domain behavior.
+3. Draft or update numbered implementation plans using `NN-slug.md`, where `NN` is the next unused two-digit plan
+   number.
+4. Add or update the plan row in the target milestone record's **Drafted Plans** section.
+5. Define expected deliverables for every plan phase, such as schema/migrations, endpoints, services, UI slices,
+   scripts, tests, docs, checkpoints, or `None`.
+6. Add checkpoints after each completed plan phase so future sessions can resume without chat history.
+7. Create decision records before making durable architecture, product, security, or operational choices that should
+   outlive an implementation plan.

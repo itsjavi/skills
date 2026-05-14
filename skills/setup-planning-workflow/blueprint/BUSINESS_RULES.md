@@ -7,13 +7,13 @@ For decision history and tradeoffs, see `decisions/`.
 
 ## Status Legend
 
-`Draft` · `Active` · `Deprecated` · `Superseded`
+`🧭 Proposed` · `✅ Active` · `🧹 Deprecated` · `🗄️ Superseded`
 
 ## Rule Index
 
-| #    | Rule area  | Status | Owner | Summary                  | Record                                                  |
-| ---- | ---------- | ------ | ----- | ------------------------ | ------------------------------------------------------- |
-| 0001 | Membership | Draft  | TBD   | Workspace membership TBD | [0001-membership.md](business-rules/0001-membership.md) |
+| #    | Rule area  | Status      | Owner | Summary                  | Record                                                  |
+| ---- | ---------- | ----------- | ----- | ------------------------ | ------------------------------------------------------- |
+| 0001 | Membership | 🧭 Proposed | TBD   | Workspace membership TBD | [0001-membership.md](business-rules/0001-membership.md) |
 
 ## Rule Areas
 

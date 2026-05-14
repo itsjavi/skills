@@ -1,24 +1,29 @@
-# Decision: <Title>
+# NNN — Decision Title
 
-Status: Proposed Date: YYYY-MM-DD Owner: TBD
+- **Status:** 🧭 Proposed
+- **Date:** YYYY-MM-DD
+- **Owner:** TBD
 
 ## Context
 
-What problem, constraint, or opportunity requires a decision?
+What problem, constraint, product requirement, operational need, or trade-off requires a decision? Link to `PRODUCT.md`,
+`MILESTONES.md`, research notes, plans, checkpoints, or code references when useful.
 
 ## Decision
 
-What is the chosen direction?
+State the chosen direction clearly.
 
 ## Consequences
 
-What becomes easier, harder, safer, riskier, or more constrained?
+- Positive consequence.
+- Negative consequence or trade-off.
+- Operational or maintenance implication.
 
 ## Alternatives Considered
 
-- Option A: tradeoffs.
-- Option B: tradeoffs.
+- **Alternative A:** why it was not chosen.
+- **Alternative B:** why it was not chosen.
 
-## Follow-Ups
+## Follow-ups
 
-- [ ] TBD
+- [ ] Follow-up item.

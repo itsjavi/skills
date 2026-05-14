@@ -12,11 +12,11 @@ Last reviewed: YYYY-MM-DD HH:mm TZ
 
 ## Active Work
 
-| Owner / agent  | Branch                 | Workspace / session | Task               | Files / area owned | Depends on         | Status      | Last update      | Handoff |
-| -------------- | ---------------------- | ------------------- | ------------------ | ------------------ | ------------------ | ----------- | ---------------- | ------- |
-| backend-agent  | feat/api-contract      | project-api session | First API contract | `src/api/**`       | Repo foundation    | In progress | YYYY-MM-DD HH:mm | TBD     |
-| frontend-agent | feat/ui-vertical-slice | project-ui session  | First UI flow      | `src/ui/**`        | First API contract | Mocking     | YYYY-MM-DD HH:mm | TBD     |
-| human          | main                   | .                   | Review milestones  | `.specs/**`        | None               | Active      | YYYY-MM-DD HH:mm | TBD     |
+| Owner / agent  | Branch                 | Workspace / session | Task               | Files / area owned | Depends on         | Status     | Last update      | Handoff |
+| -------------- | ---------------------- | ------------------- | ------------------ | ------------------ | ------------------ | ---------- | ---------------- | ------- |
+| backend-agent  | feat/api-contract      | project-api session | First API contract | `src/api/**`       | Repo foundation    | 🚧 Active  | YYYY-MM-DD HH:mm | TBD     |
+| frontend-agent | feat/ui-vertical-slice | project-ui session  | First UI flow      | `src/ui/**`        | First API contract | ⛔ Blocked | YYYY-MM-DD HH:mm | TBD     |
+| human          | main                   | .                   | Review milestones  | `.specs/**`        | None               | 🚧 Active  | YYYY-MM-DD HH:mm | TBD     |
 
 ## Blocked Or Waiting
 
@@ -30,7 +30,8 @@ Last reviewed: YYYY-MM-DD HH:mm TZ
 - If multiple agents share the same working directory, claim file or area ownership before editing.
 - Keep rows brief; link to plans and checkpoints for details.
 - Remove or archive stale rows after the work has a checkpoint and no longer needs active coordination.
-- Update `.specs/MILESTONES.md` only when durable roadmap, phase, ordering, or dependency state changes.
+- Update `.specs/MILESTONES.md` only when milestone focus, milestone status, cross-milestone ordering, latest
+  checkpoint, or overview state changes.
 - Update `.specs/BUSINESS_RULES.md` or `.specs/business-rules/` when current product/domain rules change.
 - Durable completion details belong in checkpoints, not in this board.
 - Branch/worktree inspection rules live in [Guide](GUIDE.md).

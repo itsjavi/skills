@@ -2,9 +2,9 @@
 
 Planning root: `.specs/`.
 
-This guide centralizes the conventions that used to live in per-directory README files. Do not add `README.md` files
-inside `decisions/`, `milestones/`, `business-rules/`, `plans/`, `checkpoints/`, `research/`, or `setup/` unless the
-project explicitly chooses that layout.
+This guide centralizes [project name]'s docs-first AI + human development workflow. Do not add `README.md` files inside
+`decisions/`, `milestones/`, `business-rules/`, `plans/`, `checkpoints/`, `research/`, or `setup/` unless the project
+explicitly chooses that layout.
 
 ## Mental Model
 
@@ -14,9 +14,9 @@ project explicitly chooses that layout.
   directory roles, naming conventions, template mappings, indexes, plan/checkpoint lifecycle, and cross-session rules.
 - `.specs/PRODUCT.md`: product truth only: requirements, constraints, scope, non-goals, users, operating assumptions,
   acceptance criteria, and open product questions.
-- `.specs/MILESTONES.md`: durable roadmap index only: current plan order, milestone and sub-milestone status, durable
-  dependencies, active or next recommended plan, latest checkpoint pointers, and links to detailed records in
-  `milestones/`. It should stay stable enough to act as the execution map.
+- `.specs/MILESTONES.md`: durable milestone index only: cross-milestone order, milestone status, active milestone,
+  recommended next plan, latest checkpoint pointer, and links to detailed records in `milestones/`. It should not
+  duplicate drafted-plan registries or phase maps from milestone records.
 - `.specs/milestones/`: detailed milestone records. Use these when a milestone needs its own objective, scope, phase
   map, acceptance criteria, related plans, business rules, decisions, or checkpoint rollups.
 - `.specs/BUSINESS_RULES.md`: current business-rule index: grouped rule areas, rule status, ownership/source notes, and
@@ -83,6 +83,24 @@ it to the project and current task.
 - `templates/PLAN.md`: use for new files in `plans/`.
 - `templates/PLAN_CHECKPOINT.md`: use for new files in `checkpoints/`.
 
+## Status Vocabulary
+
+Use the exact status labels below, including emoji, in indexes, templates, status tables, and records.
+
+Implementation workflow statuses for milestones, plans, and phases:
+
+- `🧭 Proposed`: scoped or queued, but not the current active work. Use this instead of `Draft` or bare `Proposed`.
+- `🚧 Active`: current work is underway or the milestone/plan is the active focus.
+- `⛔ Blocked`: cannot proceed until a named dependency is resolved.
+- `⏸️ Paused`: intentionally stopped but expected to resume.
+- `✅ Complete`: finished and checkpointed or otherwise accepted as done.
+- `🛑 Cancelled`: intentionally stopped and not expected to resume.
+
+Reference-record statuses:
+
+- Business rules use `🧭 Proposed`, `✅ Active`, `🗄️ Superseded`, or `🧹 Deprecated`.
+- Decisions use `🧭 Proposed`, `✅ Accepted`, `🗄️ Superseded`, or `🧹 Deprecated`.
+
 ## `decisions/`
 
 Purpose: architecture/product decision records and tradeoff history. Each record captures one durable choice, the
@@ -91,35 +109,37 @@ alternatives considered, and the consequences.
 Use [templates/DECISION.md](templates/DECISION.md) for new decision records.
 
 - File name: `NNNN-kebab-case-title.md`. Never reuse numbers.
-- Status lifecycle: `Proposed` -> `Accepted` -> `Superseded by NNNN` or `Deprecated`.
+- Status lifecycle: `🧭 Proposed` -> `✅ Accepted` -> `🗄️ Superseded by NNNN` or `🧹 Deprecated`.
 - Accepted decisions are durable history. Fix typos if needed, but make substantive changes with a new decision that
   supersedes the old one.
 - Cross-link related decisions.
 
 ### Decision Index
 
-| #    | Title               | Status   |
-| ---- | ------------------- | -------- |
-| 0001 | Runtime and storage | Accepted |
+| #    | Title               | Status      |
+| ---- | ------------------- | ----------- |
+| 0001 | Runtime and storage | ✅ Accepted |
 
 ## `milestones/`
 
-Purpose: detailed milestone records for roadmap items that need more context than an index row. Keep ordering, status,
-and durable dependencies in [MILESTONES.md](MILESTONES.md); use files here for the milestone's objective, scope,
-acceptance criteria, related plans, related business rules, decisions, risks, and checkpoint rollups.
+Purpose: detailed milestone records for roadmap items that need more context than an index row. Keep only
+cross-milestone ordering and milestone status in [MILESTONES.md](MILESTONES.md); use files here for the milestone's
+objective, scope, drafted plans, phase maps, acceptance criteria, related business rules, decisions, risks, and
+checkpoint rollups.
 
 Use [templates/MILESTONE.md](templates/MILESTONE.md) for new milestone records.
 
 - File name: `NNNN-kebab-case-title.md`. Never reuse numbers.
-- Status lifecycle: `Proposed` -> `Active` -> `Complete`, with `Paused`, `Cancelled`, or `Future` when needed.
+- Status lifecycle: `🧭 Proposed` -> `🚧 Active` -> `✅ Complete`, with `⛔ Blocked`, `⏸️ Paused`, or `🛑 Cancelled`
+  when needed.
 - A milestone record should link back to its row in [MILESTONES.md](MILESTONES.md).
 - If a milestone is small enough to fit clearly in [MILESTONES.md](MILESTONES.md), a separate record is optional.
 
 ### Milestone Record Index
 
-| #    | Milestone      | Status | Summary                    | Link                                                        |
-| ---- | -------------- | ------ | -------------------------- | ----------------------------------------------------------- |
-| 0001 | MVP Foundation | Active | First useful product loop. | [0001-mvp-foundation.md](milestones/0001-mvp-foundation.md) |
+| #    | Milestone      | Status    | Summary                    | Link                                                        |
+| ---- | -------------- | --------- | -------------------------- | ----------------------------------------------------------- |
+| 0001 | MVP Foundation | 🚧 Active | First useful product loop. | [0001-mvp-foundation.md](milestones/0001-mvp-foundation.md) |
 
 ## `business-rules/`
 
@@ -130,20 +150,21 @@ tradeoff, add or supersede a decision record too.
 Use [templates/BUSINESS_RULE.md](templates/BUSINESS_RULE.md) for new business-rule records.
 
 - File name: `NNNN-kebab-case-title.md`. Never reuse numbers.
-- Status lifecycle: `Draft` -> `Active` -> `Deprecated` or `Superseded by NNNN`.
+- Status lifecycle: `🧭 Proposed` -> `✅ Active`, or `🧹 Deprecated`, `🗄️ Superseded by NNNN`.
 - Keep [BUSINESS_RULES.md](BUSINESS_RULES.md) as the grouped index and current source for rule status.
 - Link implementation surfaces and tests when known so rules remain verifiable.
 
 ### Business Rule Index
 
-| #    | Rule area  | Status | Summary                  | Link                                                    |
-| ---- | ---------- | ------ | ------------------------ | ------------------------------------------------------- |
-| 0001 | Membership | Draft  | Workspace membership TBD | [0001-membership.md](business-rules/0001-membership.md) |
+| #    | Rule area  | Status      | Summary                  | Link                                                    |
+| ---- | ---------- | ----------- | ------------------------ | ------------------------------------------------------- |
+| 0001 | Membership | 🧭 Proposed | Workspace membership TBD | [0001-membership.md](business-rules/0001-membership.md) |
 
 ## `plans/`
 
 Purpose: implementation plans after product requirements, business rules, and decisions are clear. Plans are scoped
-units of work, not the master roadmap; durable order and status live in [MILESTONES.md](MILESTONES.md).
+units of work, not the master roadmap; milestone ordering lives in [MILESTONES.md](MILESTONES.md), while plan order and
+phase state live in the target milestone record and the plan file.
 
 Use [templates/PLAN.md](templates/PLAN.md) when drafting a new plan.
 
@@ -158,33 +179,36 @@ validation plan, risk notes, and a final **Final review pass** phase.
 
 ### Plan Index
 
-| Plan                | Status | Owner | Phase progress | Summary                        |
-| ------------------- | ------ | ----- | -------------- | ------------------------------ |
-| 01 - Vertical slice | Draft  | TBD   | 0 / TBD        | First end-to-end product path. |
+| Plan                | Status      | Owner | Phase progress | Summary                        |
+| ------------------- | ----------- | ----- | -------------- | ------------------------------ |
+| 01 - Vertical slice | 🧭 Proposed | TBD   | 0 / TBD        | First end-to-end product path. |
 
 ### Creating A New Plan
 
 1. Pick `NN` as the next unused two-digit number.
 2. Copy [templates/PLAN.md](templates/PLAN.md) to `plans/NN-slug.md`.
-3. Add a row to the plan index in this guide.
-4. Add or update the matching row in [MILESTONES.md](MILESTONES.md).
+3. Add or update the matching row in the target milestone record's **Drafted Plans** section.
+4. Update [MILESTONES.md](MILESTONES.md) only if milestone focus, milestone status, cross-milestone order, latest
+   checkpoint, or recommended next plan changed.
 5. Ensure the final phase is **Final review pass**.
 
 ### Resuming Work
 
-1. Find the first `Active` plan in [MILESTONES.md](MILESTONES.md).
+1. Use [MILESTONES.md](MILESTONES.md) to find the `🚧 Active` milestone, then open that milestone record's **Drafted
+   Plans** section.
 2. Read [COORDINATION.md](COORDINATION.md) to see active sessions, branches, worktrees, blockers, ownership, and
    handoffs.
 3. Open the active plan and its latest checkpoint in `checkpoints/`.
 4. Continue from the first non-complete phase.
-5. If no plan is active, pick the first `Proposed` plan in recommended order.
+5. If no plan is active, pick the first `🧭 Proposed` plan in recommended order from the milestone record or ask whether
+   to create one.
 
 ### Phase Workflow
 
 When starting a phase:
 
 1. Confirm preceding phases are complete, or note why the plan is intentionally skipping ahead.
-2. Update the plan status table: set the phase to `In progress` and fill in `Started`.
+2. Update the plan status table: set the phase to `🚧 Active` and fill in `Started`.
 3. Implement only the work scoped to that phase unless the plan is updated.
 
 When completing a phase:
@@ -192,8 +216,10 @@ When completing a phase:
 1. Run the phase-specific acceptance check listed in the plan.
 2. Run the relevant verification commands.
 3. Create a checkpoint from [templates/PLAN_CHECKPOINT.md](templates/PLAN_CHECKPOINT.md) in `checkpoints/`.
-4. Update the plan status table: set the phase to `Complete`, fill in `Completed`, and link the checkpoint.
-5. Update [MILESTONES.md](MILESTONES.md) if the plan status, phase count, dependencies, or recommended order changed.
+4. Update the plan status table: set the phase to `✅ Complete`, fill in `Completed`, and link the checkpoint.
+5. Update the milestone record if plan status, phase count, dependencies, or recommended order changed. Update
+   [MILESTONES.md](MILESTONES.md) only when cross-milestone focus, status, ordering, latest checkpoint, or overview
+   changed.
 
 The final phase of every plan is always **Final review pass**. It is verification-only unless it finds defects.
 
@@ -222,7 +248,7 @@ Phase work ends with verification and documentation, not a commit.
 
 When multiple agents or humans work in parallel sessions, branches, or worktrees, use:
 
-- [MILESTONES.md](MILESTONES.md) for durable roadmap, ordering, phase, and dependency state.
+- [MILESTONES.md](MILESTONES.md) for durable milestone roadmap, cross-milestone ordering, and active milestone focus.
 - [COORDINATION.md](COORDINATION.md) for active work, ownership, blockers, branch/worktree/session location, and handoff
   links.
 - `checkpoints/` for completed phase handoffs that others can safely rely on.
@@ -285,9 +311,9 @@ capture it in a plan. When it clarifies current product/domain behavior, capture
 
 ### Research Index
 
-| Topic | Date       | Status | Summary | Link |
-| ----- | ---------- | ------ | ------- | ---- |
-| TBD   | YYYY-MM-DD | Draft  | TBD     | TBD  |
+| Topic | Date       | Status      | Summary | Link |
+| ----- | ---------- | ----------- | ------- | ---- |
+| TBD   | YYYY-MM-DD | 🧭 Proposed | TBD     | TBD  |
 
 ## `setup/`
 
@@ -336,7 +362,7 @@ has a distinct operator path, for example `ci.md`, `preview-environments.md`, `s
 
 ### Setup Index
 
-| Guide                             | Scope                 | Status | Link                                                                               |
-| --------------------------------- | --------------------- | ------ | ---------------------------------------------------------------------------------- |
-| Local development                 | Local source checkout | Draft  | [local-development.md](setup/local-development.md)                                 |
-| Production hosting and deployment | Staging / production  | Draft  | [production-hosting-and-deployment.md](setup/production-hosting-and-deployment.md) |
+| Guide                             | Scope                 | Status      | Link                                                                               |
+| --------------------------------- | --------------------- | ----------- | ---------------------------------------------------------------------------------- |
+| Local development                 | Local source checkout | 🧭 Proposed | [local-development.md](setup/local-development.md)                                 |
+| Production hosting and deployment | Staging / production  | 🧭 Proposed | [production-hosting-and-deployment.md](setup/production-hosting-and-deployment.md) |

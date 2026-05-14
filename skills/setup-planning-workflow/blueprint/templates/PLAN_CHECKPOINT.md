@@ -1,29 +1,40 @@
-# Checkpoint: <Plan> / <Phase>
+# Checkpoint: MMM-PPP Plan Title — Phase PHASE
 
-Completed: YYYY-MM-DD
+- **Status:** ✅ Complete
+- **Completed:** YYYY-MM-DD
+- **Author / session:** TBD
+- **Plan:** [MMM-PPP-plan-title.md](../plans/MMM-PPP-plan-title.md)
+- **Phase:** PHASE — Phase title
 
 ## Summary
 
-What changed in this completed phase?
+What changed in this phase?
+
+## Deliverables
+
+- Delivered: TBD.
+- Deferred: TBD.
+- Not applicable: TBD.
 
 ## Files Changed
 
-- TBD
+- `path/to/file`: why it changed.
 
 ## Checks Run
 
-- TBD
+- `command`: result.
 
-## Notes And Surprises
+## Notes / Surprises
 
-- TBD
+- Note anything future sessions should know.
 
 ## Implications
 
-Decisions, business rules, product docs, milestones, future plans, security, or configuration implications:
+- **Product:** TBD.
+- **Decisions:** TBD.
+- **Future plans:** TBD.
+- **Security / env / operations:** TBD.
 
-- TBD
+## Follow-ups
 
-## Follow-Ups
-
-- [ ] TBD
+- [ ] Follow-up item.

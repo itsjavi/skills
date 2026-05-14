@@ -1,44 +1,50 @@
 # Milestone: <Title>
 
-| Field       | Value |
-| ----------- | ----- |
-| Status      | TBD   |
-| Owner       | TBD   |
-| Target date | TBD   |
-| Index row   | TBD   |
+| Field                 | Value                             |
+| --------------------- | --------------------------------- |
+| Status                | 🧭 Proposed                       |
+| Owner                 | TBD                               |
+| Target date / horizon | TBD                               |
+| Index row             | [MILESTONES.md](../MILESTONES.md) |
 
 ## Objective
 
-TBD
+TBD.
 
 ## Scope
 
-TBD
+- TBD.
 
 ## Non-Goals
 
-TBD
+- TBD.
 
 ## Related Work
 
-- Plans: TBD
-- Decisions: TBD
-- Business rules: TBD
-- Checkpoints: TBD
+- Plans: See **Drafted Plans** below.
+- Decisions: TBD.
+- Business rules: TBD.
+- Checkpoints: TBD.
+
+## Drafted Plans
+
+| #   | Plan | Status      | Depends on | Notes |
+| --- | ---- | ----------- | ---------- | ----- |
+| TBD | TBD  | 🧭 Proposed | TBD        | TBD   |
 
 ## Phase Map
 
-| Phase | Status | Related plan | Acceptance signal |
-| ----- | ------ | ------------ | ----------------- |
-| TBD   | TBD    | TBD          | TBD               |
+| Phase | Status      | Related plan | Expected deliverables | Acceptance signal |
+| ----- | ----------- | ------------ | --------------------- | ----------------- |
+| TBD   | 🧭 Proposed | TBD          | TBD                   | TBD               |
 
 ## Acceptance Criteria
 
-- TBD
+- TBD.
 
 ## Risks And Open Questions
 
-- TBD
+- TBD.
 
 ## Checkpoint Rollup
 

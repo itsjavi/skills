@@ -1,6 +1,6 @@
 # 0001 — Runtime And Storage
 
-**Status:** Accepted **Date:** 2026-05-11 **Owner:** TBD
+**Status:** ✅ Accepted **Date:** 2026-05-11 **Owner:** TBD
 
 ## Context
 

@@ -1,18 +1,18 @@
 # Plan 01 — Vertical Slice
 
-**Status:** Active **Owner:** TBD **Last updated:** 2026-05-11
+**Status:** 🚧 Active **Owner:** TBD **Last updated:** 2026-05-11
 
 ## Status
 
-| Phase | Title              | Status         | Started    | Completed  | Checkpoint                                       |
-| ----- | ------------------ | -------------- | ---------- | ---------- | ------------------------------------------------ |
-| A     | Repo foundation    | ✅ Complete    | 2026-05-11 | 2026-05-11 | [Phase A](../checkpoints/01-vertical-slice-A.md) |
-| B     | First API contract | 🟡 In progress | 2026-05-11 | —          | —                                                |
-| C     | First UI flow      | ⬜ Pending     | —          | —          | —                                                |
-| D     | Tests and docs     | ⬜ Pending     | —          | —          | —                                                |
-| E     | Final review pass  | ⬜ Pending     | —          | —          | —                                                |
+| Phase | Title              | Status      | Started    | Completed  | Checkpoint                                       |
+| ----- | ------------------ | ----------- | ---------- | ---------- | ------------------------------------------------ |
+| A     | Repo foundation    | ✅ Complete | 2026-05-11 | 2026-05-11 | [Phase A](../checkpoints/01-vertical-slice-A.md) |
+| B     | First API contract | 🚧 Active   | 2026-05-11 | —          | —                                                |
+| C     | First UI flow      | 🧭 Proposed | —          | —          | —                                                |
+| D     | Tests and docs     | 🧭 Proposed | —          | —          | —                                                |
+| E     | Final review pass  | 🧭 Proposed | —          | —          | —                                                |
 
-Legend: `⬜ Pending` · `🟡 In progress` · `✅ Complete` · `⏸ Paused` · `❌ Cancelled`.
+Legend: `🧭 Proposed` · `🚧 Active` · `⛔ Blocked` · `⏸️ Paused` · `✅ Complete` · `🛑 Cancelled`.
 
 ## Goal
 

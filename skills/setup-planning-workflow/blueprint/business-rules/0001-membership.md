@@ -2,7 +2,7 @@
 
 | Field         | Value                                     |
 | ------------- | ----------------------------------------- |
-| Status        | Draft                                     |
+| Status        | 🧭 Proposed                               |
 | Owner         | TBD                                       |
 | Last reviewed | YYYY-MM-DD                                |
 | Index row     | [BUSINESS_RULES.md](../BUSINESS_RULES.md) |

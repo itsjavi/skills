@@ -2,7 +2,7 @@
 
 | Field       | Value                             |
 | ----------- | --------------------------------- |
-| Status      | Active                            |
+| Status      | 🚧 Active                         |
 | Owner       | TBD                               |
 | Target date | TBD                               |
 | Index row   | [MILESTONES.md](../MILESTONES.md) |
@@ -31,13 +31,13 @@ Prove the smallest useful product loop before adding breadth.
 
 ## Phase Map
 
-| Phase              | Status   | Related plan | Acceptance signal       |
-| ------------------ | -------- | ------------ | ----------------------- |
-| Repo foundation    | Complete | Plan 01      | Phase A checkpoint      |
-| First API contract | Active   | Plan 01      | Contract checkpoint     |
-| First UI flow      | Proposed | Plan 01      | UI flow smoke check     |
-| Tests and docs     | Proposed | Plan 01      | Verification pass       |
-| Final review pass  | Proposed | Plan 01      | Final review checkpoint |
+| Phase              | Status      | Related plan | Acceptance signal       |
+| ------------------ | ----------- | ------------ | ----------------------- |
+| Repo foundation    | ✅ Complete | Plan 01      | Phase A checkpoint      |
+| First API contract | 🚧 Active   | Plan 01      | Contract checkpoint     |
+| First UI flow      | 🧭 Proposed | Plan 01      | UI flow smoke check     |
+| Tests and docs     | 🧭 Proposed | Plan 01      | Verification pass       |
+| Final review pass  | 🧭 Proposed | Plan 01      | Final review checkpoint |
 
 ## Acceptance Criteria
 
