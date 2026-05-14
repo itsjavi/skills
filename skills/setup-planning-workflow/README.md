@@ -13,8 +13,10 @@ The workflow creates a lightweight project memory system:
 
 - `PRODUCT.md` explains what the product is trying to become and why.
 - `decisions/` captures durable choices and tradeoffs.
-- `MILESTONES.md` is the stable roadmap index: milestones, ordering, status, plan order, and durable dependencies.
-- `milestones/` holds detailed milestone records when an index row is not enough.
+- `MILESTONES.md` is the stable milestone index: cross-milestone order, status, active milestone, recommended next plan,
+  latest checkpoint, and record links.
+- `milestones/` holds detailed milestone records, including drafted-plan registries, phase maps, risks, and checkpoint
+  rollups.
 - `BUSINESS_RULES.md` is the index of current product/domain rules.
 - `business-rules/` captures current rules the system must obey, separate from decision history.
 - `COORDINATION.md` tracks active parallel work: who or what is moving right now, where, and with what blockers.
@@ -51,9 +53,9 @@ The workflow makes specification work practical for agents:
 
 `MILESTONES.md` and `COORDINATION.md` intentionally serve different kinds of truth.
 
-`MILESTONES.md` is durable project state. It should stay stable enough to act as the execution map: what milestones
-exist, what depends on what, what is active, what comes next, and which detailed milestone record has the deeper
-context.
+`MILESTONES.md` is durable project state. It should stay stable enough to act as the cross-milestone map: what
+milestones exist, which milestone is active, what plan is recommended next, and which detailed milestone record has the
+deeper context.
 
 `BUSINESS_RULES.md` and `business-rules/` are current product truth. They state what the system must currently do in
 domain language, with examples, edge cases, implementation links, and test links when known. This keeps product rules

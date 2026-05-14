@@ -2,14 +2,18 @@
 
 Planning root: `.specs/`.
 
-This guide centralizes [project name]'s docs-first AI + human development workflow. Do not add `README.md` files inside
-`decisions/`, `milestones/`, `business-rules/`, `plans/`, `checkpoints/`, `research/`, or `setup/` unless the project
-explicitly chooses that layout.
+This guide centralizes [project name]'s docs-first AI + human development workflow. It is a standalone operating manual:
+an agent can be told to "follow this guide" to create or update milestones, plans, checkpoints, decisions, business
+rules, research notes, or setup docs, even when the project has no root `AGENTS.md`.
+
+Do not add `README.md` files inside `decisions/`, `milestones/`, `business-rules/`, `plans/`, `checkpoints/`,
+`research/`, or `setup/` unless the project explicitly chooses that layout.
 
 ## Mental Model
 
-- The project's root `AGENTS.md`: the cockpit checklist. It should contain what an agent must do at the start/end of
-  work and short operating rules, while linking here for the full workflow.
+- The project's root `AGENTS.md`, when present: the cockpit checklist. It should contain what an agent must do at the
+  start/end of work and short operating rules, while linking here for the full workflow. The workflow must remain usable
+  without it.
 - `.specs/GUIDE.md`: this centralized manual and canonical explanation of the spec-based workflow: document roles,
   directory roles, naming conventions, template mappings, indexes, plan/checkpoint lifecycle, and cross-session rules.
 - `.specs/PRODUCT.md`: product truth only: requirements, constraints, scope, non-goals, users, operating assumptions,
@@ -43,6 +47,22 @@ explicitly chooses that layout.
   stale and should be promoted into decisions or plans when it becomes load-bearing.
 - `.specs/setup/`: local development, production hosting, deployment, self-hosting, and operational setup guides.
 
+## Direct Agent Use
+
+When a user asks an agent to follow this guide for a milestone, plan, checkpoint, decision, business rule, research
+note, or setup guide:
+
+1. Read this guide first, then the relevant source docs: [PRODUCT.md](PRODUCT.md), [MILESTONES.md](MILESTONES.md),
+   [BUSINESS_RULES.md](BUSINESS_RULES.md), [COORDINATION.md](COORDINATION.md), the target milestone record, active plan,
+   latest relevant checkpoints, and any relevant setup or design docs.
+2. Use the matching template from `templates/` when creating a new structured record.
+3. Use the exact status vocabulary, file naming, and numbering rules in this guide.
+4. Update the owning index or source-of-truth file only when this guide says that file owns the changed state.
+5. Keep generated docs concise, link to details instead of duplicating them, and mark unknowns as `TBD` instead of
+   inventing product facts.
+6. Before finishing, check whether the requested doc change affects milestones, business rules, decisions, coordination,
+   setup, or active plans, and update the related file in the same turn when needed.
+
 ## Context Discipline
 
 Start with the high-signal specs: this guide, [PRODUCT.md](PRODUCT.md), [MILESTONES.md](MILESTONES.md),
@@ -55,6 +75,21 @@ large documents.
 
 When creating or updating specs, keep entries concise and link to details instead of duplicating long explanations.
 Prefer updating indexes and latest checkpoint links over pasting full plan contents into new files.
+
+## Current Technical References
+
+Before writing durable guidance that depends on library, framework, SDK, API, CLI, or cloud-provider behavior, verify
+the details against current documentation. Use the project's approved documentation-fetching workflow when one exists,
+such as Context7 in Codex environments:
+
+```bash
+npx -y ctx7@latest library <name> "<user question>"
+npx -y ctx7@latest docs <libraryId> "<user question>"
+```
+
+Do not include secrets, tokens, credentials, private URLs, or production data in documentation queries. If a technical
+finding becomes load-bearing, summarize it in the relevant research note, decision, setup guide, or plan instead of
+leaving it only in chat.
 
 ## Directory Map
 
@@ -108,17 +143,11 @@ alternatives considered, and the consequences.
 
 Use [templates/DECISION.md](templates/DECISION.md) for new decision records.
 
-- File name: `NNNN-kebab-case-title.md`. Never reuse numbers.
-- Status lifecycle: `🧭 Proposed` -> `✅ Accepted` -> `🗄️ Superseded by NNNN` or `🧹 Deprecated`.
+- File name: `NNN-kebab-case-title.md`. Never reuse numbers.
+- Status lifecycle: `🧭 Proposed` -> `✅ Accepted` -> `🗄️ Superseded by NNN` or `🧹 Deprecated`.
 - Accepted decisions are durable history. Fix typos if needed, but make substantive changes with a new decision that
   supersedes the old one.
-- Cross-link related decisions.
-
-### Decision Index
-
-| #    | Title               | Status      |
-| ---- | ------------------- | ----------- |
-| 0001 | Runtime and storage | ✅ Accepted |
+- Cross-link related decisions, plans, business rules, checkpoints, or implementation surfaces when useful.
 
 ## `milestones/`
 
@@ -129,17 +158,12 @@ checkpoint rollups.
 
 Use [templates/MILESTONE.md](templates/MILESTONE.md) for new milestone records.
 
-- File name: `NNNN-kebab-case-title.md`. Never reuse numbers.
+- File name: `NNN-kebab-case-title.md`. Never reuse numbers.
 - Status lifecycle: `🧭 Proposed` -> `🚧 Active` -> `✅ Complete`, with `⛔ Blocked`, `⏸️ Paused`, or `🛑 Cancelled`
   when needed.
 - A milestone record should link back to its row in [MILESTONES.md](MILESTONES.md).
 - If a milestone is small enough to fit clearly in [MILESTONES.md](MILESTONES.md), a separate record is optional.
-
-### Milestone Record Index
-
-| #    | Milestone      | Status    | Summary                    | Link                                                        |
-| ---- | -------------- | --------- | -------------------------- | ----------------------------------------------------------- |
-| 0001 | MVP Foundation | 🚧 Active | First useful product loop. | [0001-mvp-foundation.md](milestones/0001-mvp-foundation.md) |
+- Do not duplicate milestone rows in this guide; [MILESTONES.md](MILESTONES.md) owns the milestone index.
 
 ## `business-rules/`
 
@@ -149,16 +173,11 @@ tradeoff, add or supersede a decision record too.
 
 Use [templates/BUSINESS_RULE.md](templates/BUSINESS_RULE.md) for new business-rule records.
 
-- File name: `NNNN-kebab-case-title.md`. Never reuse numbers.
-- Status lifecycle: `🧭 Proposed` -> `✅ Active`, or `🧹 Deprecated`, `🗄️ Superseded by NNNN`.
+- File name: `NNN-kebab-case-title.md`. Never reuse numbers.
+- Status lifecycle: `🧭 Proposed` -> `✅ Active`, or `🧹 Deprecated`, `🗄️ Superseded by NNN`.
 - Keep [BUSINESS_RULES.md](BUSINESS_RULES.md) as the grouped index and current source for rule status.
 - Link implementation surfaces and tests when known so rules remain verifiable.
-
-### Business Rule Index
-
-| #    | Rule area  | Status      | Summary                  | Link                                                    |
-| ---- | ---------- | ----------- | ------------------------ | ------------------------------------------------------- |
-| 0001 | Membership | 🧭 Proposed | Workspace membership TBD | [0001-membership.md](business-rules/0001-membership.md) |
+- Do not duplicate business-rule rows in this guide; [BUSINESS_RULES.md](BUSINESS_RULES.md) owns the rule index.
 
 ## `plans/`
 
@@ -168,29 +187,25 @@ phase state live in the target milestone record and the plan file.
 
 Use [templates/PLAN.md](templates/PLAN.md) when drafting a new plan.
 
-- File name: `NN-slug.md`.
-- `NN` is two-digit and monotonic. Once allocated, never reuse it.
+- File name: `MMM-PPP-slug.md`.
+- `MMM` is the three-digit milestone id and `PPP` is the three-digit plan id within that milestone. Once allocated,
+  never reuse a plan number within its milestone.
 - Roadmap items do not get numbers until they are drafted into real plan files.
 - Phase labels are letters: A, B, C, ...
-- Checkpoints live in `checkpoints/` and are named `NN-slug-LETTER.md`.
+- Checkpoints live in `checkpoints/` and are named `MMM-PPP-slug-LETTER.md`.
 
 A good plan includes goal, definition of done, out of scope, phase status table, phase files and acceptance checks,
 validation plan, risk notes, and a final **Final review pass** phase.
 
-### Plan Index
-
-| Plan                | Status      | Owner | Phase progress | Summary                        |
-| ------------------- | ----------- | ----- | -------------- | ------------------------------ |
-| 01 - Vertical slice | 🧭 Proposed | TBD   | 0 / TBD        | First end-to-end product path. |
-
 ### Creating A New Plan
 
-1. Pick `NN` as the next unused two-digit number.
-2. Copy [templates/PLAN.md](templates/PLAN.md) to `plans/NN-slug.md`.
-3. Add or update the matching row in the target milestone record's **Drafted Plans** section.
-4. Update [MILESTONES.md](MILESTONES.md) only if milestone focus, milestone status, cross-milestone order, latest
+1. Pick the target milestone `MMM`.
+2. Pick `PPP` as the next unused three-digit plan number inside that milestone.
+3. Copy [templates/PLAN.md](templates/PLAN.md) to `plans/MMM-PPP-slug.md`.
+4. Add or update the matching row in the target milestone record's **Drafted Plans** section.
+5. Update [MILESTONES.md](MILESTONES.md) only if milestone focus, milestone status, cross-milestone order, latest
    checkpoint, or recommended next plan changed.
-5. Ensure the final phase is **Final review pass**.
+6. Ensure the final phase is **Final review pass**.
 
 ### Resuming Work
 
@@ -277,8 +292,8 @@ plans.
 
 Use [templates/PLAN_CHECKPOINT.md](templates/PLAN_CHECKPOINT.md) for new checkpoints.
 
-- File name: `NN-slug-LETTER.md`.
-- `NN-slug` matches the plan filename in `plans/`.
+- File name: `MMM-PPP-slug-LETTER.md`.
+- `MMM-PPP-slug` matches the plan filename in `plans/`.
 - `LETTER` matches the completed phase letter in the plan status table.
 
 Required content:
@@ -291,12 +306,6 @@ Required content:
 - implications for product specs, decisions, or future plans
 - follow-ups
 
-### Checkpoint Index
-
-| Plan                | Phase | Date       | Summary               | Link                                                         |
-| ------------------- | ----- | ---------- | --------------------- | ------------------------------------------------------------ |
-| 01 - Vertical slice | A     | YYYY-MM-DD | Foundation completed. | [01-vertical-slice-A.md](checkpoints/01-vertical-slice-A.md) |
-
 After creating a checkpoint, update the matching plan's status table so the phase points back to the checkpoint.
 
 ## `research/`
@@ -308,12 +317,6 @@ Research can become stale. Product requirements in [PRODUCT.md](PRODUCT.md), cur
 
 When research produces a durable decision, capture it in a decision record. When it produces implementation sequencing,
 capture it in a plan. When it clarifies current product/domain behavior, capture it in a business-rule record.
-
-### Research Index
-
-| Topic | Date       | Status      | Summary | Link |
-| ----- | ---------- | ----------- | ------- | ---- |
-| TBD   | YYYY-MM-DD | 🧭 Proposed | TBD     | TBD  |
 
 ## `setup/`
 
@@ -360,9 +363,5 @@ has a distinct operator path, for example `ci.md`, `preview-environments.md`, `s
 - security notes for TLS, trusted origins, public/private ports, admin endpoints, secret handling, logging, and
   least-privilege access
 
-### Setup Index
-
-| Guide                             | Scope                 | Status      | Link                                                                               |
-| --------------------------------- | --------------------- | ----------- | ---------------------------------------------------------------------------------- |
-| Local development                 | Local source checkout | 🧭 Proposed | [local-development.md](setup/local-development.md)                                 |
-| Production hosting and deployment | Staging / production  | 🧭 Proposed | [production-hosting-and-deployment.md](setup/production-hosting-and-deployment.md) |
+Keep setup guide discovery in the directory listing or project guide. Do not maintain a duplicate setup index here
+unless the project has enough setup guides to justify one.

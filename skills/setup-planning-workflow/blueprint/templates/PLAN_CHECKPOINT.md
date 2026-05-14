@@ -1,10 +1,10 @@
-# Checkpoint: MMM-PPP Plan Title — Phase PHASE
+# Checkpoint: MMM-PPP Plan Title — Phase LETTER
 
 - **Status:** ✅ Complete
 - **Completed:** YYYY-MM-DD
 - **Author / session:** TBD
 - **Plan:** [MMM-PPP-plan-title.md](../plans/MMM-PPP-plan-title.md)
-- **Phase:** PHASE — Phase title
+- **Phase:** LETTER — Phase title
 
 ## Summary
 

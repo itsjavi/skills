@@ -5,21 +5,21 @@ Current product and domain rules the system must obey.
 For workflow conventions, rule records, and the distinction between decisions and business rules, see [Guide](GUIDE.md).
 For decision history and tradeoffs, see `decisions/`.
 
-## Status Legend
+## Status Vocabulary
 
-`🧭 Proposed` · `✅ Active` · `🧹 Deprecated` · `🗄️ Superseded`
+Use the exact business-rule status labels from [Guide: Status Vocabulary](GUIDE.md#status-vocabulary).
 
 ## Rule Index
 
-| #    | Rule area  | Status      | Owner | Summary                  | Record                                                  |
-| ---- | ---------- | ----------- | ----- | ------------------------ | ------------------------------------------------------- |
-| 0001 | Membership | 🧭 Proposed | TBD   | Workspace membership TBD | [0001-membership.md](business-rules/0001-membership.md) |
+| #   | Rule area | Status      | Owner | Summary | Record |
+| --- | --------- | ----------- | ----- | ------- | ------ |
+| TBD | TBD       | 🧭 Proposed | TBD   | TBD     | TBD    |
 
 ## Rule Areas
 
-| Area       | Source of truth | Notes |
-| ---------- | --------------- | ----- |
-| Membership | TBD             | TBD   |
+| Area | Source of truth | Notes |
+| ---- | --------------- | ----- |
+| TBD  | TBD             | TBD   |
 
 ## Decisions vs Business Rules
 

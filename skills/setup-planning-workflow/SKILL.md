@@ -42,8 +42,8 @@ After bootstrapping, future coding agents should understand how to:
 ## Required Output Contract
 
 This skill must create or update a concrete workflow, not merely describe one. Before finishing, verify that every
-required file exists under the chosen planning root and that the project agent guide tells future agents to use those
-files.
+required file exists under the chosen planning root and that `<planning-root>/GUIDE.md` is usable as a standalone
+operating manual an agent can follow directly.
 
 Required generated or adapted files:
 
@@ -62,11 +62,13 @@ Required generated or adapted files:
 - `<planning-root>/templates/PLAN.md`
 - `<planning-root>/templates/PLAN_CHECKPOINT.md`
 
-Required edited file:
+Recommended edited file:
 
-- The project agent guide (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, or equivalent) must include the adapted workflow
-  instructions from **Project Agent Guide Section** below, including `BUSINESS_RULES.md` for current domain rules and
-  `COORDINATION.md` as a required active-work board.
+- When a project agent guide exists (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, or equivalent), it should include the
+  adapted workflow instructions from **Project Agent Guide Section** below, including `BUSINESS_RULES.md` for current
+  domain rules and `COORDINATION.md` as a required active-work board. If no agent guide exists, create one unless the
+  user explicitly wants the workflow to live only in the planning root. In all cases, do not rely on the agent guide for
+  workflow correctness; `GUIDE.md` must carry the complete rules.
 
 `DESIGN.md` is optional. Create it only when the project already has design guidance, the user asks for design guidance,
 or UI work calls for the create-design-guidelines skill.
@@ -112,10 +114,11 @@ workflow instructions so future agents know where to look.
 
 - `PRODUCT.md`: master product requirements document (PRD). High-level requirements, constraints, scope, non-goals,
   operating assumptions.
-- `MILESTONES.md`: durable project execution index. Milestone order, milestone status, plan order, durable dependencies,
-  active/next roadmap focus, and links to detailed milestone records in `milestones/`.
+- `MILESTONES.md`: durable milestone index. Cross-milestone order, milestone status, active milestone, recommended next
+  plan, latest checkpoint pointer, and links to detailed milestone records in `milestones/`. It should not duplicate
+  drafted-plan registries or phase maps.
 - `milestones/`: detailed milestone records. Use these when a milestone needs its own objective, scope, phase map,
-  acceptance criteria, related plans, business rules, decisions, or checkpoint rollups.
+  acceptance criteria, drafted plans, related business rules, decisions, or checkpoint rollups.
 - `BUSINESS_RULES.md`: current business-rule index. Groups durable product/domain rules by area and links to detailed
   records in `business-rules/`.
 - `business-rules/`: current normative product/domain rules. These state what the system must currently do. They are
@@ -156,8 +159,16 @@ workflow instructions so future agents know where to look.
 5. Adapt the matching files from `blueprint/` wherever a blueprint file exists. The blueprint files are canonical
    scaffold sources to adapt, not optional inspiration. Replace placeholder paths, names, dates, and sample rows with
    repo-specific content or `TBD`.
-6. Adapt `blueprint/GUIDE.md` to `<planning-root>/GUIDE.md`. Do not create per-directory README files; `GUIDE.md`
-   supersedes them.
+6. Copy `blueprint/GUIDE.md` to `<planning-root>/GUIDE.md` nearly verbatim. The copied guide must remain standalone so
+   future users can say things like "following `docs/GUIDE.md`, elaborate a milestone/plan for ...", even if the project
+   has no root agent guide. Only adapt these touch points:
+   - planning root paths, such as `.specs/`
+   - `[project name]`
+   - links or examples that must change because the planning root is not `.specs/`
+
+   Do not rewrite the guide's rules, document roles, lifecycle guidance, vocabulary, or workflow sections just to match
+   local tone. Do not create per-directory README files; `GUIDE.md` supersedes them.
+
 7. Fill any required file without a one-to-one example with concise, reusable structure.
 8. Seed `PRODUCT.md`, `MILESTONES.md`, `BUSINESS_RULES.md`, `COORDINATION.md`, `ENV_VARS.md`, `SECURITY.md`, and the
    setup guides with what can be inferred; mark unknowns as `TBD`.
@@ -166,89 +177,83 @@ workflow instructions so future agents know where to look.
    - `setup/production-hosting-and-deployment.md`: how an operator hosts and deploys a production-like instance.
    - Keep hosting guidance generic. Mention Docker, Compose, Kubernetes, serverless, PaaS, SSH servers, package
      artifacts, or static hosting only when the repo actually indicates that path.
-   - If production deployment is not yet defined, create the guide with inferred prerequisites, open decisions, and safe
+   - If production deployment is not yet defined, create the guide with inferred prerequisites, open questions, and safe
      TBD placeholders instead of inventing an architecture.
 10. Add or update an agent guide (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, or equivalent) with the workflow in **Agent
-    Guide Requirements** below.
+    Guide Requirements** below, unless the user explicitly wants no agent guide.
 11. Run formatter/checks appropriate for markdown if available.
-12. Confirm in the final response that `BUSINESS_RULES.md` and `COORDINATION.md` were created or updated and that the
-    agent guide references them.
+12. Confirm in the final response that `GUIDE.md` is standalone, that `BUSINESS_RULES.md` and `COORDINATION.md` were
+    created or updated, and whether an agent guide was created or updated.
 
 ## Agent Guide Requirements
 
-Add the workflow instructions in **Project Agent Guide Section** to the target project's agent guide.
+Add the workflow instructions in **Project Agent Guide Section** to the target project's agent guide when one exists or
+when creating one is acceptable. Treat this as a convenience entrypoint; `<planning-root>/GUIDE.md` remains the complete
+workflow source of truth.
 
 - Prefer the existing project guide when present: `AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, or equivalent.
 - Merge the section into the existing guide. Preserve existing instructions, stronger local rules, headings, and tone.
-- If there is no project guide, create `AGENTS.md` with the adapted section.
+- If there is no project guide, create `AGENTS.md` with the adapted section unless the user explicitly wants no agent
+  guide.
 - Replace `.specs/` paths with the chosen planning root when the project uses a different root.
-- Keep the section concise and repo-specific; remove duplicate bullets already covered elsewhere in the target guide.
-- Preserve these workflow requirements: fresh-session bootstrap order, docs roles, `COORDINATION.md` as the active
-  parallel-work board, plan/checkpoint workflow, proportional context reads, docs-sync rules, git rules, cross-session
-  coordination, and Context7 guidance.
+- Keep the section concise and repo-specific. It should route agents to `<planning-root>/GUIDE.md`, not duplicate the
+  guide's document roles, lifecycle rules, naming conventions, status vocabulary, or templates.
+- Preserve only cockpit-level requirements in the agent guide: planning root, fresh-session bootstrap order, a clear
+  statement that `GUIDE.md` is the workflow source of truth, docs-sync reminder, `COORDINATION.md` reminder, and local
+  git/index rules.
 
 ### Project Agent Guide Section
 
-Adapt this short operating checklist into the target project guide. Keep detailed workflow explanations in
-`<planning-root>/GUIDE.md`.
+Adapt this short operating checklist into the target project guide. Keep it intentionally thin; detailed workflow
+explanations belong only in `<planning-root>/GUIDE.md`.
 
 ```markdown
 ## Project Planning Workflow
 
 Planning root: `.specs/`.
 
-Start each session by reading:
+For planning work, follow `.specs/GUIDE.md`. It is the source of truth for document roles, status vocabulary, naming,
+numbering, templates, milestones, plans, checkpoints, decisions, business rules, research, setup docs, and coordination.
+
+At the start of planning or implementation work, read:
 
 1. This file.
-2. `.specs/GUIDE.md` for workflow conventions, directories, templates, and lifecycle rules.
+2. `.specs/GUIDE.md`.
 3. `.specs/PRODUCT.md` for product requirements.
-4. `.specs/MILESTONES.md` for durable roadmap state and active plan order.
+4. `.specs/MILESTONES.md` for active milestone focus and recommended next plan.
 5. `.specs/BUSINESS_RULES.md` for current product/domain rules.
 6. `.specs/COORDINATION.md` for active parallel work, blockers, ownership, and handoffs.
-7. The active plan and latest relevant checkpoints.
+7. The active milestone record, plan, and latest relevant checkpoints when applicable.
 8. `.specs/DESIGN.md` for UI work, if present.
 9. The relevant `.specs/setup/` guide for local setup, deployment, hosting, or operations work.
 
 Operating rules:
 
-- Follow the plan/checkpoint workflow in `.specs/GUIDE.md`; if no relevant plan exists, create or update one unless the
-  user explicitly asks for a quick unplanned change.
 - Keep implementation and specs in sync. When behavior, architecture, configuration, APIs, operational flows, or
   user-facing workflows change, update the relevant spec before finishing.
 - Use `.specs/COORDINATION.md` for active parallel work only. Update it when work starts, pauses, blocks, resumes, or
   completes.
-- Use `.specs/MILESTONES.md` for durable roadmap, phase, ordering, and dependency state only.
-- Use `.specs/BUSINESS_RULES.md` and `.specs/business-rules/` for current product/domain rules. Use `.specs/decisions/`
-  for historical decision records that explain why a choice was made.
-- Expand context deliberately when the task is ambiguous, risky, cross-cutting, or the initial specs do not answer the
-  question. Summarize relevant state before implementing.
 - Preserve git index state unless explicitly asked. Do not stage, unstage, commit, amend, reset, or switch files between
   staged and unstaged.
 - Commit messages, when requested, must use Conventional Commit format: `<type>(optional-scope): <imperative summary>`.
-- Use Context7 before answering or implementing against library/framework/SDK/API/CLI/cloud details:
-  `npx ctx7@latest library <name> "<user question>"`, then `npx ctx7@latest docs <libraryId> "<user question>"`.
-- Do not include secrets in Context7 queries.
-- If Context7 quota fails, tell the user how to raise limits. If network/DNS fails in a sandbox, retry outside the
-  sandbox when the environment supports it.
 ```
 
 ## Workflow Docs To Generate
 
 `<planning-root>/MILESTONES.md` should include:
 
-- status legend
-- drafted plans table with durable status
-- roadmap / milestone groups and sub-milestones/phases as an index
-- links to detailed records in `milestones/` when a milestone needs more than an index row
+- status vocabulary link back to `GUIDE.md`
+- current focus with active milestone, recommended next plan, latest checkpoint, coordination board, and business-rule
+  index links
+- milestone index table with number, title, status, record link, and summary
 - recommended execution order
-- durable dependencies between milestones/plans
-- active or next recommended plan with latest checkpoint link when available
-- links to `COORDINATION.md`, plans, and checkpoints
+- explicit note that drafted plans, phase maps, risks, acceptance criteria, and checkpoint rollups live in milestone
+  records
 - link to `GUIDE.md` for workflow conventions, plan creation, templates, and resume workflow
 
 `<planning-root>/BUSINESS_RULES.md` should include:
 
-- rule status legend
+- business-rule status vocabulary link back to `GUIDE.md`
 - business-rule index grouped by product/domain area
 - links to detailed records in `business-rules/`
 - ownership or source-of-truth notes when known
@@ -302,6 +307,8 @@ sections, and guidance on adding more setup guides. Keep all setup docs inferred
 - document and directory roles, including that `GUIDE.md` replaces per-directory README files
 - context discipline: initial high-signal specs, when to expand context, and summarizing relevant state before
   implementation
+- current technical reference rule for verifying library/framework/SDK/API/CLI/cloud behavior with current docs before
+  writing durable guidance
 - guidance to keep spec updates concise, link to details, and update indexes/latest checkpoint links instead of
   duplicating long content
 - directory map that explains what belongs in `decisions/`, `milestones/`, `business-rules/`, `plans/`, `checkpoints/`,
@@ -309,18 +316,19 @@ sections, and guidance on adding more setup guides. Keep all setup docs inferred
 - template mapping: `decisions/` uses `templates/DECISION.md`, `milestones/` uses `templates/MILESTONE.md`,
   `business-rules/` uses `templates/BUSINESS_RULE.md`, `plans/` uses `templates/PLAN.md`, `checkpoints/` uses
   `templates/PLAN_CHECKPOINT.md`, and `research/`/`setup/` do not require templates
-- milestone record convention and the rule that `MILESTONES.md` is the index/source for order and status
+- milestone record convention and the rule that `MILESTONES.md` is only the cross-milestone overview and must not
+  duplicate drafted-plan registries or phase maps
 - business-rule record convention and the rule that `BUSINESS_RULES.md` is the index/source for current rules
 - clear distinction between decisions (why a choice was made) and business rules (what the system must currently do)
 - decision filename convention
-- decision status lifecycle (`Proposed`, `Accepted`, `Superseded by NNNN`, `Deprecated`)
-- decision index table with status and one-line summary
+- decision status lifecycle (`🧭 Proposed`, `✅ Accepted`, `🗄️ Superseded by NNN`, `🧹 Deprecated`)
+- decision record convention and cross-link expectations
 - rule to supersede accepted decisions instead of rewriting them
-- plan filename convention
-- plan index table with status, owner, phase progress, and one-line summary
-- how to create a new plan, including choosing the next number, copying the plan template, updating the guide index, and
-  updating `MILESTONES.md`
-- how to resume work from `MILESTONES.md`, `COORDINATION.md`, the active plan, and latest checkpoints
+- plan filename convention using three-digit milestone and plan ids, e.g. `003-001-plan-title-slug.md`
+- how to create a new plan, including choosing the next number, copying the plan template, updating the target milestone
+  record's **Drafted Plans** section, and updating `MILESTONES.md` only when cross-milestone focus changes
+- how to resume work from `MILESTONES.md`, the active milestone record, `COORDINATION.md`, the active plan, and latest
+  checkpoints
 - phase/checkpoint convention
 - phase workflow
 - final review workflow
@@ -329,7 +337,6 @@ sections, and guidance on adding more setup guides. Keep all setup docs inferred
 - rule that uncommitted state in another workspace is invisible unless published, summarized, committed, checkpointed,
   or explicitly provided by the user
 - checkpoint naming convention
-- checkpoint index table by plan/phase with latest checkpoint links
 - required checkpoint content
 - how checkpoints link back to plans
 - research guidance: what belongs in research, staleness warning, and promotion rules for durable conclusions
@@ -401,8 +408,8 @@ subdirectories unless the user explicitly requests that layout.
   response unless the user asks.
 - Use dated sections for post-hoc updates, e.g. `## Implementation update (2026-05-11)`.
 - Decisions belong in `decisions/`; current domain rules belong in `BUSINESS_RULES.md` and `business-rules/`;
-  implementation sequencing belongs in `plans/`; roadmap status/order belongs in `MILESTONES.md` and optional detail
-  records in `milestones/`; active parallel work belongs in `COORDINATION.md`.
+  implementation sequencing belongs in `plans/` and milestone records; cross-milestone status/order belongs in
+  `MILESTONES.md`; active parallel work belongs in `COORDINATION.md`.
 - Respect the chosen planning root. Use `.specs/` by default, but if the user requested another root, adapt every
   generated path and link.
 - Do not invent major product requirements. Mark unknowns as `TBD`.
@@ -421,11 +428,6 @@ copy sample rows literally; replace them with repo-specific content or `TBD`.
 - `blueprint/GUIDE.md`
 - `blueprint/setup/local-development.md`
 - `blueprint/setup/production-hosting-and-deployment.md`
-- `blueprint/decisions/0001-runtime-and-storage.md`
-- `blueprint/milestones/0001-mvp-foundation.md`
-- `blueprint/business-rules/0001-membership.md`
-- `blueprint/plans/01-vertical-slice.md`
-- `blueprint/checkpoints/01-vertical-slice-A.md`
 - `blueprint/templates/DECISION.md`
 - `blueprint/templates/MILESTONE.md`
 - `blueprint/templates/BUSINESS_RULE.md`

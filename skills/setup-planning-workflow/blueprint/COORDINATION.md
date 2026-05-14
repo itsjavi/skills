@@ -12,17 +12,15 @@ Last reviewed: YYYY-MM-DD HH:mm TZ
 
 ## Active Work
 
-| Owner / agent  | Branch                 | Workspace / session | Task               | Files / area owned | Depends on         | Status     | Last update      | Handoff |
-| -------------- | ---------------------- | ------------------- | ------------------ | ------------------ | ------------------ | ---------- | ---------------- | ------- |
-| backend-agent  | feat/api-contract      | project-api session | First API contract | `src/api/**`       | Repo foundation    | 🚧 Active  | YYYY-MM-DD HH:mm | TBD     |
-| frontend-agent | feat/ui-vertical-slice | project-ui session  | First UI flow      | `src/ui/**`        | First API contract | ⛔ Blocked | YYYY-MM-DD HH:mm | TBD     |
-| human          | main                   | .                   | Review milestones  | `.specs/**`        | None               | 🚧 Active  | YYYY-MM-DD HH:mm | TBD     |
+| Owner / agent | Branch | Workspace / session | Task | Files / area owned | Depends on | Status      | Last update      | Handoff |
+| ------------- | ------ | ------------------- | ---- | ------------------ | ---------- | ----------- | ---------------- | ------- |
+| TBD           | TBD    | TBD                 | TBD  | TBD                | TBD        | 🧭 Proposed | YYYY-MM-DD HH:mm | TBD     |
 
 ## Blocked Or Waiting
 
-| Owner / agent  | Waiting for             | Current fallback              | Next check                     |
-| -------------- | ----------------------- | ----------------------------- | ------------------------------ |
-| frontend-agent | API contract checkpoint | Use Plan 01 mock API strategy | After backend checkpoint lands |
+| Owner / agent | Waiting for | Current fallback | Next check |
+| ------------- | ----------- | ---------------- | ---------- |
+| TBD           | TBD         | TBD              | TBD        |
 
 ## Coordination Rules
 

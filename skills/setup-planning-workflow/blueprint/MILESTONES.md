@@ -8,23 +8,23 @@ see [Coordination](COORDINATION.md). For current product/domain rules, see [Busi
 
 Last reviewed: YYYY-MM-DD
 
-## Status Legend
+## Status Vocabulary
 
-`🧭 Proposed` · `🚧 Active` · `⛔ Blocked` · `⏸️ Paused` · `✅ Complete` · `🛑 Cancelled`
+Use the exact status labels from [Guide: Status Vocabulary](GUIDE.md#status-vocabulary).
 
 ## Current Focus
 
-- **Active milestone:** [0001 - MVP Foundation](milestones/0001-mvp-foundation.md)
-- **Recommended next plan:** [01 - Vertical slice](plans/01-vertical-slice.md)
-- **Latest checkpoint:** [Plan 01 Phase A](checkpoints/01-vertical-slice-A.md)
+- **Active milestone:** TBD
+- **Recommended next plan:** TBD
+- **Latest checkpoint:** TBD
 - **Coordination board:** [COORDINATION.md](COORDINATION.md)
 - **Business-rule index:** [BUSINESS_RULES.md](BUSINESS_RULES.md)
 
 ## Milestone Index
 
-| #    | Milestone      | Status    | Record                                                                 | Summary                    |
-| ---- | -------------- | --------- | ---------------------------------------------------------------------- | -------------------------- |
-| 0001 | MVP Foundation | 🚧 Active | [milestones/0001-mvp-foundation.md](milestones/0001-mvp-foundation.md) | First useful product loop. |
+| #   | Milestone | Status      | Record | Summary |
+| --- | --------- | ----------- | ------ | ------- |
+| TBD | TBD       | 🧭 Proposed | TBD    | TBD     |
 
 Milestone objectives, scope, drafted plans, phase maps, risks, acceptance criteria, and checkpoint rollups live in the
 linked milestone records under `milestones/`. Keep this file focused on the overview and cross-milestone ordering.
@@ -33,8 +33,8 @@ linked milestone records under `milestones/`. Keep this file focused on the over
 
 1. Keep [COORDINATION.md](COORDINATION.md) current for active work.
 2. Read [BUSINESS_RULES.md](BUSINESS_RULES.md) before changing product/domain behavior.
-3. Draft or update numbered implementation plans using `NN-slug.md`, where `NN` is the next unused two-digit plan
-   number.
+3. Draft or update numbered implementation plans using `MMM-PPP-slug.md`, where `MMM` is the three-digit milestone id
+   and `PPP` is the next three-digit plan number inside that milestone.
 4. Add or update the plan row in the target milestone record's **Drafted Plans** section.
 5. Define expected deliverables for every plan phase, such as schema/migrations, endpoints, services, UI slices,
    scripts, tests, docs, checkpoints, or `None`.

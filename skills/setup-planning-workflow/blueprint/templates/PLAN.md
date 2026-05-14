@@ -12,8 +12,8 @@ Describe the scoped outcome this plan should deliver.
 
 ## Definition of Done
 
-- [ ] User-facing behavior works.
-- [ ] Server/client boundaries and domain/runtime boundaries are respected.
+- [ ] User-facing, operator-facing, or developer-facing behavior works, if applicable.
+- [ ] Project architecture and ownership boundaries are respected.
 - [ ] Phase deliverables are completed, intentionally deferred, or marked not applicable.
 - [ ] Human QA steps are documented in **How to QA**.
 - [ ] Relevant docs are updated.
@@ -57,8 +57,8 @@ Scope:
 
 Deliverables:
 
-- Concrete artifact(s) for this phase, such as DB schema and migrations, repositories/services, route loaders/actions,
-  endpoints, UI components, tests, scripts, or docs.
+- Concrete artifact(s) for this phase, such as schema changes, services, handlers/controllers/routes, UI components,
+  APIs, scripts, tests, or docs.
 
 Acceptance checks:
 
@@ -99,15 +99,15 @@ Acceptance checks:
 
 ## Test / Validation Plan
 
-- `pnpm typecheck` for typed changes when feasible.
-- `pnpm lint` before final handoff when scope is broad.
-- Additional focused tests: TBD.
+- Typecheck command: `TBD`, when typed code changed.
+- Lint/format command: `TBD`, before final handoff when scope is broad.
+- Additional focused tests: `TBD`.
 
 ## How to QA
 
-Assume the app is already running locally. Describe the main manual QA flows a human should walk through without turning
-this into an exhaustive click-by-click script. Name the relevant area or route, the user intent, and the expected
-outcome.
+Assume the relevant local system, package, service, app, or docs preview is available when applicable. Describe the main
+manual QA flows a human should walk through without turning this into an exhaustive click-by-click script. Name the
+relevant area, command, route, or workflow, the user/operator/developer intent, and the expected outcome.
 
 - Flow: `TBD`.
 - Flow: `TBD`.
@@ -119,13 +119,13 @@ outcome.
 
 ## Documentation Updates
 
-- [ ] `docs/PRODUCT.md`
-- [ ] `docs/MILESTONES.md`
-- [ ] `docs/milestones/`
-- [ ] `docs/BUSINESS_RULES.md`
-- [ ] `docs/business-rules/`
-- [ ] `docs/COORDINATION.md`
-- [ ] `docs/DESIGN.md`
-- [ ] `docs/ENV_VARS.md`
-- [ ] `docs/SECURITY.md`
+- [ ] `../PRODUCT.md`
+- [ ] `../MILESTONES.md`
+- [ ] `../milestones/`
+- [ ] `../BUSINESS_RULES.md`
+- [ ] `../business-rules/`
+- [ ] `../COORDINATION.md`
+- [ ] `../DESIGN.md`
+- [ ] `../ENV_VARS.md`
+- [ ] `../SECURITY.md`
 - [ ] Decision records / setup docs / research notes as needed.
