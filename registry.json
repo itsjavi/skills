@@ -1,7 +1,7 @@
 {
   "name": "itsjavi/skills",
   "repository": "https://github.com/itsjavi/skills",
-  "generatedAt": "2026-05-14T19:54:26.542Z",
+  "generatedAt": "2026-05-15T02:25:35.465Z",
   "skills": [
     {
       "name": "create-design-guidelines",
@@ -32,6 +32,11 @@
       "name": "find-docs",
       "path": "skills/find-docs",
       "description": ">- Retrieves up-to-date documentation, API references, and code examples for any developer technology. Use this skill whenever the user asks about a specific library, framework, SDK, CLI tool, or cloud service -- even for well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. Your training data may not reflect recent API changes or version updates. Always use for: API syntax questions, configuration options, version migration issues, \"how do I\" questions mentioning a library name, debugging that involves library-specific behavior, setup instructions, and CLI tool usage. Use even when you think you know the answer -- do not rely on training data for API details, signatures, or configuration options as they are frequently outdated. Always verify against current docs. Prefer this over web search for library documentation and API details."
+    },
+    {
+      "name": "generate-commit-msg",
+      "path": "skills/generate-commit-msg",
+      "description": ">- Generate a Conventional Commit message for the repository's current staged changes. Use when the user asks for a commit message, commit title, git commit message, or conventional commit summary based on staged changes. The output must be only the message as plaintext code, with no explanation or follow-up text."
     },
     {
       "name": "setup-planning-workflow",

@@ -14,6 +14,7 @@ The collection focuses on docs-first planning workflows, implementation handoffs
 | `document-decision`            | Capture or supersede major durable architecture/product/security/operational decisions when they are decision-worthy.                                                                         |
 | `create-design-guidelines`     | Create or update a project `DESIGN.md` / design-system guide for web or mobile UI work.                                                                                                       |
 | `find-docs`                    | Retrieve current documentation, API references, and examples for libraries, frameworks, SDKs, CLIs, and cloud services with Context7.                                                         |
+| `generate-commit-msg`          | Generate a Conventional Commit message from the current staged changes and output only the plaintext code message.                                                                            |
 
 Each skill lives in `skills/<skill-name>/SKILL.md`. The registry is generated from skill frontmatter.
 
