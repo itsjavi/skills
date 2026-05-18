@@ -1,7 +1,8 @@
 # Upgrading Existing Planning Workflows
 
 Use this guide when a project already has an older setup-planning-workflow installation and needs to adopt the current
-blueprint, standalone `GUIDE.md`, status vocabulary, three-digit numbering, and optional `plan-coord` live coordinator.
+blueprint, standalone `GUIDE.md`, status vocabulary, three-digit numbering, `CHECKS.md`, `MANUAL_QA.md`, and manual
+`COORDINATION.md` workflow.
 
 Treat the upgrade as a migration, not a reinstall. Preserve project truth, replace workflow rules where the blueprint is
 canonical, and report anything that still needs human review.
@@ -22,8 +23,9 @@ old guide as the source for "latest blueprint" replacements.
 Before editing:
 
 - Inspect the current planning root, root agent guide, README, and existing workflow docs.
-- Read the current `GUIDE.md`, `MILESTONES.md`, `BUSINESS_RULES.md`, `COORDINATION.md`, active milestone records, active
-  plans, and latest relevant checkpoints when they exist.
+- Read the current `GUIDE.md`, `MILESTONES.md`, `BUG_FIXES.md`, `BUSINESS_RULES.md`, `COORDINATION.md`, `CHECKS.md`,
+  `MANUAL_QA.md`, active milestone records, active bug-fix records, active plans, and latest relevant checkpoints when
+  they exist.
 - Check whether any active work rows, blockers, or handoffs in `COORDINATION.md` still matter.
 - Preserve the user's git index state. Do not stage, unstage, commit, amend, reset, or discard files unless explicitly
   asked.
@@ -35,7 +37,6 @@ Prefer three categories of changes:
 
 - Replace files that are workflow rules or reusable scaffolds.
 - Merge files that contain project truth.
-- Initialize live coordination only when `plan-coord` is available.
 - Create missing required files and directories from this skill folder's current blueprint, using `TBD` where project
   facts are unknown.
 
@@ -49,6 +50,7 @@ These files can usually be replaced from this skill folder's bundled `blueprint/
 - `<planning-root>/GUIDE.md`
 - `<planning-root>/templates/DECISION.md`
 - `<planning-root>/templates/MILESTONE.md`
+- `<planning-root>/templates/BUG_FIX.md`
 - `<planning-root>/templates/BUSINESS_RULE.md`
 - `<planning-root>/templates/PLAN.md`
 - `<planning-root>/templates/PLAN_CHECKPOINT.md`
@@ -70,11 +72,11 @@ tone. The goal is for users to be able to say: "following `<planning-root>/GUIDE
 ## Replace Or Carefully Merge
 
 `<planning-root>/COORDINATION.md` is volatile. Replace it from this skill folder's `blueprint/COORDINATION.md` when it
-only contains stale examples. If it contains current active work, preserve the useful rows or use `plan-coord export-md`
-after registering the active sessions.
+only contains stale examples. If it contains current active work, preserve the useful rows, blockers, ownership notes,
+project directories, branches, worktree paths, and handoff links.
 
-If `plan-coord` is unavailable, manually update `COORDINATION.md` to the current active-work snapshot format and keep
-the meaningful active rows, blockers, ownership notes, project directories, branches, worktree paths, and handoff links.
+Manually update `COORDINATION.md` to the current active-work snapshot format. It is the coordination source of truth for
+agents and should not depend on local runtime state outside the repository.
 
 ## Merge, Do Not Replace
 
@@ -83,6 +85,8 @@ Preserve the actual project content in these files:
 - `<planning-root>/PRODUCT.md`
 - `<planning-root>/MILESTONES.md`
 - `<planning-root>/milestones/*.md`
+- `<planning-root>/BUG_FIXES.md`
+- `<planning-root>/bug-fixes/*.md`
 - `<planning-root>/BUSINESS_RULES.md`
 - `<planning-root>/business-rules/*.md`
 - `<planning-root>/decisions/*.md`
@@ -90,6 +94,8 @@ Preserve the actual project content in these files:
 - `<planning-root>/checkpoints/*.md`
 - `<planning-root>/ENV_VARS.md`
 - `<planning-root>/SECURITY.md`
+- `<planning-root>/CHECKS.md`
+- `<planning-root>/MANUAL_QA.md`
 - `<planning-root>/setup/*.md`
 - `<planning-root>/DESIGN.md`, when present
 - root `AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, or equivalent
@@ -109,39 +115,30 @@ Bring older workflows in line with the current guide:
 
 - All numbered docs use exactly three digits.
 - Decisions, milestones, and business rules use `NNN-kebab-case-title.md`.
+- Bug fixes use `BBB-kebab-case-title.md`.
 - Plans use `MMM-PPP-slug.md`.
 - Checkpoints use `MMM-PPP-slug-LETTER.md`.
 - Milestones, plans, and phases use `🧭 Proposed`, `🚧 Active`, `⛔ Blocked`, `⏸️ Paused`, `✅ Complete`, or
   `🛑 Cancelled`.
 - Business rules use `🧭 Proposed`, `✅ Active`, `🗄️ Superseded`, or `🧹 Deprecated`.
 - Decisions use `🧭 Proposed`, `✅ Accepted`, `🗄️ Superseded`, or `🧹 Deprecated`.
+- Bug fixes use `🐞 Reported`, `🔎 Triaged`, `🚧 Fixing`, `⛔ Blocked`, `✅ Fixed`, `🛑 Won't Fix`, or `🗄️ Duplicate`.
 - `MILESTONES.md` stays an index of milestones only. Drafted-plan registries, phase maps, risks, acceptance criteria,
   and checkpoint rollups live in milestone records.
+- `BUG_FIXES.md` stays an index of bug fixes only. Reproduction, diagnosis, proposed fix, validation, and outcome live
+  in bug-fix records.
+- Scoped defects use bug-fix records instead of plans. Promote to a plan when the fix becomes multi-phase,
+  architecture-changing, migration-heavy, cross-domain, or roadmap-visible.
+- `CHECKS.md` owns canonical automated verification commands, reliability notes, and fallback behavior.
+- `MANUAL_QA.md` owns live manual QA coverage for user-facing and operator-facing workflows.
+- Accepted or active plans require explicit spec updates before material scope or behavior changes continue.
+- Add circuit breakers to plans and handoffs: repeated identical check failures, unavailable required verification,
+  conflicting requirements, and scope expansion should stop the loop for human direction.
 - If file renames are needed to reach three-digit numbering, update all links and references in the same turn.
 - Do not reuse retired numbers.
 - `AGENTS.md` or equivalent stays thin. It should point to `<planning-root>/GUIDE.md` instead of duplicating guide
   rules. If no root agent guide exists, the workflow can still be valid because `GUIDE.md` is standalone; create an
   agent guide only when the user wants one or the project convention clearly expects one.
-
-## Optional Live Coordination
-
-If `plan-coord` is installed, initialize or refresh its local coordination cache from the project root:
-
-```bash
-plan-coord init --planning-root <planning-root>
-plan-coord sync-docs
-plan-coord export-md --out <planning-root>/COORDINATION.md
-```
-
-Docs remain canonical for milestones, plans, checkpoints, decisions, and business rules. SQLite is authoritative only
-for live local coordination state: active sessions, worktree directories, branches, claims, blockers, and transient
-handoffs.
-
-By default, `plan-coord` stores its SQLite database at `$XDG_STATE_HOME/plan-coord/coord.sqlite`, or
-`~/.local/state/plan-coord/coord.sqlite` when `XDG_STATE_HOME` is unset. `PLAN_COORD_DB` overrides this location.
-
-Run `plan-coord sync-docs` again after substantial doc renames or status migrations so the local metadata cache matches
-the upgraded docs.
 
 ## Agent Prompt
 
@@ -158,18 +155,24 @@ path, project name, and links. Replace templates from the latest bundled bluepri
 customizations.
 
 Do not overwrite project truth. Preserve and migrate existing PRODUCT.md, MILESTONES.md, milestone records,
-BUSINESS_RULES.md, business-rule records, decisions, plans, checkpoints, ENV_VARS.md, SECURITY.md, and setup docs.
+BUG_FIXES.md, bug-fix records, BUSINESS_RULES.md, business-rule records, decisions, plans, checkpoints, CHECKS.md,
+MANUAL_QA.md, ENV_VARS.md, SECURITY.md, and setup docs. Create BUG_FIXES.md, CHECKS.md, and MANUAL_QA.md from the
+current blueprint if they are missing.
 
 Normalize vocabulary and numbering:
 - all numbered docs use exactly three digits
+- bug fixes use BBB-kebab-case-title.md
 - plans use MMM-PPP-slug.md
 - checkpoints use MMM-PPP-slug-LETTER.md
 - use the GUIDE.md status vocabulary with emoji
+- accepted/active plans are implementation contracts; material changes need explicit spec updates
+- BUG_FIXES.md is the scoped defect index
+- CHECKS.md is the automated verification contract
+- MANUAL_QA.md is the manual QA coverage map
 
-Update COORDINATION.md to the new active-work snapshot format. If plan-coord is available, run:
-plan-coord init --planning-root <planning-root>
-plan-coord sync-docs
-plan-coord export-md --out <planning-root>/COORDINATION.md
+Update COORDINATION.md to the new active-work snapshot format. Preserve useful active rows, blockers, ownership notes,
+project directories, branches, worktree paths, and handoff links. COORDINATION.md is the coordination source of truth for
+agents.
 
 Update AGENTS.md or equivalent only as a thin cockpit checklist that points to <planning-root>/GUIDE.md. Do not
 duplicate GUIDE.md rules there. If no root agent guide exists, keep GUIDE.md standalone unless the project convention or
@@ -189,5 +192,6 @@ In the final response, report:
 - numbering/status migrations performed
 - links updated after file renames
 - missing required files created with `TBD`
-- whether `plan-coord` was initialized or unavailable
+- whether existing defect notes were migrated into `BUG_FIXES.md` or left for review
+- whether `COORDINATION.md` was updated to the manual active-work format
 - any files that still need human review

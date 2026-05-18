@@ -3,30 +3,35 @@
 Reusable `SKILL.md`-based coding-agent skills and small CLI tools for Codex, Claude Code, Cursor, and compatible agents.
 The collection focuses on docs-first planning workflows, implementation handoffs, and agent-friendly project memory.
 
+![Spec-based Development](./assets/spec-based-development.webp)
+
+> Inspired by [Better Editors are A Trap](https://www.plg.news/p/better-editors-are-a-trap)
+
 ## Skills
 
-| Skill                          | Use it for                                                                                                                                                                                    |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `setup-planning-workflow`      | Bootstrap or upgrade a docs-first planning workflow with product docs, milestones, business rules, decisions, plans, checkpoints, setup/security/env docs, templates, and agent instructions. |
-| `create-milestone`             | Create or update milestones in an established workflow; chooses the next three-digit milestone id and keeps `MILESTONES.md` as an index.                                                      |
-| `create-plan`                  | Create an implementation plan, update the plan index, and ask whether implementation should start.                                                                                            |
-| `create-implementation-prompt` | Draft a paste-ready prompt for implementing an existing plan, then ask whether implementation should start.                                                                                   |
-| `document-decision`            | Capture or supersede major durable architecture/product/security/operational decisions when they are decision-worthy.                                                                         |
-| `create-design-guidelines`     | Create or update a project `DESIGN.md` / design-system guide for web or mobile UI work.                                                                                                       |
-| `find-docs`                    | Retrieve current documentation, API references, and examples for libraries, frameworks, SDKs, CLIs, and cloud services with Context7.                                                         |
-| `generate-commit-msg`          | Generate a Conventional Commit message from the current staged changes and output only the plaintext code message.                                                                            |
+| Skill                          | Use it for                                                                                                                                                                                                                  |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `setup-planning-workflow`      | Bootstrap or upgrade a docs-first planning workflow with product docs, milestones, bug fixes, business rules, decisions, plans, checkpoints, checks, manual QA, setup/security/env docs, templates, and agent instructions. |
+| `create-milestone`             | Create or update milestones in an established workflow; chooses the next three-digit milestone id and keeps `MILESTONES.md` as an index.                                                                                    |
+| `create-plan`                  | Create a milestone-scoped implementation plan in an established workflow, update the milestone record, and ask whether implementation should start.                                                                         |
+| `create-implementation-prompt` | Draft a paste-ready fresh-agent prompt for implementing an existing milestone-scoped plan, including context, checks, manual QA, and circuit breakers.                                                                      |
+| `document-decision`            | Capture or supersede major durable architecture/product/security/operational decisions when they are decision-worthy.                                                                                                       |
+| `create-design-guidelines`     | Create or update a project `DESIGN.md` / design-system guide for web or mobile UI work.                                                                                                                                     |
+| `find-docs`                    | Retrieve current documentation, API references, and examples for libraries, frameworks, SDKs, CLIs, and cloud services with Context7.                                                                                       |
+| `generate-commit-msg`          | Generate a Conventional Commit message from the current staged changes and output only the plaintext code message.                                                                                                          |
 
 Each skill lives in `skills/<skill-name>/SKILL.md`. The registry is generated from skill frontmatter.
 
 ## Tools
 
-| Tool              | Purpose                                                                                                                                                                                           |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `create-worktree` | Create a Git worktree under `../<repo>-worktrees/`, copy `.env` when present, install dependencies from the detected lockfile, and optionally launch an agent in Ghostty.                         |
-| `plan-coord`      | Coordinate live planning-workflow sessions across local worktrees with Bun + SQLite. Docs stay canonical; SQLite tracks active sessions, worktree dirs, branches, claims, blockers, and handoffs. |
+| Tool              | Purpose                                                                                                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `create-worktree` | Create a Git worktree under `../<repo>-worktrees/`, copy `.env` when present, install dependencies from the detected lockfile, and optionally launch an agent in Ghostty. |
 
-`plan-coord` stores its database at `$XDG_STATE_HOME/plan-coord/coord.sqlite`, or
-`~/.local/state/plan-coord/coord.sqlite` when `XDG_STATE_HOME` is unset. Set `PLAN_COORD_DB` to override it.
+Experimental/manual-only tools:
+
+- `plan-coord`: local SQLite coordination prototype. The planning workflow no longer recommends it for agents; use
+  `COORDINATION.md` as the coordination source of truth.
 
 ## Rules
 

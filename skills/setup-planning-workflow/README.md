@@ -17,11 +17,17 @@ The workflow creates a lightweight project memory system:
   latest checkpoint, and record links.
 - `milestones/` holds detailed milestone records, including drafted-plan registries, phase maps, risks, and checkpoint
   rollups.
+- `BUG_FIXES.md` is the index of scoped defect reports and fixes.
+- `bug-fixes/` captures report, impact, reproduction, evidence, root cause, proposed fix, validation, and outcome for
+  defects that do not need roadmap plan sequencing.
 - `BUSINESS_RULES.md` is the index of current product/domain rules.
 - `business-rules/` captures current rules the system must obey, separate from decision history.
 - `COORDINATION.md` tracks active parallel work: who or what is moving right now, where, and with what blockers.
 - `GUIDE.md` centralizes conventions, indexes, and directory roles instead of scattering README files across
   directories.
+- `CHECKS.md` defines the canonical automated verification contract: which commands prove the work, when to run them,
+  and what to do when they fail or cannot run.
+- `MANUAL_QA.md` keeps live manual QA coverage visible for product workflows that still need human judgment.
 - `plans/` describes how a specific chunk of work should be implemented.
 - `checkpoints/` captures completed phase handoffs.
 - `research/` holds useful exploration that may become stale.
@@ -40,8 +46,7 @@ In skill instructions, `blueprint/...` means the bundled files in this skill dir
 referenced as `<planning-root>/...`.
 
 For projects that already have an older version of this workflow, use [UPGRADING.md](UPGRADING.md). It explains which
-files can be replaced from the blueprint, which project-truth files must be merged, and how to initialize the optional
-`plan-coord` live coordinator.
+files can be replaced from the blueprint and which project-truth files must be merged.
 
 ## Why It Helps
 
@@ -50,11 +55,16 @@ The workflow makes specification work practical for agents:
 - **Durable state.** `MILESTONES.md` and `checkpoints/` act like a project save game. A new agent or human can resume
   from the latest documented state without reconstructing context from chat history.
 - **Explicit verification.** Phase-based plans make acceptance checks part of the implementation loop, not background
-  reading that can drift away from the code.
+  reading that can drift away from the code. `CHECKS.md` makes the canonical commands and their reliability notes
+  inspectable before work starts.
 - **Conflict prevention.** Decision records, implementation updates, coordination notes, and checkpoints reduce silent
   changes: important choices made in code without being broadcast to future agents or parallel work.
+- **Bug-fix separation.** `BUG_FIXES.md` keeps reported defects and scoped fixes visible without forcing every bug into
+  roadmap milestones or phase checkpoints.
 - **Proportional context.** The document set gives agents high-signal entry points first, while still leaving room to
   expand into more context when the work is risky, ambiguous, or cross-cutting.
+- **Manual judgment preserved.** `MANUAL_QA.md` gives humans a maintained review surface for flows where screenshots,
+  accessibility, permissions, data state, or product taste still require inspection.
 
 ## How The Pieces Fit
 
@@ -63,6 +73,10 @@ The workflow makes specification work practical for agents:
 `MILESTONES.md` is durable project state. It should stay stable enough to act as the cross-milestone map: what
 milestones exist, which milestone is active, what plan is recommended next, and which detailed milestone record has the
 deeper context.
+
+`BUG_FIXES.md` is durable defect state. It should stay focused on active defect records, status, priority, report/fix
+dates, and links to `bug-fixes/` records. Use a bug-fix record for scoped defect work; promote the work into a plan when
+the fix becomes broad feature work, architecture-changing, migration-heavy, cross-domain, or multi-phase.
 
 `BUSINESS_RULES.md` and `business-rules/` are current product truth. They state what the system must currently do in
 domain language, with examples, edge cases, implementation links, and test links when known. This keeps product rules
@@ -76,14 +90,18 @@ supersede the related decision.
 blockers, ownership, and handoff links. Keeping this separate prevents the roadmap from turning into a noisy live ops
 board.
 
-When the optional `plan-coord` tool is installed, coordination becomes a two-layer model: workflow docs stay canonical
-for roadmap/spec state, while a local SQLite database tracks live sessions, project directories, branches, claims,
-blockers, and transient handoffs. `COORDINATION.md` remains the readable snapshot that can be manually edited or
-exported from `plan-coord` before handoff.
+`COORDINATION.md` is the coordination source of truth for active sessions. Agents and humans update it manually when
+work starts, pauses, blocks, resumes, or completes, keeping the live coordination state inspectable without depending on
+local runtime state outside the repository.
 
 `checkpoints/` are the handoff layer between the two. A checkpoint says what was actually completed, what was checked,
 what changed, and what another agent can safely rely on. This is the "save game" that lets work resume without replaying
 the previous conversation.
+
+`CHECKS.md` and `MANUAL_QA.md` are the feedback-loop layer. Automated checks should be deterministic enough for agents
+to run without babysitting; manual QA should be current enough that humans can review the right product behavior instead
+of rediscovering every flow. If either layer changes, update the relevant plan or checkpoint so future agents know what
+was proven and what still needs judgment.
 
 Together, these files give agents enough structure to move quickly without pretending that chat memory, branch state, or
 uncommitted work in another workspace is magically visible.

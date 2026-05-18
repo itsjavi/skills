@@ -1,7 +1,7 @@
 {
   "name": "itsjavi/skills",
   "repository": "https://github.com/itsjavi/skills",
-  "generatedAt": "2026-05-15T02:25:35.465Z",
+  "generatedAt": "2026-05-18T13:12:10.276Z",
   "skills": [
     {
       "name": "create-design-guidelines",
@@ -11,7 +11,7 @@
     {
       "name": "create-implementation-prompt",
       "path": "skills/create-implementation-prompt",
-      "description": "Use when the user asks for a prompt to start a fresh chat/agent for implementing an existing project plan, e.g. \"write a prompt for Plan 16\", \"create the next plan implementation prompt\", or \"handoff prompt for docs/plans/NN-*.md\". Also useful to continue a plan implementation that was stopped and is still in progress. After generating the prompt, ask whether implementation should start now."
+      "description": "Use when the user asks for a prompt to start a fresh chat/agent for implementing an existing project plan, e.g. \"write a prompt for Plan 003-001\", \"create the next plan implementation prompt\", or \"handoff prompt for .specs/plans/MMM-PPP-*.md\". Also useful to continue a plan implementation that was stopped and is still in progress. After generating the prompt, ask whether implementation should start now."
     },
     {
       "name": "create-milestone",
@@ -21,7 +21,7 @@
     {
       "name": "create-plan",
       "path": "skills/create-plan",
-      "description": "Use when the user asks to create, draft, add, or plan a new project implementation plan under docs/plans, including choosing the next plan number, updating the plan index, creating a phase/checkpoint-ready plan file, and asking whether implementation should start afterward."
+      "description": "Use when the user asks to create, draft, add, or plan a new implementation plan in an established planning workflow, including finding the planning root, reading GUIDE.md, choosing the next milestone-scoped plan number, updating the target milestone record, creating a phase/checkpoint-ready plan file, and asking whether implementation should start afterward."
     },
     {
       "name": "document-decision",
@@ -41,7 +41,7 @@
     {
       "name": "setup-planning-workflow",
       "path": "skills/setup-planning-workflow",
-      "description": "Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including PRODUCT.md, MILESTONES.md, milestone records, BUSINESS_RULES.md, business-rule records, COORDINATION.md, decision records, plans, checkpoints, research notes, setup docs, ENV_VARS, SECURITY, templates, and coding-agent instructions for following the workflow; also use when upgrading an older existing planning workflow to the current conventions."
+      "description": "Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including PRODUCT.md, MILESTONES.md, milestone records, BUG_FIXES.md, bug-fix records, BUSINESS_RULES.md, business-rule records, COORDINATION.md, decision records, plans, checkpoints, research notes, setup docs, CHECKS, MANUAL_QA, ENV_VARS, SECURITY, templates, and coding-agent instructions for following the workflow; also use when upgrading an older existing planning workflow to the current conventions."
     }
   ]
 }

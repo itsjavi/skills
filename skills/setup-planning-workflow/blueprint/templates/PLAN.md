@@ -10,12 +10,17 @@
 
 Describe the scoped outcome this plan should deliver.
 
+Use a bug-fix record instead of a plan when the work is primarily a scoped defect report and fix proposal. Keep this
+plan only when the work needs milestone sequencing, multiple phases, architecture changes, migrations, cross-domain
+behavior, or roadmap visibility.
+
 ## Definition of Done
 
 - [ ] User-facing, operator-facing, or developer-facing behavior works, if applicable.
 - [ ] Project architecture and ownership boundaries are respected.
 - [ ] Phase deliverables are completed, intentionally deferred, or marked not applicable.
 - [ ] Human QA steps are documented in **How to QA**.
+- [ ] Relevant manual QA coverage is updated in [Manual QA](../MANUAL_QA.md), if user-facing behavior changed.
 - [ ] Relevant docs are updated.
 - [ ] Decision record needs are resolved in **Decision Records**.
 - [ ] Verification checks have run or skipped checks are explained.
@@ -104,19 +109,35 @@ Acceptance checks:
 
 ## Test / Validation Plan
 
+Use [Automated Checks](../CHECKS.md) as the source of truth for canonical commands, reliability notes, and fallback
+behavior.
+
 - Typecheck command: `TBD`, when typed code changed.
 - Lint/format command: `TBD`, before final handoff when scope is broad.
-- Additional focused tests: `TBD`.
+- Unit/integration/e2e command: `TBD`.
+- Build/smoke command: `TBD`.
+- Checks that may be skipped only with documented fallback: `TBD`.
+
+## Circuit Breakers
+
+- Stop after two repeated failures of the same check with no new evidence or changed approach.
+- Stop when requirements, business rules, decisions, or implementation constraints conflict.
+- Stop when required verification cannot run and [Automated Checks](../CHECKS.md) has no documented fallback.
+- Stop when the work expands beyond this plan's scope.
+- Stop before changing public behavior, security posture, data model, deployment flow, or manual QA coverage unless the
+  relevant spec update is included.
 
 ## How to QA
 
-Assume the relevant local system, package, service, app, or docs preview is available when applicable. Describe the main
-manual QA flows a human should walk through without turning this into an exhaustive click-by-click script. Name the
-relevant area, command, route, or workflow, the user/operator/developer intent, and the expected outcome.
+Use [Manual QA](../MANUAL_QA.md) as the source of truth for live manual QA coverage. Describe the main manual QA flows a
+human should walk through without turning this into an exhaustive click-by-click script. Name the relevant area,
+command, route, or workflow, the user/operator/developer intent, and the expected outcome.
 
 - Flow: `TBD`.
 - Flow: `TBD`.
 - Expected result: `TBD`.
+- Manual QA coverage update needed: `TBD` (`Yes`, `No`, or `Already covered`).
+- Manual QA links: `TBD`.
 
 ## Risk Notes
 
@@ -137,9 +158,13 @@ relevant area, command, route, or workflow, the user/operator/developer intent, 
 - [ ] `../PRODUCT.md`
 - [ ] `../MILESTONES.md`
 - [ ] `../milestones/`
+- [ ] `../BUG_FIXES.md`
+- [ ] `../bug-fixes/`
 - [ ] `../BUSINESS_RULES.md`
 - [ ] `../business-rules/`
 - [ ] `../COORDINATION.md`
+- [ ] `../CHECKS.md`
+- [ ] `../MANUAL_QA.md`
 - [ ] `../DESIGN.md`
 - [ ] `../ENV_VARS.md`
 - [ ] `../SECURITY.md`

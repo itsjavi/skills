@@ -23,6 +23,8 @@ What changed in this phase?
 ## Checks Run
 
 - `command`: result.
+- Skipped checks: `TBD`, with reason and fallback.
+- Circuit breaker status: `TBD`, if a stop condition was hit or narrowly avoided.
 
 ## Notes / Surprises
 
@@ -31,7 +33,10 @@ What changed in this phase?
 ## Implications
 
 - **Product:** TBD.
+- **Bug fixes:** Updates needed in `../BUG_FIXES.md` or `../bug-fixes/`, or `None`.
 - **Decisions:** New or superseded decision records, or `None`.
+- **Automated checks:** Updates needed in `../CHECKS.md`, or `None`.
+- **Manual QA:** Updates needed in `../MANUAL_QA.md`, or `None`.
 - **Future plans:** TBD.
 - **Security / env / operations:** TBD.
 

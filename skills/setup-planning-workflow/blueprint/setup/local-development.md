@@ -72,7 +72,8 @@ TBD
 
 ## Run Checks
 
-Use the narrowest checks available in the repo.
+Use the narrowest checks available in the repo. See [Automated Checks](../CHECKS.md) for canonical commands, reliability
+notes, and fallback behavior.
 
 ```bash
 TBD
