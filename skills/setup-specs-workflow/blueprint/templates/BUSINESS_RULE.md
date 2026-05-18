@@ -4,6 +4,7 @@
 | ------------- | ----------------------------------------- |
 | Status        | 🧭 Proposed                               |
 | Owner         | TBD                                       |
+| Applies to    | TBD app(s)/package(s)                     |
 | Last reviewed | YYYY-MM-DD                                |
 | Index row     | [BUSINESS_RULES.md](../BUSINESS_RULES.md) |
 

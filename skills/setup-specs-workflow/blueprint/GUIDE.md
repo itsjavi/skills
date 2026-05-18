@@ -94,6 +94,26 @@ large documents.
 When creating or updating specs, keep entries concise and link to details instead of duplicating long explanations.
 Prefer updating indexes and latest checkpoint links over pasting full plan contents into new files.
 
+## App And Package Scope
+
+On monorepos with multiple apps and/or packages, every spec document must state which app(s) or package(s) it applies
+to. Use an `Applies to` field near the top of structured records, and a short `Applies to:` line near the top of
+top-level docs, research notes, and setup guides.
+
+Scope values should use concrete workspace paths or package names, for example:
+
+- `apps/web`
+- `apps/docs`
+- `apps/e2e`
+- `packages/core`
+- `@workspace/db`
+- `Monorepo: apps/web, apps/docs, apps/e2e, packages/*`
+
+When a document affects more than one surface, list every affected app/package and make ownership clear in the summary,
+index row, and implementation surfaces. Do not rely on milestone numbers or file location alone to imply scope.
+
+For monorepos with a single app and/or package, the `Applies to` field is optional.
+
 ## Spec Revisions And Freeze Points
 
 Accepted or active plans are the implementation contract. Chat can be exploratory before that point, but once a plan is
@@ -193,6 +213,9 @@ it to the project and current task.
 - `templates/PLAN.md`: use for new files in `plans/`.
 - `templates/PLAN_CHECKPOINT.md`: use for new files in `checkpoints/`.
 
+Each template includes an `Applies to` field. Fill it before drafting substantial content; do not leave it as `TBD`
+unless the record itself is documenting an unresolved ownership question.
+
 ## Status Vocabulary
 
 Use the exact status labels below, including emoji, in indexes, templates, status tables, and records.
@@ -239,6 +262,7 @@ Use [templates/MILESTONE.md](templates/MILESTONE.md) for new milestone records.
 - Status lifecycle: `🧭 Proposed` -> `🚧 Active` -> `✅ Complete`, with `⛔ Blocked`, `⏸️ Paused`, or `🛑 Cancelled`
   when needed.
 - A milestone record should link back to its row in [MILESTONES.md](MILESTONES.md).
+- A milestone record must state the app(s)/package(s) it applies to and the index row should expose that scope.
 - If a milestone is small enough to fit clearly in [MILESTONES.md](MILESTONES.md), a separate record is optional.
 - Do not duplicate milestone rows in this guide; [MILESTONES.md](MILESTONES.md) owns the milestone index.
 
@@ -253,6 +277,8 @@ Use [templates/BUSINESS_RULE.md](templates/BUSINESS_RULE.md) for new business-ru
 - File name: `NNN-kebab-case-title.md`. Never reuse numbers.
 - Status lifecycle: `🧭 Proposed` -> `✅ Active`, or `🧹 Deprecated`, `🗄️ Superseded by NNN`.
 - Keep [BUSINESS_RULES.md](BUSINESS_RULES.md) as the grouped index and current source for rule status.
+- Each rule must state the app(s)/package(s) it applies to; group or label index rows so app-specific rules do not look
+  global.
 - Link implementation surfaces and tests when known so rules remain verifiable.
 - Do not duplicate business-rule rows in this guide; [BUSINESS_RULES.md](BUSINESS_RULES.md) owns the rule index.
 
@@ -268,6 +294,7 @@ Use [templates/BUG_FIX.md](templates/BUG_FIX.md) for new bug-fix records.
 - Status lifecycle: `🐞 Reported` -> `🔎 Triaged` -> `🚧 Fixing` -> `✅ Fixed`, with `⛔ Blocked`, `🛑 Won't Fix`, or
   `🗄️ Duplicate` when needed.
 - A bug-fix record should link back to its row in [BUG_FIXES.md](BUG_FIXES.md).
+- A bug-fix record must state the affected app(s)/package(s), and the index row should expose that scope.
 - Use a bug-fix record instead of a plan when the work is primarily a defect report and scoped fix proposal that does
   not need milestone sequencing, multiple implementation phases, or roadmap visibility.
 - Promote the work into a plan when the fix expands into broad feature work, durable architecture changes, migrations,
@@ -288,6 +315,8 @@ Use [templates/PLAN.md](templates/PLAN.md) when drafting a new plan.
 - `MMM` is the three-digit milestone id and `PPP` is the three-digit plan id within that milestone. Once allocated,
   never reuse a plan number within its milestone.
 - Roadmap items do not get numbers until they are drafted into real plan files.
+- Each plan must state the affected app(s)/package(s). Checkpoints for the plan must repeat that scope so phase handoffs
+  remain clear when read alone.
 - Phase labels are letters: A, B, C, ...
 - Checkpoints live in `checkpoints/` and are named `MMM-PPP-slug-LETTER.md`.
 
@@ -524,3 +553,5 @@ has a distinct operator path, for example `ci.md`, `preview-environments.md`, `s
 
 Keep setup guide discovery in the directory listing or project guide. Do not maintain a duplicate setup index here
 unless the project has enough setup guides to justify one.
+
+Applies to: Monorepo: `apps/web`, `apps/dataset-editor`, `apps/e2e`, `packages/*`.

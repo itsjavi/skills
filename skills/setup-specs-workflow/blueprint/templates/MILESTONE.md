@@ -4,6 +4,7 @@
 | --------------------- | --------------------------------- |
 | Status                | 🧭 Proposed                       |
 | Owner                 | TBD                               |
+| Applies to            | TBD app(s)/package(s)             |
 | Target date / horizon | TBD                               |
 | Index row             | [MILESTONES.md](../MILESTONES.md) |
 

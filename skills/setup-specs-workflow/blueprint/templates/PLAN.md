@@ -2,6 +2,7 @@
 
 - **Status:** 🧭 Proposed
 - **Owner:** TBD
+- **Applies to:** TBD app(s)/package(s)
 - **Created:** YYYY-MM-DD
 - **Milestone:** [MMM - Milestone Title](../milestones/MMM-milestone-title.md)
 - **Depends on:** TBD

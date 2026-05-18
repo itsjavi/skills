@@ -3,6 +3,7 @@
 - **Status:** ✅ Complete
 - **Completed:** YYYY-MM-DD
 - **Author / session:** TBD
+- **Applies to:** TBD app(s)/package(s)
 - **Plan:** [MMM-PPP-plan-title.md](../plans/MMM-PPP-plan-title.md)
 - **Phase:** LETTER — Phase title
 - **Changelog Impact:** `None` (`Added`, `Changed`, `Fixed`, `Removed`, `Security`, `Operations`, `QA / Verification`,

@@ -3,6 +3,7 @@
 - **Status:** 🧭 Proposed
 - **Date:** YYYY-MM-DD
 - **Owner:** TBD
+- **Applies to:** TBD app(s)/package(s)
 
 ## Context
 

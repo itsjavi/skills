@@ -3,6 +3,7 @@
 - **Status:** 🐞 Reported
 - **Priority:** TBD
 - **Owner:** TBD
+- **Applies to:** TBD app(s)/package(s)
 - **Reported:** YYYY-MM-DD
 - **Fixed:** TBD
 - **Source:** TBD
