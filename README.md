@@ -7,6 +7,23 @@ The collection focuses on docs-first planning workflows, implementation handoffs
 
 > Inspired by [Better Editors are A Trap](https://www.plg.news/p/better-editors-are-a-trap)
 
+## Why This Exists
+
+These skills are for teams that want coding agents to work from durable project context instead of long chat histories.
+They do not try to make the editor the source of truth. Instead, they help encode product memory, execution state, QA
+expectations, and handoff structure into repo-owned docs that both humans and agents can inspect, update, and carry
+forward.
+
+That makes the workflow more explicit than a typical agent session. Plans, bug fixes, decisions, checks, manual QA
+notes, and coordination state live beside the code, so a fresh agent can pick up a task with the same operating context
+a human reviewer would expect. The tradeoff is intentional: a little more documentation discipline in exchange for less
+hidden state, fewer context resets, and more repeatable implementation work.
+
+This is not meant to be a full project-management system or an autonomous agent orchestrator. It is a practical set of
+skills and templates for keeping AI-assisted development grounded in specs, checks, and reviewable project records. An
+early experimental coordination prototype exists as `plan-coord`, but the recommended workflow is intentionally
+docs-first: use `COORDINATION.md` for active work instead of relying on a local agent queue or database.
+
 ## Skills
 
 | Skill                          | Use it for                                                                                                                                                                                                                  |
@@ -15,6 +32,7 @@ The collection focuses on docs-first planning workflows, implementation handoffs
 | `create-milestone`             | Create or update milestones in an established workflow; chooses the next three-digit milestone id and keeps `MILESTONES.md` as an index.                                                                                    |
 | `create-plan`                  | Create a milestone-scoped implementation plan in an established workflow, update the milestone record, and ask whether implementation should start.                                                                         |
 | `create-implementation-prompt` | Draft a paste-ready fresh-agent prompt for implementing an existing milestone-scoped plan, including context, checks, manual QA, and circuit breakers.                                                                      |
+| `generate-changelog`           | Generate or update root `CHANGELOG.md` from `.specs` changes using prepend-only dated blocks and product/spec language instead of commit-message summaries.                                                                 |
 | `document-decision`            | Capture or supersede major durable architecture/product/security/operational decisions when they are decision-worthy.                                                                                                       |
 | `create-design-guidelines`     | Create or update a project `DESIGN.md` / design-system guide for web or mobile UI work.                                                                                                                                     |
 | `find-docs`                    | Retrieve current documentation, API references, and examples for libraries, frameworks, SDKs, CLIs, and cloud services with Context7.                                                                                       |
@@ -31,7 +49,8 @@ Each skill lives in `skills/<skill-name>/SKILL.md`. The registry is generated fr
 Experimental/manual-only tools:
 
 - `plan-coord`: local SQLite coordination prototype. The planning workflow no longer recommends it for agents; use
-  `COORDINATION.md` as the coordination source of truth.
+  `COORDINATION.md` as the coordination source of truth. It lives under `tools/experimental/` and is not installed by
+  `pnpm tools:install`.
 
 ## Rules
 
@@ -71,7 +90,7 @@ pnpm skills:install --help
 ```
 
 Install tools. Tools are symlinked into `/usr/local/bin` by default. Tool files ending in `.sh` are installed without
-the suffix:
+the suffix. Experimental tools under `tools/experimental/` are ignored by the installer:
 
 ```bash
 pnpm tools:install
@@ -111,6 +130,7 @@ skills/
     scripts/         # optional helper scripts
 tools/
   *.sh               # installed without .sh suffix
+  experimental/      # manual-only prototypes; ignored by tools installer
   <tool-name>/
 rules/
   *.mdc

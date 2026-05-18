@@ -5,6 +5,9 @@
 - **Author / session:** TBD
 - **Plan:** [MMM-PPP-plan-title.md](../plans/MMM-PPP-plan-title.md)
 - **Phase:** LETTER — Phase title
+- **Changelog Impact:** `None` (`Added`, `Changed`, `Fixed`, `Removed`, `Security`, `Operations`, `QA / Verification`,
+  or `None`)
+- **Changelog Note:** `None` unless release-visible; write one short human-readable sentence when impact is not `None`.
 
 ## Summary
 
@@ -37,6 +40,7 @@ What changed in this phase?
 - **Decisions:** New or superseded decision records, or `None`.
 - **Automated checks:** Updates needed in `../CHECKS.md`, or `None`.
 - **Manual QA:** Updates needed in `../MANUAL_QA.md`, or `None`.
+- **Changelog:** Release-visible impact category and note, or `None`.
 - **Future plans:** TBD.
 - **Security / env / operations:** TBD.
 

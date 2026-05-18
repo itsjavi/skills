@@ -22,7 +22,15 @@ Do not use this skill to bootstrap, upgrade, or repair the workflow itself. If t
    - Check common roots in this order: `.specs/`, `docs/`, `project-specs/`, `.agents/specs/`, `ai/`.
    - If multiple plausible roots exist, choose the one whose `GUIDE.md` describes the active workflow or ask when the
      answer is not clear.
-2. Read project context:
+2. Read project context in tiers:
+   - Always read only the root agent guide if present, `<planning-root>/GUIDE.md`, `PRODUCT.md`, `MILESTONES.md`,
+     `BUG_FIXES.md`, `BUSINESS_RULES.md`, `COORDINATION.md`, `CHECKS.md`, and `MANUAL_QA.md`.
+   - Read the active or requested milestone record before opening related plans or checkpoints.
+   - Read `DESIGN.md`, decisions, business-rule records, bug-fix records, research notes, setup docs, security docs, env
+     docs, and implementation files only when they affect the requested plan.
+   - Use `rg`, filename scans, and index rows to find relevant records before opening full files.
+   - Do not bulk-read all plans, checkpoints, decisions, or business-rule records.
+3. Minimum context sources:
    - root `AGENTS.md`, `CLAUDE.md`, or `.cursor/rules` if present
    - `<planning-root>/GUIDE.md`
    - `<planning-root>/PRODUCT.md`
@@ -32,49 +40,40 @@ Do not use this skill to bootstrap, upgrade, or repair the workflow itself. If t
    - `<planning-root>/COORDINATION.md`
    - `<planning-root>/CHECKS.md`
    - `<planning-root>/MANUAL_QA.md`
-   - `<planning-root>/DESIGN.md` for UI plans, if present
-   - related milestone records, decisions, plans, checkpoints, business rules, research notes, setup docs, security
-     docs, env docs, and implementation files when relevant
-3. Treat `<planning-root>/GUIDE.md` as the workflow source of truth for status vocabulary, numbering, file naming,
+4. Treat `<planning-root>/GUIDE.md` as the workflow source of truth for status vocabulary, numbering, file naming,
    template usage, spec revision rules, checkpoint expectations, and index ownership.
-4. Check whether the request belongs in a bug-fix record instead of a plan:
+5. Check whether the request belongs in a bug-fix record instead of a plan:
    - Use `<planning-root>/templates/BUG_FIX.md` and update `<planning-root>/BUG_FIXES.md` when the work is primarily a
      scoped defect report and fix proposal that does not need milestone sequencing, multiple implementation phases, or
      roadmap visibility.
    - Continue with plan creation when the fix expands into broad feature work, durable architecture changes, migrations,
      cross-domain behavior, or multi-phase delivery.
-5. Determine the target milestone:
+6. Determine the target milestone:
    - Use the milestone named by the user when provided.
    - Otherwise use the active milestone from `<planning-root>/MILESTONES.md`.
    - If there is no active milestone, pick the clearly requested milestone or ask whether to create/select one.
-6. Choose `PPP` for a new plan:
+7. Choose `PPP` for a new plan:
    - Use the user's requested plan number only when it is exactly three digits and unused inside the target milestone.
    - Otherwise pick the next unused three-digit plan number after scanning `<planning-root>/plans/` and the target
      milestone record's **Drafted Plans** section.
    - Never reuse cancelled, retired, or superseded plan numbers.
-7. Create or update `<planning-root>/plans/MMM-PPP-kebab-case-title.md`:
+8. Create or update `<planning-root>/plans/MMM-PPP-kebab-case-title.md`:
    - Prefer `<planning-root>/templates/PLAN.md` when present.
    - If the template is missing, follow the plan requirements in `<planning-root>/GUIDE.md`.
    - Draft phases A, B, C... with the final phase named **Final review pass**.
    - Include definition of done, out of scope, phase acceptance checks, validation plan, manual QA impact, circuit
-     breakers, risk notes, documentation updates, and decision-record check.
-8. Update the target milestone record:
+     breakers, risk notes, changelog impact, documentation updates, and decision-record check.
+9. Update the target milestone record:
    - Add or update the plan row in the milestone record's **Drafted Plans** section.
    - Keep plan registries and phase maps in the milestone record, not in `MILESTONES.md`.
-9. Update `<planning-root>/MILESTONES.md` only when cross-milestone focus changed:
-   - active milestone
-   - recommended next plan
-   - latest checkpoint
-   - milestone status
-   - recommended execution order
-10. Apply the spec revision rule:
+10. Update `<planning-root>/MILESTONES.md` only when cross-milestone focus changed: active milestone, recommended next
+    plan, latest checkpoint, milestone status, or recommended execution order.
+11. Apply the spec revision rule: material changes to accepted or active plans require an explicit plan update before
+    implementation continues, and unplanned work that changes behavior, architecture, configuration, APIs, operational
+    flows, security posture, manual QA coverage, verification commands, or user-facing workflows must update the closest
+    relevant spec in the same turn.
 
-- Material changes to an accepted or active plan require an explicit plan update before implementation continues.
-- Fixes, refactors, or unplanned implementation work that change behavior, architecture, configuration, APIs,
-  operational flows, security posture, manual QA coverage, verification commands, or user-facing workflows must update
-  the closest relevant spec in the same turn, even when they are not part of a milestone.
-
-11. Preserve git index state. Do not stage, unstage, commit, amend, reset, or discard files unless explicitly asked.
+12. Preserve git index state. Do not stage, unstage, commit, amend, reset, or discard files unless explicitly asked.
 
 ## Plan Content Requirements
 
@@ -87,6 +86,8 @@ Include:
 - phases with goal, likely files or areas, deliverables, and acceptance checks
 - test / validation plan that references `<planning-root>/CHECKS.md`
 - manual QA impact that references `<planning-root>/MANUAL_QA.md`
+- changelog impact using `Added`, `Changed`, `Fixed`, `Removed`, `Security`, `Operations`, `QA / Verification`, or
+  `None`, plus a short human-readable note when release-visible
 - circuit breakers and stop conditions
 - risk notes
 - decision-record check with links to created, existing, or superseded decisions

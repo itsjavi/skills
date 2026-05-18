@@ -1,7 +1,8 @@
 # Automated Checks
 
-Canonical automated verification contract for this project. Keep this file current when commands, test infrastructure,
-CI gates, generated artifacts, services, or known reliability issues change.
+Canonical automated verification contract for this project. This should stay relatively low-maintenance: keep it current
+when commands, test infrastructure, CI gates, generated artifacts, required services, known reliability issues, or safe
+fallbacks change.
 
 For workflow rules, see [Guide](GUIDE.md). For local setup, see [Local Development Setup](setup/local-development.md).
 For secrets and configuration, see [Environment Variables](ENV_VARS.md) and [Security](SECURITY.md).

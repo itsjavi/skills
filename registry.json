@@ -1,7 +1,7 @@
 {
   "name": "itsjavi/skills",
   "repository": "https://github.com/itsjavi/skills",
-  "generatedAt": "2026-05-18T13:12:10.276Z",
+  "generatedAt": "2026-05-18T13:35:00.442Z",
   "skills": [
     {
       "name": "create-design-guidelines",
@@ -34,6 +34,11 @@
       "description": ">- Retrieves up-to-date documentation, API references, and code examples for any developer technology. Use this skill whenever the user asks about a specific library, framework, SDK, CLI tool, or cloud service -- even for well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. Your training data may not reflect recent API changes or version updates. Always use for: API syntax questions, configuration options, version migration issues, \"how do I\" questions mentioning a library name, debugging that involves library-specific behavior, setup instructions, and CLI tool usage. Use even when you think you know the answer -- do not rely on training data for API details, signatures, or configuration options as they are frequently outdated. Always verify against current docs. Prefer this over web search for library documentation and API details."
     },
     {
+      "name": "generate-changelog",
+      "path": "skills/generate-changelog",
+      "description": "Use when the user asks to generate, update, draft, or compare a CHANGELOG.md or release notes from .specs, planning docs, milestones, checkpoints, bug-fix records, decisions, business rules, manual QA, checks, security, env, setup, or other spec-based project records. Produces a prepend-only, non-destructive dated changelog block in product/spec language instead of summarizing commit messages."
+    },
+    {
       "name": "generate-commit-msg",
       "path": "skills/generate-commit-msg",
       "description": ">- Generate a Conventional Commit message for the repository's current staged changes. Use when the user asks for a commit message, commit title, git commit message, or conventional commit summary based on staged changes. The output must be only the message as plaintext code, with no explanation or follow-up text."
@@ -41,7 +46,7 @@
     {
       "name": "setup-planning-workflow",
       "path": "skills/setup-planning-workflow",
-      "description": "Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including PRODUCT.md, MILESTONES.md, milestone records, BUG_FIXES.md, bug-fix records, BUSINESS_RULES.md, business-rule records, COORDINATION.md, decision records, plans, checkpoints, research notes, setup docs, CHECKS, MANUAL_QA, ENV_VARS, SECURITY, templates, and coding-agent instructions for following the workflow; also use when upgrading an older existing planning workflow to the current conventions."
+      "description": "Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including PRODUCT.md, MILESTONES.md, milestone records, BUG_FIXES.md, bug-fix records, BUSINESS_RULES.md, business-rule records, COORDINATION.md, decision records, plans, checkpoints, research notes, setup docs, CHECKS, MANUAL_QA, ENV_VARS, SECURITY, changelog impact fields, templates, and coding-agent instructions for following the workflow; also use when upgrading an older existing planning workflow to the current conventions."
     }
   ]
 }

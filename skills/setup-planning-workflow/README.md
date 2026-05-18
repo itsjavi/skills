@@ -26,8 +26,13 @@ The workflow creates a lightweight project memory system:
 - `GUIDE.md` centralizes conventions, indexes, and directory roles instead of scattering README files across
   directories.
 - `CHECKS.md` defines the canonical automated verification contract: which commands prove the work, when to run them,
-  and what to do when they fail or cannot run.
-- `MANUAL_QA.md` keeps live manual QA coverage visible for product workflows that still need human judgment.
+  and what to do when they fail or cannot run. It should stay low-maintenance and change mostly when commands,
+  environments, required services, reliability notes, or fallbacks change.
+- `MANUAL_QA.md` keeps live manual QA coverage visible for important product workflows that still need human judgment.
+  Agents are expected to update it when meaningful fixes, refactors, or feature changes alter how those flows should be
+  verified.
+- `Changelog Impact` fields in plans, checkpoints, and bug-fix records mark release-visible changes so root
+  `CHANGELOG.md` can be generated later from spec evidence.
 - `plans/` describes how a specific chunk of work should be implemented.
 - `checkpoints/` captures completed phase handoffs.
 - `research/` holds useful exploration that may become stale.
@@ -98,10 +103,16 @@ local runtime state outside the repository.
 what changed, and what another agent can safely rely on. This is the "save game" that lets work resume without replaying
 the previous conversation.
 
-`CHECKS.md` and `MANUAL_QA.md` are the feedback-loop layer. Automated checks should be deterministic enough for agents
-to run without babysitting; manual QA should be current enough that humans can review the right product behavior instead
-of rediscovering every flow. If either layer changes, update the relevant plan or checkpoint so future agents know what
-was proven and what still needs judgment.
+`CHECKS.md` and `MANUAL_QA.md` are the feedback-loop layer. `CHECKS.md` is usually low-maintenance: it names the
+commands, environments, reliability notes, and fallbacks that agents need before they run automated verification.
+`MANUAL_QA.md` needs more active care because it preserves human review knowledge for important user and operator flows.
+Agents should update it when behavior, roles, permissions, setup data, edge cases, acceptance criteria, supported
+platforms, or release-critical flows change. If either layer changes, update the relevant plan or checkpoint so future
+agents know what was proven and what still needs judgment.
+
+Root `CHANGELOG.md` is the release communication layer when a project wants one. It is not part of the required planning
+root, but plans, checkpoints, and bug-fix records can carry `Changelog Impact` notes. The `generate-changelog` skill
+uses those notes plus `.specs` diffs to prepend dated changelog blocks without rewriting older entries.
 
 Together, these files give agents enough structure to move quickly without pretending that chat memory, branch state, or
 uncommitted work in another workspace is magically visible.

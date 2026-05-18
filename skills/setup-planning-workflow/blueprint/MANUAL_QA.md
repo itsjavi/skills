@@ -1,7 +1,11 @@
 # Manual QA
 
-Live manual QA coverage map for product and operator workflows. Keep this file current when user-facing behavior, roles,
-permissions, configuration, edge cases, acceptance criteria, or supported platforms change.
+Live manual QA coverage map for product and operator workflows. Keep this file current when meaningful changes affect
+how a human should verify important user-facing or operator-facing flows, including roles, permissions, configuration,
+edge cases, acceptance criteria, supported platforms, setup data, or release-critical behavior.
+
+This is not a changelog and should not track every small implementation detail. Use it to preserve the manual QA
+knowledge that would otherwise live only in a person's head or a chat thread.
 
 For workflow rules, see [Guide](GUIDE.md). For automated verification, see [Automated Checks](CHECKS.md). For product
 requirements and current domain behavior, see [Product](PRODUCT.md) and [Business Rules](BUSINESS_RULES.md).
@@ -61,8 +65,11 @@ Last reviewed: YYYY-MM-DD
 
 ## Update Rules
 
-- Add or revise a workflow when user-facing behavior changes.
+- Add or revise a workflow when an important user-facing or operator-facing behavior changes.
 - Update role/persona coverage when permissions, tenancy, auth, or onboarding changes.
 - Update setup data when seeds, fixtures, feature flags, env vars, or demo accounts change.
+- Update edge cases, failure signals, or acceptance criteria when fixes or refactors change what QA must verify.
 - Link relevant plans, checkpoints, business rules, decisions, tests, screenshots, or issue trackers when known.
 - Mark stale flows as `🧭 Needs review` instead of deleting useful history without replacement.
+- Skip updates for purely internal refactors, small copy changes, or implementation details that do not change manual QA
+  coverage.

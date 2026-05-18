@@ -4,8 +4,8 @@ description:
   Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including
   PRODUCT.md, MILESTONES.md, milestone records, BUG_FIXES.md, bug-fix records, BUSINESS_RULES.md, business-rule records,
   COORDINATION.md, decision records, plans, checkpoints, research notes, setup docs, CHECKS, MANUAL_QA, ENV_VARS,
-  SECURITY, templates, and coding-agent instructions for following the workflow; also use when upgrading an older
-  existing planning workflow to the current conventions.
+  SECURITY, changelog impact fields, templates, and coding-agent instructions for following the workflow; also use when
+  upgrading an older existing planning workflow to the current conventions.
 ---
 
 # Dev Pairing Workflow Bootstrap
@@ -13,8 +13,8 @@ description:
 Bootstrap a docs-first **Dev Pairing (AI + human dev) workflow and plan bookkeeping** structure for projects that do not
 yet have one.
 
-See `README.md` in this skill folder for the rationale behind the workflow, especially the document mental model,
-parallel-work coordination, and checkpoint "save game" pattern.
+Read this skill folder's `README.md` only when the user asks for rationale or you need to explain the workflow model.
+The executable bootstrap rules are in this `SKILL.md` and the bundled `blueprint/` files.
 
 ## Resource Path Rules
 
@@ -60,6 +60,7 @@ After bootstrapping, future coding agents should understand how to:
 - coordinate parallel sessions, branches, or worktrees without relying on chat history
 - add dated implementation updates when code changes make docs stale
 - keep canonical automated checks and manual QA coverage visible to future agents
+- mark release-visible changelog impact in plans, checkpoints, and bug-fix records
 - stop implementation loops when checks repeatedly fail, verification cannot run, constraints conflict, or scope expands
 - fetch current library/tool documentation with Context7 before answering library-specific questions or implementing
   against unfamiliar/current APIs
@@ -170,8 +171,8 @@ workflow instructions so future agents know where to look.
 - `CHECKS.md`: canonical automated verification contract. Lists install, format, lint, typecheck, test, build, smoke,
   preview, CI, and release checks with when to run them, expected runtime, reliability notes, and fallback behavior.
 - `MANUAL_QA.md`: live manual QA coverage map. Describes product areas, feature workflows, roles/personas, setup data,
-  browser/device expectations, acceptance signals, and stale or missing coverage. Keep it current when user-facing
-  behavior changes.
+  browser/device expectations, acceptance signals, and stale or missing coverage. Keep it current when meaningful
+  changes affect how important flows should be manually verified.
 - `decisions/`: architecture/product decision records. Durable, load-bearing decisions and tradeoff history.
 - `plans/`: implementation plans written after product requirements, business rules, and decisions are clear. Plans are
   divided into phases.
@@ -183,6 +184,8 @@ workflow instructions so future agents know where to look.
 - `SECURITY.md`: security model, threat assumptions, secret handling, reporting process, and operational hardening.
 - `DESIGN.md`: master design guidelines. If present, follow it for UI work; if missing and UI work is requested, suggest
   generating it with the create-design-guidelines skill.
+- Root `CHANGELOG.md`: optional release communication output. It is updated by the `generate-changelog` skill from
+  planning-spec evidence using prepend-only dated blocks, not by rewriting historical entries.
 
 ## Bootstrap Workflow
 
@@ -249,47 +252,9 @@ workflow source of truth.
 
 ### Project Agent Guide Section
 
-Adapt this short operating checklist into the target project guide. Keep it intentionally thin; detailed workflow
-explanations belong only in `<planning-root>/GUIDE.md`.
-
-```markdown
-## Project Planning Workflow
-
-Planning root: `.specs/`.
-
-For planning work, follow `.specs/GUIDE.md`. It is the source of truth for document roles, status vocabulary, naming,
-numbering, templates, milestones, bug fixes, plans, checkpoints, decisions, business rules, research, setup docs, and
-coordination.
-
-At the start of planning or implementation work, read:
-
-1. This file.
-2. `.specs/GUIDE.md`.
-3. `.specs/PRODUCT.md` for product requirements.
-4. `.specs/MILESTONES.md` for active milestone focus and recommended next plan.
-5. `.specs/BUG_FIXES.md` for active defect records and scoped fix status.
-6. `.specs/BUSINESS_RULES.md` for current product/domain rules.
-7. `.specs/COORDINATION.md` for active parallel work, blockers, ownership, and handoffs.
-8. `.specs/CHECKS.md` for canonical automated verification commands and known reliability notes.
-9. `.specs/MANUAL_QA.md` for manual QA workflows and feature coverage.
-10. The active milestone record, bug-fix record, plan, and latest relevant checkpoints when applicable.
-11. `.specs/DESIGN.md` for UI work, if present.
-12. The relevant `.specs/setup/` guide for local setup, deployment, hosting, or operations work.
-
-Operating rules:
-
-- Keep implementation and specs in sync. When behavior, architecture, configuration, APIs, operational flows, or
-  user-facing workflows change, update the relevant spec before finishing.
-- Material changes to accepted/active plans require an explicit plan update before implementation continues. Fixes,
-  refactors, and unplanned implementation work must still update the relevant spec when they change behavior,
-  architecture, configuration, APIs, operational flows, security posture, verification commands, manual QA coverage, or
-  user-facing workflows.
-- Use `.specs/COORDINATION.md` for active parallel work only. Update it when work starts, pauses, blocks, resumes, or
-  completes.
-- Preserve git index state unless explicitly asked. Do not stage, unstage, commit, amend, reset, or switch files between
-  staged and unstaged.
-- Commit messages, when requested, must use Conventional Commit format: `<type>(optional-scope): <imperative summary>`.
-```
+Use `blueprint/AGENT_GUIDE.md` as the source text. Adapt only the planning root, project name/context if needed, and
+links that must change for the target repo. Keep the project agent guide thin; detailed workflow explanations belong in
+`<planning-root>/GUIDE.md`.
 
 ## Workflow Docs To Generate
 
@@ -351,6 +316,8 @@ Operating rules:
 - circuit breaker guidance: stop after repeated identical failures with no new evidence, stop when required verification
   cannot run, and document skipped checks with reason and fallback
 - links to setup docs, env vars, security docs, plans, checkpoints, or CI config that define or consume these checks
+- keep this file low-maintenance: update it when commands, environments, reliability notes, required services, or
+  fallbacks change; do not treat it as a narrative QA log
 
 `<planning-root>/MANUAL_QA.md` should include:
 
@@ -361,8 +328,20 @@ Operating rules:
 - coverage status for each workflow, such as `✅ Current`, `🧭 Needs review`, `⛔ Blocked`, or `TBD`
 - links to related product requirements, business rules, plans, checkpoints, decisions, tests, screenshots, or issue
   trackers when known
-- update rules requiring agents to revise manual QA coverage when user-facing workflows, roles, permissions,
-  configuration, edge cases, or acceptance criteria change
+- update rules requiring agents to revise manual QA coverage when meaningful changes affect user-facing or
+  operator-facing flows, roles, permissions, configuration, edge cases, acceptance criteria, supported platforms, setup
+  data, or release-critical behavior
+- guidance to avoid churn: small copy tweaks, internal refactors, and implementation-only changes do not need manual QA
+  updates unless they change how a human should verify the product
+
+Plan, checkpoint, and bug-fix templates should include a lightweight `Changelog Impact` field:
+
+- accepted categories: `Added`, `Changed`, `Fixed`, `Removed`, `Security`, `Operations`, `QA / Verification`, or `None`
+- require a short human-readable impact sentence when the category is not `None`
+- use `None` for internal-only implementation work, coordination churn, formatting, template updates, or changes with no
+  release communication value
+- root `CHANGELOG.md` is updated later by prepending a dated block with the `generate-changelog` skill; agents should
+  not rewrite or merge older changelog entries unless explicitly asked
 
 `<planning-root>/ENV_VARS.md` should include:
 
@@ -395,60 +374,10 @@ adapted from the matching blueprint files bundled in this skill folder. Use this
 the detailed setup guide conventions, required sections, and guidance on adding more setup guides. Keep all setup docs
 inferred from repo evidence; mark unknowns as `TBD` instead of inventing a hosting or deployment architecture.
 
-`<planning-root>/GUIDE.md` should include:
-
-- planning root and mental model
-- document and directory roles, including that `GUIDE.md` replaces per-directory README files
-- context discipline: initial high-signal specs, when to expand context, and summarizing relevant state before
-  implementation
-- current technical reference rule for verifying library/framework/SDK/API/CLI/cloud behavior with current docs before
-  writing durable guidance
-- spec freeze and explicit revision rules for accepted/active plans
-- automated verification guidance with `CHECKS.md` as the source of truth
-- manual QA guidance with `MANUAL_QA.md` as the source of truth
-- circuit breakers for repeated failures, unavailable verification, conflicting requirements, or scope expansion
-- guidance to keep spec updates concise, link to details, and update indexes/latest checkpoint links instead of
-  duplicating long content
-- directory map that explains what belongs in `decisions/`, `milestones/`, `business-rules/`, `plans/`, `checkpoints/`,
-  `bug-fixes/`, `research/`, `setup/`, and `templates/`
-- template mapping: `decisions/` uses `templates/DECISION.md`, `milestones/` uses `templates/MILESTONE.md`, `bug-fixes/`
-  uses `templates/BUG_FIX.md`, `business-rules/` uses `templates/BUSINESS_RULE.md`, `plans/` uses `templates/PLAN.md`,
-  `checkpoints/` uses `templates/PLAN_CHECKPOINT.md`, and `research/`/`setup/` do not require templates
-- milestone record convention and the rule that `MILESTONES.md` is only the cross-milestone overview and must not
-  duplicate drafted-plan registries or phase maps
-- business-rule record convention and the rule that `BUSINESS_RULES.md` is the index/source for current rules
-- bug-fix record convention and the rule that `BUG_FIXES.md` is only the bug-fix overview and must not duplicate
-  reproduction, diagnosis, validation, or outcome details
-- when to use a bug-fix record instead of a plan, and when to promote a bug fix into a plan
-- clear distinction between decisions (why a choice was made) and business rules (what the system must currently do)
-- decision filename convention
-- decision status lifecycle (`🧭 Proposed`, `✅ Accepted`, `🗄️ Superseded by NNN`, `🧹 Deprecated`)
-- decision record convention and cross-link expectations
-- rule to supersede accepted decisions instead of rewriting them
-- plan filename convention using three-digit milestone and plan ids, e.g. `003-001-plan-title-slug.md`
-- how to create a new plan, including choosing the next number, copying the plan template, updating the target milestone
-  record's **Drafted Plans** section, and updating `MILESTONES.md` only when cross-milestone focus changes
-- decision-record maintenance in plans: when major durable choices need decisions, when routine changes do not, when to
-  mark decisions as needed, not needed, created, or superseded, and how to link decisions from plans and checkpoints
-- how to resume work from `MILESTONES.md`, the active milestone record, `COORDINATION.md`, the active plan, and latest
-  checkpoints
-- phase/checkpoint convention
-- phase workflow
-- final review workflow
-- docs-sync rule for implementation updates
-- cross-session coordination rules and branch/worktree inspection commands
-- rule that uncommitted state in another workspace is invisible unless published, summarized, committed, checkpointed,
-  or explicitly provided by the user
-- checkpoint naming convention
-- required checkpoint content
-- how checkpoints link back to plans
-- teaching-loop guidance: when human feedback repeats, encode it in a spec, skill, rule, check, test, template, or style
-  guide instead of relying on future chat memory
-- research guidance: what belongs in research, staleness warning, and promotion rules for durable conclusions
-- setup guidance: setup guide index, how to choose the right guide, when to add more setup guides, and links to
-  `ENV_VARS.md` and `SECURITY.md`
-- security reminder to use placeholders only and never commit real secrets, tokens, passwords, private keys, or
-  production URLs
+`<planning-root>/GUIDE.md` should be adapted from `blueprint/GUIDE.md` nearly verbatim. Do not recreate its full content
+from memory or duplicate it elsewhere. The guide owns the workflow rules, status vocabulary, directory map,
+context-discipline rules, phase/checkpoint workflow, docs-sync rules, changelog guidance, cross-session coordination,
+research rules, setup guidance, and security reminders.
 
 The centralized guide replaces per-directory README files. Do not create `README.md` files inside the planning
 subdirectories unless the user explicitly requests that layout.
@@ -494,6 +423,7 @@ subdirectories unless the user explicitly requests that layout.
 - root cause
 - fix proposal
 - validation plan linked to `CHECKS.md` and `MANUAL_QA.md`
+- changelog impact category and note
 - outcome
 - documentation updates
 
@@ -506,6 +436,7 @@ subdirectories unless the user explicitly requests that layout.
 - phases with acceptance checks
 - test/validation plan
 - manual QA impact
+- changelog impact category and note
 - circuit breakers
 - risk notes
 - decision-record check with links to created or superseded decisions
@@ -518,7 +449,7 @@ subdirectories unless the user explicitly requests that layout.
 - files changed
 - checks run
 - notes/surprises
-- implications for decisions/business rules/product/future plans
+- implications for decisions/business rules/product/changelog/future plans
 - follow-ups
 
 ## Rules
@@ -557,6 +488,7 @@ source for this skill's canonical blueprints.
 - `blueprint/ENV_VARS.md`
 - `blueprint/SECURITY.md`
 - `blueprint/GUIDE.md`
+- `blueprint/AGENT_GUIDE.md`
 - `blueprint/setup/local-development.md`
 - `blueprint/setup/production-hosting-and-deployment.md`
 - `blueprint/templates/DECISION.md`

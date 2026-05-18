@@ -18,17 +18,13 @@ description: >-
 
 Retrieve current documentation and code examples for any library using the Context7 CLI.
 
-Make sure the CLI is up to date before running commands:
-
-```bash
-npm install -g ctx7@latest
-```
-
-Or run directly without installing:
+Prefer running without global installation:
 
 ```bash
 npx ctx7@latest <command>
 ```
+
+Do not install or upgrade the CLI globally unless the user explicitly asks.
 
 ## Workflow
 

@@ -44,29 +44,34 @@ Do not invent a decision from vague conversation history.
    - Check common roots in this order: `.specs/`, `docs/`, `project-specs/`, `.agents/specs/`, `ai/`.
    - If multiple plausible roots exist, choose the one whose `GUIDE.md` describes the active workflow or ask when
      unclear.
-2. Read project context:
+2. Read project context in tiers:
+   - Always read only the root agent guide if present, `<planning-root>/GUIDE.md`, `PRODUCT.md`, `BUSINESS_RULES.md`,
+     and `MILESTONES.md`.
+   - Scan `<planning-root>/decisions/` filenames and use `rg` for relevant terms before opening decision records.
+   - Open only existing decisions that may be superseded, contradicted, or directly related.
+   - Read plans, checkpoints, business-rule records, research notes, setup docs, security docs, env docs, or
+     implementation files only when they affect the decision.
+   - Do not bulk-read every decision or every planning record.
+3. Minimum context sources:
    - root `AGENTS.md`, `CLAUDE.md`, or `.cursor/rules` if present
    - `<planning-root>/GUIDE.md`
    - `<planning-root>/PRODUCT.md`
    - `<planning-root>/BUSINESS_RULES.md`
    - `<planning-root>/MILESTONES.md`
-   - existing `<planning-root>/decisions/*.md`
-   - related plans, checkpoints, business rules, research notes, setup docs, security docs, env docs, or implementation
-     files when relevant
-3. Treat `<planning-root>/GUIDE.md` as the workflow source of truth for status vocabulary, numbering, file naming,
+4. Treat `<planning-root>/GUIDE.md` as the workflow source of truth for status vocabulary, numbering, file naming,
    template usage, and supersession rules.
-4. Run the decision-worthiness check.
-5. Create, supersede, or decline:
+5. Run the decision-worthiness check.
+6. Create, supersede, or decline:
    - Create a new decision when there is a major durable choice with meaningful alternatives, consequences, or future
      impact.
    - Supersede an existing accepted decision when the new choice changes or replaces it.
    - Decline to write a decision when the topic is local sequencing, implementation detail with no durable tradeoff, or
      unresolved exploration. Tell the user where it belongs instead.
-6. Choose `NNN` for a new decision:
+7. Choose `NNN` for a new decision:
    - Use the user's requested number only when it is exactly three digits and unused.
    - Otherwise pick the next unused three-digit number after scanning `<planning-root>/decisions/*.md`.
    - Never reuse retired, deprecated, or superseded decision numbers.
-7. Write `<planning-root>/decisions/NNN-kebab-case-title.md`:
+8. Write `<planning-root>/decisions/NNN-kebab-case-title.md`:
    - Prefer `<planning-root>/templates/DECISION.md` when present.
    - If the template is missing, follow the decision requirements in `<planning-root>/GUIDE.md`.
    - Use `✅ Accepted` when the user states the decision is made. Use `🧭 Proposed` only when the user is asking to
@@ -74,15 +79,14 @@ Do not invent a decision from vague conversation history.
    - Include context, decision, consequences, alternatives considered, and follow-ups.
    - Link related product requirements, milestones, business rules, plans, checkpoints, research notes,
      setup/security/env docs, and implementation surfaces when known.
-8. If superseding an existing decision:
+9. If superseding an existing decision:
    - Create a new decision record for the replacement.
    - Update the old decision status to `🗄️ Superseded by NNN` unless project guidance says otherwise.
    - Cross-link the old and new records.
-9. Update related docs only when needed:
-   - Update `BUSINESS_RULES.md` or `business-rules/` when the decision changes current product/domain behavior.
-   - Update milestone records or plans when the decision changes roadmap or implementation sequencing.
-   - Update setup, security, env, or design docs when the decision changes those operating rules.
-10. Preserve git index state. Do not stage, unstage, commit, amend, reset, or discard files unless explicitly asked.
+10. Update related docs only when needed: update `BUSINESS_RULES.md` or `business-rules/` when current product/domain
+    behavior changes, milestone records or plans when roadmap or implementation sequencing changes, and setup, security,
+    env, or design docs when operating rules change.
+11. Preserve git index state. Do not stage, unstage, commit, amend, reset, or discard files unless explicitly asked.
 
 ## Decision-Worthiness Check
 

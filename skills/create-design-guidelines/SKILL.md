@@ -66,7 +66,9 @@ current working directory to fill any gaps:
    - Tailwind theme colors / `extend.colors` in the config.
    - `theme.ts`, `tokens.ts`, `design-tokens.json`.
 3. **Existing components**
-   - Glob `components/`, `src/components/`, `app/`, `pages/`, `views/` to see what UI primitives already exist.
+   - Use `rg --files` or shallow directory listings for `components/`, `src/components/`, `app/`, `pages/`, and `views/`
+     to see what UI primitives already exist.
+   - Open only representative files needed to identify conventions; do not bulk-read entire component trees.
    - This lets you write a Components section that reflects reality instead of a generic checklist.
 4. **Existing design notes**
    - Look for `DESIGN.md`, `STYLEGUIDE.md`, `docs/design.md`, `BRAND.md`. If present, extend rather than overwrite — and

@@ -9,6 +9,9 @@
 - **Related feedback:** TBD
 - **Related plan:** TBD
 - **Related checkpoint:** TBD
+- **Changelog Impact:** `Fixed` (`Added`, `Changed`, `Fixed`, `Removed`, `Security`, `Operations`, `QA / Verification`,
+  or `None`)
+- **Changelog Note:** `TBD` when fixed; use `None` only when the fix has no release-visible impact.
 
 ## Report
 
@@ -64,7 +67,8 @@ Actual:
 ## Validation Plan
 
 Use [Automated Checks](../CHECKS.md) and [Manual QA](../MANUAL_QA.md) as the source of truth for validation commands,
-reliability notes, fallback behavior, and manual coverage.
+reliability notes, fallback behavior, and manual coverage. Update `../MANUAL_QA.md` when the fix changes how an
+important user-facing or operator-facing flow should be verified.
 
 - Automated checks: TBD.
 - Manual QA: TBD.
@@ -77,6 +81,7 @@ reliability notes, fallback behavior, and manual coverage.
 - Fix summary: TBD.
 - Checks run: TBD.
 - Manual QA run: TBD.
+- Changelog impact: TBD.
 - Follow-ups: TBD.
 
 ## Documentation Updates

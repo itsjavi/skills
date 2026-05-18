@@ -21,6 +21,7 @@ Options:
 
 Symlinks executable tools from ./tools into the selected bin directory by default.
 Files ending in .sh are installed without the .sh suffix.
+Experimental tools under ./tools/experimental are intentionally ignored.
 
 The default can also be changed with TOOLS_BIN_DIR.
 EOF
@@ -124,7 +125,9 @@ while IFS= read -r tool_path; do
   fi
 
   installed=$((installed + 1))
-done < <(find "$TOOLS_DIR" -maxdepth 1 -type f ! -name '.*' | sort)
+# Only install stable top-level launchers. Experimental tools stay available in
+# ./tools/experimental for manual use, but are never installed by default.
+done < <(find "$TOOLS_DIR" -maxdepth 1 -type f ! -name '.*' ! -path "$TOOLS_DIR/experimental/*" | sort)
 
 if [[ "$DRY_RUN" == true ]]; then
   action="Found"

@@ -129,8 +129,12 @@ Bring older workflows in line with the current guide:
   in bug-fix records.
 - Scoped defects use bug-fix records instead of plans. Promote to a plan when the fix becomes multi-phase,
   architecture-changing, migration-heavy, cross-domain, or roadmap-visible.
-- `CHECKS.md` owns canonical automated verification commands, reliability notes, and fallback behavior.
-- `MANUAL_QA.md` owns live manual QA coverage for user-facing and operator-facing workflows.
+- `CHECKS.md` owns canonical automated verification commands, reliability notes, and fallback behavior. It should stay
+  low-maintenance and change mainly when commands, environments, required services, or fallbacks change.
+- `MANUAL_QA.md` owns live manual QA coverage for important user-facing and operator-facing workflows. Agents should
+  update it when meaningful fixes, refactors, or feature changes alter how those flows should be verified.
+- Plans, checkpoints, and bug-fix records include `Changelog Impact` fields for release-visible changes. Root
+  `CHANGELOG.md` is optional and should be updated with prepend-only dated blocks by the `generate-changelog` skill.
 - Accepted or active plans require explicit spec updates before material scope or behavior changes continue.
 - Add circuit breakers to plans and handoffs: repeated identical check failures, unavailable required verification,
   conflicting requirements, and scope expansion should stop the loop for human direction.
@@ -169,6 +173,7 @@ Normalize vocabulary and numbering:
 - BUG_FIXES.md is the scoped defect index
 - CHECKS.md is the automated verification contract
 - MANUAL_QA.md is the manual QA coverage map
+- Changelog Impact fields mark release-visible changes for later root CHANGELOG.md generation
 
 Update COORDINATION.md to the new active-work snapshot format. Preserve useful active rows, blockers, ownership notes,
 project directories, branches, worktree paths, and handoff links. COORDINATION.md is the coordination source of truth for

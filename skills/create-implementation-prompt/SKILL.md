@@ -28,24 +28,29 @@ state, verification contract, manual QA expectations, and stop conditions withou
    - If the user gives only a plan title or partial slug, search `<planning-root>/plans/`.
    - If the user says "next", read `<planning-root>/MILESTONES.md`, the active milestone record, and
      `<planning-root>/COORDINATION.md`; pick the first non-complete plan in recommended order.
-3. Read:
+3. Read context in tiers:
+   - Always read only the root agent guide if present, `<planning-root>/GUIDE.md`, `MILESTONES.md`, `COORDINATION.md`,
+     `CHECKS.md`, `MANUAL_QA.md`, and the target plan.
+   - Read the active milestone record and latest checkpoint for the target plan when present.
+   - Read `BUG_FIXES.md`, `BUSINESS_RULES.md`, bug-fix records, decisions, setup docs, security docs, env docs, design
+     docs, and implementation files only when the target plan or checkpoint links to them or they materially affect the
+     handoff.
+   - Use `rg`, filename scans, and index rows before opening full records.
+   - Do not paste or load entire source documents just to create the prompt.
+4. Minimum context sources:
    - root `AGENTS.md`, `CLAUDE.md`, or `.cursor/rules` if present
    - `<planning-root>/GUIDE.md`
    - `<planning-root>/MILESTONES.md`
    - the active milestone record
-   - `<planning-root>/BUG_FIXES.md`
-   - `<planning-root>/BUSINESS_RULES.md`
    - `<planning-root>/COORDINATION.md`
    - `<planning-root>/CHECKS.md`
    - `<planning-root>/MANUAL_QA.md`
    - the target plan
-   - latest relevant checkpoints for the target plan and important dependencies
-   - relevant bug-fix records, decisions, setup docs, security docs, env docs, design docs, and implementation files
-     when useful
-4. If plan status, milestone state, coordination state, checks, or manual QA coverage looks stale, mention that in the
+   - latest relevant checkpoint for the target plan, if present
+5. If plan status, milestone state, coordination state, checks, or manual QA coverage looks stale, mention that in the
    prompt as context. Do not silently rewrite docs unless the user asked to update them.
-5. Generate one fenced `text` block. Keep it directly usable.
-6. Ask whether the user wants implementation to start now.
+6. Generate one fenced `text` block. Keep it directly usable.
+7. Ask whether the user wants implementation to start now.
 
 ## Prompt Shape
 
@@ -62,8 +67,10 @@ Include these sections, trimmed to what matters:
   - update plan status table per phase
   - keep specs updated before implementation continues when scope or behavior changes
   - write checkpoints after completed phases
-  - use `<planning-root>/CHECKS.md` for canonical verification commands
-  - use `<planning-root>/MANUAL_QA.md` for manual QA coverage and update it when feature behavior changes
+  - use `<planning-root>/CHECKS.md` for canonical verification commands, reliability notes, and fallbacks
+  - use `<planning-root>/MANUAL_QA.md` for manual QA coverage and update it when meaningful changes affect important
+    user-facing or operator-facing flows
+  - keep plan, checkpoint, and bug-fix `Changelog Impact` fields current when work becomes release-visible
   - do not stage, unstage, commit, amend, reset, or discard files unless explicitly asked
 - Circuit breakers:
   - stop after two repeated failures of the same check with no new evidence or changed approach

@@ -5,6 +5,9 @@
 - **Created:** YYYY-MM-DD
 - **Milestone:** [MMM - Milestone Title](../milestones/MMM-milestone-title.md)
 - **Depends on:** TBD
+- **Changelog Impact:** `None` (`Added`, `Changed`, `Fixed`, `Removed`, `Security`, `Operations`, `QA / Verification`,
+  or `None`)
+- **Changelog Note:** `None` unless release-visible; write one short human-readable sentence when impact is not `None`.
 
 ## Goal
 
@@ -20,7 +23,9 @@ behavior, or roadmap visibility.
 - [ ] Project architecture and ownership boundaries are respected.
 - [ ] Phase deliverables are completed, intentionally deferred, or marked not applicable.
 - [ ] Human QA steps are documented in **How to QA**.
-- [ ] Relevant manual QA coverage is updated in [Manual QA](../MANUAL_QA.md), if user-facing behavior changed.
+- [ ] Relevant manual QA coverage is updated in [Manual QA](../MANUAL_QA.md), if important user-facing or
+      operator-facing QA coverage changed.
+- [ ] **Changelog Impact** is set to the right category, or `None` for no release-visible change.
 - [ ] Relevant docs are updated.
 - [ ] Decision record needs are resolved in **Decision Records**.
 - [ ] Verification checks have run or skipped checks are explained.
@@ -131,7 +136,8 @@ behavior.
 
 Use [Manual QA](../MANUAL_QA.md) as the source of truth for live manual QA coverage. Describe the main manual QA flows a
 human should walk through without turning this into an exhaustive click-by-click script. Name the relevant area,
-command, route, or workflow, the user/operator/developer intent, and the expected outcome.
+command, route, or workflow, the user/operator/developer intent, and the expected outcome. Update `../MANUAL_QA.md` when
+this work meaningfully changes how important user-facing or operator-facing flows should be verified.
 
 - Flow: `TBD`.
 - Flow: `TBD`.
