@@ -1,7 +1,7 @@
 {
   "name": "itsjavi/skills",
   "repository": "https://github.com/itsjavi/skills",
-  "generatedAt": "2026-05-18T13:35:00.442Z",
+  "generatedAt": "2026-05-18T13:45:43.432Z",
   "skills": [
     {
       "name": "create-design-guidelines",
@@ -47,6 +47,11 @@
       "name": "setup-planning-workflow",
       "path": "skills/setup-planning-workflow",
       "description": "Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including PRODUCT.md, MILESTONES.md, milestone records, BUG_FIXES.md, bug-fix records, BUSINESS_RULES.md, business-rule records, COORDINATION.md, decision records, plans, checkpoints, research notes, setup docs, CHECKS, MANUAL_QA, ENV_VARS, SECURITY, changelog impact fields, templates, and coding-agent instructions for following the workflow; also use when upgrading an older existing planning workflow to the current conventions."
+    },
+    {
+      "name": "validate-specs-workflow",
+      "path": "skills/validate-specs-workflow",
+      "description": "Use when the user asks to validate, audit, check, lint, or inspect a .specs planning workflow for structural consistency, missing required files, broken links, stale placeholders, invalid statuses, malformed plan/checkpoint names, missing changelog impact fields, or incomplete CHECKS.md and MANUAL_QA.md setup. Includes a bundled deterministic validator script."
     }
   ]
 }

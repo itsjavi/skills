@@ -61,6 +61,7 @@ After bootstrapping, future coding agents should understand how to:
 - add dated implementation updates when code changes make docs stale
 - keep canonical automated checks and manual QA coverage visible to future agents
 - mark release-visible changelog impact in plans, checkpoints, and bug-fix records
+- validate workflow structure with `validate-specs-workflow` when users ask to audit or check `.specs`
 - stop implementation loops when checks repeatedly fail, verification cannot run, constraints conflict, or scope expands
 - fetch current library/tool documentation with Context7 before answering library-specific questions or implementing
   against unfamiliar/current APIs
@@ -186,6 +187,8 @@ workflow instructions so future agents know where to look.
   generating it with the create-design-guidelines skill.
 - Root `CHANGELOG.md`: optional release communication output. It is updated by the `generate-changelog` skill from
   planning-spec evidence using prepend-only dated blocks, not by rewriting historical entries.
+- `validate-specs-workflow`: companion validation skill with a bundled script for checking workflow structure, links,
+  naming, required sections, changelog impact fields, checks, manual QA coverage, and obvious placeholders.
 
 ## Bootstrap Workflow
 
@@ -318,6 +321,8 @@ links that must change for the target repo. Keep the project agent guide thin; d
 - links to setup docs, env vars, security docs, plans, checkpoints, or CI config that define or consume these checks
 - keep this file low-maintenance: update it when commands, environments, reliability notes, required services, or
   fallbacks change; do not treat it as a narrative QA log
+- optional workflow validation command using the `validate-specs-workflow` skill's bundled script when that skill is
+  available to the project
 
 `<planning-root>/MANUAL_QA.md` should include:
 

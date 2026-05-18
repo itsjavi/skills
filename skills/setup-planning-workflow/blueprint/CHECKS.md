@@ -19,17 +19,18 @@ Last reviewed: YYYY-MM-DD
 
 ## Canonical Commands
 
-| Check                | Command | When to run                                          | Expected runtime | Deterministic? | Requires | Success signal | Notes / fallback |
-| -------------------- | ------- | ---------------------------------------------------- | ---------------- | -------------- | -------- | -------------- | ---------------- |
-| Install/bootstrap    | `TBD`   | Fresh checkout or dependency changes                 | TBD              | TBD            | TBD      | TBD            | TBD              |
-| Format               | `TBD`   | Before final handoff when formatted files changed    | TBD              | TBD            | TBD      | TBD            | TBD              |
-| Lint                 | `TBD`   | Before checkpoint/final review when code changed     | TBD              | TBD            | TBD      | TBD            | TBD              |
-| Typecheck            | `TBD`   | After typed code changes and before final review     | TBD              | TBD            | TBD      | TBD            | TBD              |
-| Unit tests           | `TBD`   | For touched logic                                    | TBD              | TBD            | TBD      | TBD            | TBD              |
-| Integration tests    | `TBD`   | For cross-module or service behavior                 | TBD              | TBD            | TBD      | TBD            | TBD              |
-| E2E / browser tests  | `TBD`   | For user-facing flows                                | TBD              | TBD            | TBD      | TBD            | TBD              |
-| Build                | `TBD`   | Before final review when buildable artifacts changed | TBD              | TBD            | TBD      | TBD            | TBD              |
-| Smoke / health check | `TBD`   | After starting the app or deployment-like flow       | TBD              | TBD            | TBD      | TBD            | TBD              |
+| Check                | Command | When to run                                          | Expected runtime | Deterministic? | Requires | Success signal | Notes / fallback                                        |
+| -------------------- | ------- | ---------------------------------------------------- | ---------------- | -------------- | -------- | -------------- | ------------------------------------------------------- |
+| Install/bootstrap    | `TBD`   | Fresh checkout or dependency changes                 | TBD              | TBD            | TBD      | TBD            | TBD                                                     |
+| Format               | `TBD`   | Before final handoff when formatted files changed    | TBD              | TBD            | TBD      | TBD            | TBD                                                     |
+| Lint                 | `TBD`   | Before checkpoint/final review when code changed     | TBD              | TBD            | TBD      | TBD            | TBD                                                     |
+| Typecheck            | `TBD`   | After typed code changes and before final review     | TBD              | TBD            | TBD      | TBD            | TBD                                                     |
+| Unit tests           | `TBD`   | For touched logic                                    | TBD              | TBD            | TBD      | TBD            | TBD                                                     |
+| Integration tests    | `TBD`   | For cross-module or service behavior                 | TBD              | TBD            | TBD      | TBD            | TBD                                                     |
+| E2E / browser tests  | `TBD`   | For user-facing flows                                | TBD              | TBD            | TBD      | TBD            | TBD                                                     |
+| Build                | `TBD`   | Before final review when buildable artifacts changed | TBD              | TBD            | TBD      | TBD            | TBD                                                     |
+| Smoke / health check | `TBD`   | After starting the app or deployment-like flow       | TBD              | TBD            | TBD      | TBD            | TBD                                                     |
+| Specs workflow       | `TBD`   | When auditing `.specs` structure                     | TBD              | Yes            | TBD      | TBD            | Use the `validate-specs-workflow` skill when available. |
 
 ## CI Gates
 
