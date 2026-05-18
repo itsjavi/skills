@@ -1,6 +1,6 @@
 # Upgrading Existing Planning Workflows
 
-Use this guide when a project already has an older setup-planning-workflow installation and needs to adopt the current
+Use this guide when a project already has an older setup-specs-workflow installation and needs to adopt the current
 blueprint, standalone `GUIDE.md`, status vocabulary, three-digit numbering, `CHECKS.md`, `MANUAL_QA.md`, and manual
 `COORDINATION.md` workflow.
 
@@ -149,11 +149,11 @@ Bring older workflows in line with the current guide:
 Use this prompt when asking an agent to upgrade a project:
 
 ```text
-Upgrade this project's planning workflow to the latest setup-planning-workflow conventions.
+Upgrade this project's planning workflow to the latest setup-specs-workflow conventions.
 
 Planning root: <docs-or-.specs>
 
-Use the latest setup-planning-workflow skill folder as the workflow source. Read bundled blueprint files from that skill
+Use the latest setup-specs-workflow skill folder as the workflow source. Read bundled blueprint files from that skill
 folder, not from the target project. Replace <planning-root>/GUIDE.md nearly verbatim, adapting only the planning root
 path, project name, and links. Replace templates from the latest bundled blueprint unless the project has intentional
 customizations.

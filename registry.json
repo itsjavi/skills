@@ -44,8 +44,8 @@
       "description": ">- Generate a Conventional Commit message for the repository's current staged changes. Use when the user asks for a commit message, commit title, git commit message, or conventional commit summary based on staged changes. The output must be only the message as plaintext code, with no explanation or follow-up text."
     },
     {
-      "name": "setup-planning-workflow",
-      "path": "skills/setup-planning-workflow",
+      "name": "setup-specs-workflow",
+      "path": "skills/setup-specs-workflow",
       "description": "Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including PRODUCT.md, MILESTONES.md, milestone records, BUG_FIXES.md, bug-fix records, BUSINESS_RULES.md, business-rule records, COORDINATION.md, decision records, plans, checkpoints, research notes, setup docs, CHECKS, MANUAL_QA, ENV_VARS, SECURITY, changelog impact fields, templates, and coding-agent instructions for following the workflow; also use when upgrading an older existing planning workflow to the current conventions."
     },
     {

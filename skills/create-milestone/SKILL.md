@@ -11,7 +11,7 @@ description:
 Create or update a milestone inside an already established planning workflow.
 
 Do not use this skill to bootstrap, upgrade, or repair the workflow itself. If the project has no standalone
-`<planning-root>/GUIDE.md`, or the user asks to modernize the workflow, use `setup-planning-workflow` instead.
+`<planning-root>/GUIDE.md`, or the user asks to modernize the workflow, use `setup-specs-workflow` instead.
 
 ## Workflow
 

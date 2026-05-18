@@ -1,5 +1,5 @@
 ---
-name: setup-planning-workflow
+name: setup-specs-workflow
 description:
   Use when the user wants to bootstrap a docs-driven AI+human development workflow in a new project, including
   PRODUCT.md, MILESTONES.md, milestone records, BUG_FIXES.md, bug-fix records, BUSINESS_RULES.md, business-rule records,
@@ -36,7 +36,7 @@ workflows to a new or under-documented repo, or when asked to upgrade an existin
 conventions.
 
 When the user asks to upgrade, refresh, migrate, modernize, or bring up to date an existing project planning workflow,
-planning docs directory, spec workflow, or older setup-planning-workflow installation, read this skill folder's
+planning docs directory, spec workflow, or older setup-specs-workflow installation, read this skill folder's
 `UPGRADING.md` before editing. Preserve project-truth files, replace workflow-rule files from this skill folder's
 `blueprint/` directory where instructed, and report what was replaced, merged, initialized, renamed, created with `TBD`,
 or left for human review. For upgrades, follow `UPGRADING.md` as the migration workflow before applying the bootstrap

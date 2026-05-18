@@ -18,7 +18,7 @@ Validate a project planning workflow without judging product strategy or impleme
    - Use the path named by the user when provided.
    - Otherwise prefer a directory with `GUIDE.md` and `MILESTONES.md`.
    - Check common roots in this order: `.specs/`, `docs/`, `project-specs/`, `.agents/specs/`, `ai/`.
-   - If no planning root exists, report that setup is missing and recommend `setup-planning-workflow`.
+   - If no planning root exists, report that setup is missing and recommend `setup-specs-workflow`.
 3. Run the bundled validator script from this skill folder:
 
    ```bash
