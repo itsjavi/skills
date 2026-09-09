@@ -1,7 +1,7 @@
 ---
 name: changelog-authoring
 description:
-  Use when the user asks to generate, update, draft, or compare a CHANGELOG.md or release notes from .specs, planning
+  Use when the user asks to generate, update, draft, or compare a CHANGELOG.md or release notes from docs dirs, planning
   docs, milestones, checkpoints, bug-fix records, decisions, business rules, manual QA, checks, security, env, setup, or
   other spec-based project records. Produces a prepend-only, non-destructive dated changelog block in product/spec
   language instead of summarizing commit messages.
@@ -18,7 +18,7 @@ language.
 2. Resolve the planning root:
    - Use the root named by the user when provided.
    - Otherwise prefer a directory with `GUIDE.md` and `MILESTONES.md`.
-   - Check common roots in this order: `.specs/`, `docs/`, `project-specs/`, `.agents/specs/`, `ai/`.
+   - Check common roots in this order: `.changeset/`, `backlog/`, `docs/`, `.agents/plans/`, `.agents/memory/`.
    - If multiple plausible roots exist, choose the one whose `GUIDE.md` describes the active workflow or ask when the
      answer is not clear.
 3. Resolve the comparison range:
