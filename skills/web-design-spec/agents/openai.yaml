@@ -1,6 +1,0 @@
-interface:
-  display_name: "Web Design Spec"
-  short_description: "Generate or edit design guidelines for websites and webapps"
-  icon_small: "./assets/icon.png"
-  icon_large: "./assets/icon.png"
-  default_prompt: "Use $create-web-design-spec to propose, make or edit a web design spec document for this project."

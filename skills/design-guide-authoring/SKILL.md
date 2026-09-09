@@ -1,14 +1,9 @@
 ---
-name: web-design-spec
+name: design-guide-authoring
 description:
-  Create a design guide / design system spec document (typically DESIGN.md) for a web or mobile UI project. Trigger
-  whenever the user asks to "create a design guide", "write a design system doc", "create DESIGN.md", "write design
-  guidelines", "draft a style guide", or wants any general visual / UX style document an LLM or developer can use as a
-  reference when building components, pages, or screens. Also trigger for design specs for a webapp, SPA, mobile app,
-  dashboard, or component library — even when they don't say "design guide" verbatim. Accepts optional context like
-  framework (React, Vue), styling (Tailwind, CSS), UI library (shadcn/ui, Base UI, Radix, MUI), brand color, theme name,
-  and product name. With no arguments, inspects the current project to infer them; missing fields are left open rather
-  than guessed.
+  Create or update a design guide or design system specification, usually DESIGN.md, for web or mobile interfaces. Use
+  when asked to document visual direction, design tokens, typography, component patterns, or interaction guidelines for
+  developers and agents. Ground the guide in the project's existing design and stack.
 ---
 
 # Design Guide Generator
