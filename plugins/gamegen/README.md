@@ -1,11 +1,22 @@
 # GameGen
 
-GameGen is a local Codex plugin for creating 2D, 2.5D and 3D games with Godot, Blender and shared project preferences.
-Its display name is **GameGen**, its plugin identifier is `gamegen`, and its manifest is `.codex-plugin/plugin.json`.
+GameGen is a plugin for Codex, Claude Desktop and Claude Code for creating 2D, 2.5D and 3D games with Godot, Blender and
+shared project preferences. Its plugin identifier is `gamegen`. Codex uses `.codex-plugin/plugin.json`, and Claude uses
+`.claude-plugin/plugin.json`; both load the same `skills/` directory.
 
 This directory is the plugin package. Each game keeps its own `.agents/gamegen-prefs.json`. Installing or updating the
 plugin does not replace a game's choices. The package uses local executables and existing service connections; it does
 not install Blender, Godot, SpriteCook or Higgsfield, or copy account configuration.
+
+## Installation
+
+Follow the [repository's plugin setup instructions](../../README.md#plugins-setup) for Codex Desktop, Claude Desktop or
+Claude Code. Registering a marketplace and installing GameGen are separate steps. For Claude Desktop, add
+`https://github.com/itsjavi/skills.git` through **Customize → Plugins → Personal plugins → + → Add marketplace → Add
+from a repository**, then install GameGen from **itsjavi-skills**.
+
+Game production requires an environment that can access your game repository and execute the selected tools. Bootstrap
+checks those capabilities and resolves available generation providers before production.
 
 ## Start or resume a game
 
@@ -98,6 +109,18 @@ python3 -m unittest discover -s tests -v
 The package was also checked with the Codex plugin and skill validators. See [validation.json](validation.json) for the
 recorded conditions and results. These checks exercise configuration and asset metadata workflows; they do not simulate
 question-tool conversations, purchase service generations or prove every game's production outcome.
+
+From the repository root, validate Claude's marketplace and plugin package with:
+
+```sh
+claude plugin validate --strict .claude-plugin/marketplace.json
+claude plugin validate --strict plugins/gamegen
+```
+
+Keep the shared name, version, description, author and skill path aligned across both plugin manifests when releasing
+updates. The repository's `.claude-plugin/marketplace.json` lists plugins; GameGen's `.claude-plugin/plugin.json`
+describes the package. Skills and helper files stay outside `.claude-plugin/`, as documented in
+[Claude's plugin reference](https://code.claude.com/docs/en/plugins-reference).
 
 The icon was generated with the built-in image-generation tool. Its prompt and provenance are in
 [icon-generation.json](assets/icon-generation.json). The same self-contained icon works on light and dark plugin

@@ -1,0 +1,16 @@
+{
+  "name": "itsjavi-skills",
+  "owner": {
+    "name": "Javi"
+  },
+  "metadata": {
+    "description": "Reusable skills and plugins for game production and development workflows."
+  },
+  "plugins": [
+    {
+      "name": "gamegen",
+      "source": "./plugins/gamegen",
+      "description": "Create 2D, 2.5D and 3D games with shared project preferences, concept art, Blender, Godot and measured validation."
+    }
+  ]
+}
