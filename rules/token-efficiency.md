@@ -1,4 +1,4 @@
-### TOKEN EFFICIENCY RULES
+### Be Token-Efficient
 
 Enforce token-efficient, code-centric responses.
 
