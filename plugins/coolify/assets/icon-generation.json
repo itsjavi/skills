@@ -1,0 +1,7 @@
+{
+  "tool": "built-in image_gen",
+  "model_reported": null,
+  "prompt": "Create one finished premium square app icon, artwork only with no lettering, labels, contact sheet or mockup. The supplied GameGen icon is a STYLE REFERENCE only. Match its deep midnight teal rounded-square background, softly sculpted geometric 3D forms, polished soft highlights, gentle dimensional shading, balanced negative space, clear silhouette, safe margins and excellent readability at 32 pixels. Fill the square canvas with the rounded-square icon, transparent pixels outside its rounded corners. Keep the same visual family but use the specified distinct emblem. No official company marks, watermark or tiny fussy details. Plugin: Coolify, infrastructure operations through the CLI. The emblem is a softly sculpted warm coral cloud above two short stacked dark blue server slabs with two luminous mint status lights. Warm rounded geometry and strong readable silhouette. This is original independent plugin artwork, do not use the official Coolify logo.",
+  "reference": "plugins/gamegen/assets/icon.png",
+  "output": "icon.png"
+}

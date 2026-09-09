@@ -117,10 +117,10 @@ claude plugin validate --strict .claude-plugin/marketplace.json
 claude plugin validate --strict plugins/gamegen
 ```
 
-Keep the shared name, version, description, author and skill path aligned across both plugin manifests when releasing
-updates. The repository's `.claude-plugin/marketplace.json` lists plugins; GameGen's `.claude-plugin/plugin.json`
-describes the package. Skills and helper files stay outside `.claude-plugin/`, as documented in
-[Claude's plugin reference](https://code.claude.com/docs/en/plugins-reference).
+Use the [shared repository release workflow](../../README.md#maintaining-plugins-and-releases) to synchronize manifest
+metadata and versions from the root package version. The repository's `.claude-plugin/marketplace.json` lists plugins;
+GameGen's `.claude-plugin/plugin.json` describes the package. Skills and helper files stay outside `.claude-plugin/`, as
+documented in [Claude's plugin reference](https://code.claude.com/docs/en/plugins-reference).
 
 The icon was generated with the built-in image-generation tool. Its prompt and provenance are in
 [icon-generation.json](assets/icon-generation.json). The same self-contained icon works on light and dark plugin

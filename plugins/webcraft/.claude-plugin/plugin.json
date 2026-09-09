@@ -1,0 +1,11 @@
+{
+  "name": "webcraft",
+  "version": "0.1.0",
+  "description": "Build and improve web applications with React, design guides, accessibility, metadata, rendering performance, screenshots and commit messages.",
+  "author": { "name": "Javi" },
+  "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/webcraft",
+  "repository": "https://github.com/itsjavi/skills",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": ["web", "react", "accessibility", "design", "full-stack"]
+}

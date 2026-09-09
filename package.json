@@ -1,10 +1,19 @@
 {
+  "name": "@itsjavi/skills",
+  "version": "0.1.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm generate:catalog && mkdir -p .local && pnpm generate:rules > .local/AGENTS.md",
+    "build": "node scripts/sync-plugins.mjs && node scripts/generate-catalog.mjs && mkdir -p .local && node scripts/generate-agents-rules.mjs > .local/AGENTS.md",
+    "check": "node scripts/check-plugins.mjs",
     "format": "oxfmt --write . && sort-package-json",
     "generate:catalog": "node scripts/generate-catalog.mjs",
-    "generate:rules": "node scripts/generate-agents-rules.mjs"
+    "generate:plugins": "node scripts/sync-plugins.mjs",
+    "generate:rules": "node scripts/generate-agents-rules.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "preversion": "npm run check",
+    "version": "node scripts/release-version.mjs",
+    "version:sync": "node scripts/sync-plugins.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.5.0",

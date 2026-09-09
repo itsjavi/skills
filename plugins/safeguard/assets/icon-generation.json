@@ -1,0 +1,7 @@
+{
+  "tool": "built-in image_gen",
+  "model_reported": null,
+  "prompt": "Create one finished premium square app icon, artwork only with no lettering, labels, contact sheet or mockup. The supplied GameGen icon is a STYLE REFERENCE only. Match its deep midnight teal rounded-square background, softly sculpted geometric 3D forms, polished soft highlights, gentle dimensional shading, balanced negative space, clear silhouette, safe margins and excellent readability at 32 pixels. Fill the square canvas with the rounded-square icon, transparent pixels outside its rounded corners. Keep the same visual family but use the specified distinct emblem. No official company marks, watermark or tiny fussy details. Plugin: Safeguard, application security and trust and safety reviews. The emblem is one bold violet rounded shield with a large luminous mint check inset on its face, subtle sculpted bevels, and one small ivory four-point spark above. Strong and reassuring.",
+  "reference": "plugins/gamegen/assets/icon.png",
+  "output": "icon.png"
+}

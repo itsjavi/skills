@@ -1,0 +1,27 @@
+{
+  "name": "coolify",
+  "version": "0.1.0",
+  "description": "Operate Coolify through its official CLI for configuration, deployments, logs, services, databases and infrastructure management.",
+  "author": { "name": "Javi" },
+  "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/coolify",
+  "repository": "https://github.com/itsjavi/skills",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": ["coolify", "deployment", "infrastructure", "cli"],
+  "interface": {
+    "displayName": "Coolify",
+    "shortDescription": "Manage Coolify services through the CLI.",
+    "longDescription": "Operate Coolify through its official CLI for configuration, deployments, logs, services, databases and infrastructure management.",
+    "developerName": "Javi",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "brandColor": "#FF8F7A",
+    "defaultPrompt": [
+      "Inspect the Coolify application and its deployment status.",
+      "Diagnose this Coolify deployment using its configuration and logs."
+    ],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png",
+    "logoDark": "./assets/icon.png"
+  }
+}

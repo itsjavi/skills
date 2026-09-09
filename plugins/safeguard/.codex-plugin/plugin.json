@@ -1,0 +1,27 @@
+{
+  "name": "safeguard",
+  "version": "0.1.0",
+  "description": "Review application security and trust and safety risks with evidence-backed findings and practical remediation guidance.",
+  "author": { "name": "Javi" },
+  "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/safeguard",
+  "repository": "https://github.com/itsjavi/skills",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": ["security", "trust", "safety", "reviews"],
+  "interface": {
+    "displayName": "Safeguard",
+    "shortDescription": "Review technical security and product safety.",
+    "longDescription": "Review application security and trust and safety risks with evidence-backed findings and practical remediation guidance.",
+    "developerName": "Javi",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "brandColor": "#A887FF",
+    "defaultPrompt": [
+      "Review this change for application security weaknesses.",
+      "Review this product for content abuse and moderation risks."
+    ],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png",
+    "logoDark": "./assets/icon.png"
+  }
+}

@@ -2,9 +2,10 @@
   "name": "gamegen",
   "version": "0.1.0",
   "description": "Create 2D, 2.5D and 3D games with shared project preferences, concept art, Blender, Godot and measured validation.",
-  "author": {
-    "name": "Javi"
-  },
+  "author": { "name": "Javi" },
+  "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/gamegen",
+  "repository": "https://github.com/itsjavi/skills",
+  "license": "MIT",
   "skills": "./skills/",
   "keywords": ["games", "godot", "blender", "sprites", "gamegen"],
   "interface": {

@@ -1,16 +1,32 @@
 {
   "name": "itsjavi-skills",
-  "owner": {
-    "name": "Javi"
-  },
-  "metadata": {
-    "description": "Reusable skills and plugins for game production and development workflows."
-  },
+  "owner": { "name": "Javi" },
+  "metadata": { "description": "Reusable skills and plugins for game production and development workflows." },
   "plugins": [
     {
       "name": "gamegen",
       "source": "./plugins/gamegen",
       "description": "Create 2D, 2.5D and 3D games with shared project preferences, concept art, Blender, Godot and measured validation."
+    },
+    {
+      "name": "coolify",
+      "source": "./plugins/coolify",
+      "description": "Operate Coolify through its official CLI for configuration, deployments, logs, services, databases and infrastructure management."
+    },
+    {
+      "name": "devscout",
+      "source": "./plugins/devscout",
+      "description": "Discover agent skills and library documentation, maintain Backlog.md plans and write changelogs for development workflows."
+    },
+    {
+      "name": "safeguard",
+      "source": "./plugins/safeguard",
+      "description": "Review application security and trust and safety risks with evidence-backed findings and practical remediation guidance."
+    },
+    {
+      "name": "webcraft",
+      "source": "./plugins/webcraft",
+      "description": "Build and improve web applications with React, design guides, accessibility, metadata, rendering performance, screenshots and commit messages."
     }
   ]
 }

@@ -1,0 +1,28 @@
+{
+  "name": "webcraft",
+  "version": "0.1.0",
+  "description": "Build and improve web applications with React, design guides, accessibility, metadata, rendering performance, screenshots and commit messages.",
+  "author": { "name": "Javi" },
+  "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/webcraft",
+  "repository": "https://github.com/itsjavi/skills",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": ["web", "react", "accessibility", "design", "full-stack"],
+  "interface": {
+    "displayName": "Webcraft",
+    "shortDescription": "Build, refine and review web applications.",
+    "longDescription": "Build and improve web applications with React, design guides, accessibility, metadata, rendering performance, screenshots and commit messages.",
+    "developerName": "Javi",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "brandColor": "#52BFF7",
+    "defaultPrompt": [
+      "Build this web feature using the existing project architecture.",
+      "Review this page for accessibility, metadata and performance.",
+      "Capture this UI change and draft its commit message."
+    ],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png",
+    "logoDark": "./assets/icon.png"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "tool": "built-in image_gen",
+  "model_reported": null,
+  "prompt": "Create one finished premium square app icon, artwork only with no lettering, labels, contact sheet or mockup. The supplied GameGen icon is a STYLE REFERENCE only. Match its deep midnight teal rounded-square background, softly sculpted geometric 3D forms, polished soft highlights, gentle dimensional shading, balanced negative space, clear silhouette, safe margins and excellent readability at 32 pixels. Fill the square canvas with the rounded-square icon, transparent pixels outside its rounded corners. Keep the same visual family but use the specified distinct emblem. No official company marks, watermark or tiny fussy details. Plugin: DevScout, documentation discovery, agent skills, backlog planning and changelogs. The emblem is a luminous cyan-blue geometric compass sitting over a minimal open ivory book, with one small ivory four-point spark above. Keep the book and compass uncluttered and boldly legible.",
+  "reference": "plugins/gamegen/assets/icon.png",
+  "output": "icon.png",
+  "edit_prompt": "Remove the background outside the rounded-square icon. Make it transparent.",
+  "alpha_verification": {
+    "format": "RGBA PNG",
+    "corner_sample_size": 32,
+    "corner_max_alpha": [0, 0, 0, 0],
+    "sha256": "8a1eda9268b7ac6e08fda981e1499b63ee39bc6f7486677205820ee8cd3f9751"
+  }
+}
