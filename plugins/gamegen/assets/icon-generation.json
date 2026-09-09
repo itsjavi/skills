@@ -1,0 +1,6 @@
+{
+  "tool": "built-in image_gen",
+  "model_reported": null,
+  "prompt": "Create a finished premium app icon for a game-development toolkit named GameGen. Icon artwork only, no lettering, no mockup, no surrounding layout. Square 1:1 canvas. A single memorable emblem centered with generous safe margins: an isometric rounded mint-turquoise cube growing out of a simple 2 by 2 square tile grid, the lower tiles a warm coral-orange, conveying both 3D and 2D game creation. A very small warm ivory four-point spark above the cube. Deep midnight teal rounded square background reaching all four canvas edges. Clear geometry, smooth sculpted forms, restrained soft shading, crisp silhouette, beautiful balanced negative space, legible at 32 pixels. Soft studio highlights, modern professional playful maker-tool identity, original design, no controller shape, no letters, no logos from existing companies. Produce one polished icon, not variants.",
+  "output": "icon.png"
+}

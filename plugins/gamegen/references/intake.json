@@ -1,0 +1,52 @@
+[
+  {
+    "section": "game",
+    "prompt": "What game are we making: title, premise, player goal, genre, audience, and the scope of this first delivery?",
+    "guidance": "Reuse supplied answers. Ask for missing creative fields as free text. Offer a small playable slice as a recommendation only when it fits the brief."
+  },
+  {
+    "section": "presentation",
+    "prompt": "Which presentation and camera should this game use?",
+    "guidance": "Offer relevant 2D, 3D or 2.5D choices. For 2.5D resolve rendering and simulation separately. Resolve orientation, viewport, pixel style and applicable tile or sprite settings."
+  },
+  {
+    "section": "art",
+    "prompt": "What visual direction and asset quality should guide the game?",
+    "guidance": "Resolve style and references, palette, lighting, views, expressions, clips and asset budgets. Explain a recommendation against the target hardware and gameplay camera."
+  },
+  {
+    "section": "platforms",
+    "prompt": "Which platforms and minimum hardware should we target, and at what frame rate?",
+    "guidance": "Offer macOS and iOS first as Recommended when no conflicting target is supplied. Resolve minimum OS, device, engine version, renderer and memory budget. Technical values may be inferred from a pipeline proof and recorded before ready."
+  },
+  {
+    "section": "input",
+    "prompt": "Which controls and accessibility options should the game support?",
+    "guidance": "Resolve keyboard, mouse, controller and touch, touch placement, side swapping, rebinding and accessibility. Offer choices relevant to the target devices."
+  },
+  {
+    "section": "generation",
+    "prompt": "Which image and asset providers, models and quality settings may each production stage use?",
+    "guidance": "Offer GPT Image 2.5 for concepts, with Flare as the default for exploration and routine generation and Sunburst for precise edits or polished final artwork. Use references/providers.md for flavor selection and tool availability rules. Offer SpriteCook for 2D assets when connected, local Blender for 3D work, and Higgsfield only if needed. Resolve provider-default versus explicit model per purpose, permitted fallbacks, and computer use only when needed."
+  },
+  {
+    "section": "budget",
+    "prompt": "What cash and provider-credit limits should apply to this project?",
+    "guidance": "Resolve cash, SpriteCook and Higgsfield credits separately, retry limits and concurrent paid jobs. Preselected values are suggestions until submitted. Zero means no authorized spend in that category."
+  },
+  {
+    "section": "features",
+    "prompt": "Which supporting features belong in this delivery?",
+    "guidance": "Resolve players/network, saves, languages, audio, monetization and content constraints. Ask only about relevant possibilities and record accepted exclusions."
+  },
+  {
+    "section": "workflow",
+    "prompt": "How independently should production run, and which review or delivery checkpoints should it use?",
+    "guidance": "Resolve assisted or unattended work, who selects concepts and reviews assets, permitted parallelism, tracker, quality priority and delivery/signing. Explain that user review checkpoints cause an unattended run to wait at those points."
+  },
+  {
+    "section": "paths",
+    "prompt": "May we use the detected repository layout or the proposed GameGen starter layout?",
+    "guidance": "Present the actual detected paths. Keep existing project layout by default and mark that choice Recommended. An earlier request to preserve or use a path already resolves it."
+  }
+]

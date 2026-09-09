@@ -1,0 +1,36 @@
+{
+  "name": "gamegen",
+  "version": "0.1.0",
+  "description": "Create 2D, 2.5D and 3D games with shared project preferences, concept art, Blender, Godot and measured validation.",
+  "author": {
+    "name": "Javi"
+  },
+  "skills": "./skills/",
+  "keywords": [
+    "games",
+    "godot",
+    "blender",
+    "sprites",
+    "gamegen"
+  ],
+  "interface": {
+    "displayName": "GameGen",
+    "shortDescription": "From game idea to a tested playable build.",
+    "longDescription": "Fourteen coordinated game-production skills with question-driven setup, reusable project preferences, concept references, 2D and 3D asset workflows, and optional SpriteCook or Higgsfield integrations.",
+    "developerName": "Javi",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "brandColor": "#47D7B5",
+    "defaultPrompt": [
+      "Start a new game with GameGen.",
+      "Resume this game using its saved GameGen preferences.",
+      "Review this game's art, animation and performance."
+    ],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png",
+    "logoDark": "./assets/icon.png"
+  }
+}

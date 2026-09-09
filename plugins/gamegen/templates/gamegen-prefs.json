@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "setup": {
+    "status": "draft",
+    "revision": 0,
+    "confirmed_sections": [],
+    "deferred": []
+  },
+  "game": {
+    "title": null,
+    "description": null,
+    "goal": null,
+    "genre": null,
+    "audience": null,
+    "scope": {
+      "deliverable": null,
+      "features": [],
+      "content": null,
+      "playtime_minutes": null,
+      "exclusions": []
+    }
+  },
+  "presentation": {
+    "dimension": null,
+    "rendering": null,
+    "simulation": null,
+    "camera": null,
+    "orientation": "landscape",
+    "viewport": [
+      1280,
+      720
+    ],
+    "pixel_art": false,
+    "tile_grid": null,
+    "tile_size": null,
+    "sprite_directions": null,
+    "units": null,
+    "forward_axis": null
+  },
+  "art": {
+    "style": null,
+    "palette": [],
+    "references": [],
+    "direction_doc": "docs/art-direction.md",
+    "required_views": [
+      "front",
+      "side",
+      "rear",
+      "front-three-quarter",
+      "gameplay-camera"
+    ],
+    "required_clips": [],
+    "expressions": [],
+    "lighting": null,
+    "asset_budgets": {
+      "hero_triangles": null,
+      "materials_per_actor": null,
+      "texture_max_px": null,
+      "sprite_frame_px": null
+    }
+  },
+  "platforms": {
+    "targets": [
+      "macos",
+      "ios"
+    ],
+    "minimum_os": {
+      "macos": null,
+      "ios": null,
+      "windows": null,
+      "linux": null,
+      "android": null,
+      "web": null
+    },
+    "minimum_device": null,
+    "target_fps": 60,
+    "memory_budget_mb": null,
+    "engine": "godot",
+    "engine_version": null,
+    "renderer": null
+  },
+  "input": {
+    "methods": [
+      "keyboard",
+      "controller",
+      "touch"
+    ],
+    "touch_layout": "movement-left-actions-right",
+    "swap_sides": true,
+    "rebind": true,
+    "accessibility": [
+      "readable-text",
+      "non-color-cues",
+      "reduced-motion"
+    ]
+  },
+  "generation": {
+    "routes": {
+      "concepts": {
+        "provider": "builtin-gpt-image",
+        "model": "provider-default",
+        "quality": "high",
+        "fallbacks": []
+      },
+      "textures": {
+        "provider": "builtin-gpt-image",
+        "model": "provider-default",
+        "quality": "high",
+        "fallbacks": []
+      },
+      "sprites": {
+        "provider": "builtin-gpt-image",
+        "model": "provider-default",
+        "quality": "high",
+        "fallbacks": []
+      },
+      "animation": {
+        "provider": "local",
+        "model": "provider-default",
+        "quality": "standard",
+        "fallbacks": []
+      },
+      "ui": {
+        "provider": "builtin-gpt-image",
+        "model": "provider-default",
+        "quality": "high",
+        "fallbacks": []
+      },
+      "audio": {
+        "provider": "local",
+        "model": "provider-default",
+        "quality": "standard",
+        "fallbacks": []
+      }
+    },
+    "higgsfield": {
+      "enabled": false,
+      "use_when": "A specific capability justifies the credit cost and fits the approved limits."
+    },
+    "computer_use": "when-needed",
+    "prefer": "mcp-or-cli"
+  },
+  "budget": {
+    "currency": "EUR",
+    "cash_limit": 0,
+    "credit_limits": {
+      "spritecook": 0,
+      "higgsfield": 0
+    },
+    "max_attempts_per_asset": 3,
+    "max_parallel_paid_jobs": 1,
+    "on_limit": "continue-unpaid-work"
+  },
+  "features": {
+    "network": "offline",
+    "players": 1,
+    "save": "local",
+    "languages": [
+      "en"
+    ],
+    "audio": "music-and-sfx",
+    "monetization": "none",
+    "content_constraints": []
+  },
+  "workflow": {
+    "autonomy": "assisted",
+    "concept_review": "user",
+    "asset_review": "user",
+    "parallel_agents": 0,
+    "tracker": "existing",
+    "delivery": "editor",
+    "signing": "deferred",
+    "quality_priority": "balanced",
+    "fallback_on_unknown_cost": "unpaid-only"
+  },
+  "paths": {
+    "game": "game",
+    "concepts": "concepts",
+    "sources": "art_source",
+    "runtime_assets": "game/assets",
+    "review": "game/review",
+    "tests": "game/tests",
+    "tools": "tools",
+    "artifacts": "artifacts",
+    "manifest": "art_source/manifest.json",
+    "state": "artifacts/gamegen-state.json"
+  }
+}

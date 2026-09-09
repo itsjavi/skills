@@ -1,0 +1,156 @@
+{
+  "plugin": "gamegen",
+  "display_name": "GameGen",
+  "version": "0.1.0",
+  "checked_at_utc": "2026-09-08T23:19:12.720975+00:00",
+  "checks": {
+    "codex_plugin_validator": "passed",
+    "codex_skill_validator": {
+      "result": "passed",
+      "skills": 14
+    },
+    "helper_tests": {
+      "result": "passed",
+      "tests": 28,
+      "command": "python3 -m unittest discover -s tests -v"
+    },
+    "json_schema_2020_12": {
+      "result": "passed",
+      "fixtures": [
+        "draft",
+        "2d",
+        "2.5d",
+        "3d"
+      ],
+      "checked_at_utc": "2026-09-08T12:28:16.936189+00:00",
+      "basis": "Previous check retained; schema, preferences template, helper and test fixtures are unchanged."
+    },
+    "skill_ui_metadata": "passed",
+    "local_markdown_links": {
+      "result": "passed",
+      "links_checked": 52,
+      "anchors_checked": 3
+    },
+    "text_and_json_files": "passed",
+    "gpt_image_25_guidance": {
+      "result": "reviewed",
+      "sources": [
+        "https://openai.com/index/introducing-chatgpt-images-2-5/",
+        "https://developers.openai.com/api/docs/guides/image-generation"
+      ],
+      "boundary": "Flavor selection was reviewed as instructions. No image generation or live model selection was exercised.",
+      "checked_at_utc": "2026-09-08T22:39:21.708445+00:00",
+      "basis": "Previous review retained; GPT image guidance was not changed by the Blender workflow update."
+    },
+    "blender_cli_guidance": {
+      "result": "reviewed-and-probed",
+      "checked_at_utc": "2026-09-08T23:19:12.720975+00:00",
+      "route": "Local Blender command line with bundled bpy; no third-party Blender MCP dependency",
+      "background_python_probe": {
+        "result": "passed",
+        "blender_version": "5.1.2",
+        "background": true,
+        "execution": "Approved execution outside the macOS sandbox",
+        "arguments": [
+          "--background",
+          "--factory-startup",
+          "--python-exit-code",
+          "1",
+          "--python-expr",
+          "import bpy; print(bpy.app.version_string, bpy.app.background)"
+        ]
+      },
+      "approved_reference_asset": {
+        "user_approved": true,
+        "authoring_bones": 31,
+        "exported_skin_joints": 25,
+        "source_skin_and_blink_checks": true,
+        "fresh_glb_import_checks": true,
+        "video": {
+          "width": 1280,
+          "height": 960,
+          "fps": "24/1",
+          "frames": 192,
+          "duration_seconds": 8.0
+        },
+        "sha256": {
+          "source/creature.blend": "c72cb5548557ecd7387170028ae428a7436ff93648772482cf7128556876bec4",
+          "exports/creature-rigged.glb": "7218277b191e1c2323af8acdca463ee25ff93484140a5b257fb81bd2cacc2da1",
+          "creature-preview.mp4": "7b8319c8e65471cef29faa870a7b68f83df1de13c78f9ed7c6e143e116dd2eb8"
+        }
+      },
+      "sources": [
+        "https://docs.blender.org/manual/en/5.1/advanced/command_line/arguments.html",
+        "https://docs.blender.org/manual/en/latest/physics/simulation_nodes.html",
+        "https://docs.blender.org/manual/en/4.3/render/cycles/baking.html",
+        "https://community.openai.com/t/how-does-gpt-6-actually-generate-3d-models-in-release-demo-via-codex-local-blender-or-mcps-apis/1395391"
+      ],
+      "boundary": "The approved local asset exercised primitive/custom mesh construction, solid-color materials and UVs, skinning, IK, driven eyelids, animation rendering and fresh GLB import. Particle/simulation baking and painted or baked texture-map production were reviewed as guidance and were not exercised by that asset. No new game-engine or target-device verification was performed."
+    }
+  },
+  "icon": {
+    "file": "icon.png",
+    "bytes": 1302225,
+    "sha256": "c4151af11d83cf8cb14a437f713e5f94624a3bea2e25e5771972b4a8908758fc",
+    "boundary": "Structural metadata only; inspect visual quality and playback in the engine.",
+    "format": "png",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "alpha_channel": false,
+    "transparency_pixels_verified": false
+  },
+  "verification_limits": [
+    "The question-tool intake was reviewed as instructions; an actual user conversation was not automated.",
+    "External SpriteCook and Higgsfield generation, paid quotas and service authentication were not exercised.",
+    "The package was not installed into Codex as part of these checks.",
+    "Asset audit tests inspect metadata; complete game production, engine playback and target-device performance need project-level verification."
+  ],
+  "sha256": {
+    ".codex-plugin/plugin.json": "90907dc7412b611709e01934d859dd1a8b73b284a3ae44e911773206c50e212f",
+    "README.md": "694ffe403166ce471010e1ef5ddeb5fb18866a1c8304475ecec74e8c7a2b12d8",
+    "assets/icon-generation.json": "03820cd0faaa8ce683fa5863055d94173ef554288d5ff7bb43d0d9ba8cb42c97",
+    "assets/icon.png": "c4151af11d83cf8cb14a437f713e5f94624a3bea2e25e5771972b4a8908758fc",
+    "references/blender-cli.md": "bf979d76352f527ff35f8e7c99ceed4913c15eefa5356dcdc4647bf94fe5ea00",
+    "references/concept-references.md": "508484f0c9afa0ef2f5e01040a629da3c33dade318950fa220bd4d53919fb84a",
+    "references/intake.json": "4ed808f2d456ce321b9d9868aea251c0862b89e8c0f6ce1e5cd96274aa9d48ab",
+    "references/providers.md": "645be280c2990784f1e4fd4f866cbf75a898071e819f80950b8e2398b0da105a",
+    "references/repository.md": "31bb0a548053888625280a2df5f8309551e9010df24ab41de5b29d7f802a03a3",
+    "references/shared-context.md": "6c22c1c2fbc4ab16736044053f2501baf9a5af1b013d4fc4604569594c06bdd3",
+    "schemas/gamegen-prefs.schema.json": "799a6658569ec411df0e4199266a167ca5469963d475bd79e5406cabd271142e",
+    "scripts/asset_audit.py": "ab3933e663cb4e146808d39a8bfc92c7408789111679d2f5b2fc571a65dcba70",
+    "scripts/prefs.py": "f39dfba447dd7d349a1e57b6ecf32c85261d417ae205b5398d54e40110752354",
+    "skills/blender-game-assets/SKILL.md": "5aa2c5d626af468212fc9c7d057ed2e0eb5f1ca11fed7ff4b8a04bc9cac0629b",
+    "skills/blender-game-assets/agents/openai.yaml": "dd8d59fb1d57919f9a8f8a07dee7957dbff5d8ae4db009ccefb80fbe00fd6828",
+    "skills/game-animation/SKILL.md": "46433898663dba956c872a02512c74d155663b3e334f8032f6f82a36381e7442",
+    "skills/game-animation/agents/openai.yaml": "2aa7b5048736b70ce296e89a823ed261a0f7f962e8782b0a45abb13eb50c6c04",
+    "skills/game-audio-vfx/SKILL.md": "029c2efc5e2bfb6328896efd82bb98f9f0deabe60eb49eec8bc1e340aa0e24db",
+    "skills/game-audio-vfx/agents/openai.yaml": "6b7529e2e994cb6254bf6792301b7920eebefe5d6498e0ff9a5e2f26b73c5109",
+    "skills/game-bootstrap/SKILL.md": "1b71923ff1f32db7dd1fae866ccba52d4e7a7bf8830f5d827891fd4df8f15831",
+    "skills/game-bootstrap/agents/openai.yaml": "464a65b49f0714efe62d8fe63cd54c1cf60e2970da83155ac97d88442f182c05",
+    "skills/game-concept-art/SKILL.md": "4d0efe51bc7408eafa00b007f659a3da8cb0dc42b4ea79d1fb2057e3a1a3ab5d",
+    "skills/game-concept-art/agents/openai.yaml": "aff826926d1910fa5e6dcf975bca71c4847e8362e89cbffb0e9b9b34435a52df",
+    "skills/game-export/SKILL.md": "5e708fe87a74cab1d7abd4691ff35a3078a0615dc7b7a9659ed2dd27d8cab729",
+    "skills/game-export/agents/openai.yaml": "f7d9206ecc1b37635147299bc13fca577c9095a40506554f57d1c551b9b7dd85",
+    "skills/game-optimization/SKILL.md": "357b21248831c036ba0dcf41e65606c8c768fa03d9715136204aa7db35cfde6e",
+    "skills/game-optimization/agents/openai.yaml": "0e5b830bceacaa949dbcd4217729e1f198640db4ed1d3e2fcc4c133f945802f5",
+    "skills/game-production/SKILL.md": "b413d38ad4e23221a0273f93387607c33b12ed2f9f0d1f26f6853c7ee8d6a3ba",
+    "skills/game-production/agents/openai.yaml": "7dce7b757c271da926e346ffc1097299c497531648830b9511bc05b3b3f47d13",
+    "skills/game-qa/SKILL.md": "2bdeb8b4e5773c6f90bd7341648b7cfca4183b70af46a2f7cc134ffd3661d5b4",
+    "skills/game-qa/agents/openai.yaml": "2ccc4c340053529a852b1a85b56208b3aba663f3d954072d3bec9b99160b371e",
+    "skills/game-sprites/SKILL.md": "b9072de14b0ca7cebab9be1112e93007606b9c53341751149e109e098fcd758d",
+    "skills/game-sprites/agents/openai.yaml": "f18c25bad622cdca7545ab3f2550149257efd12d9c81f602c73f26893ddfe593",
+    "skills/game-tilesets/SKILL.md": "abf15c5feba449f2917474794fafc7298b31474ae785a693593cd3373a1337a3",
+    "skills/game-tilesets/agents/openai.yaml": "60e8529b153e437d970a1ea0019dc29e3ca54e92567bff32d7a996fff8824308",
+    "skills/game-ui-input/SKILL.md": "7ce27695fa33e8fc84d51b1b8139871c3e696dfe43586dfe92bc1114044fdc08",
+    "skills/game-ui-input/agents/openai.yaml": "dfbf1090eb0aadc826ef81489489260241ead70bf61394131a2054d9409c67bb",
+    "skills/game-world-building/SKILL.md": "fb38fdf91b472cd7cdc989705fc8e360921cab1d96b9b4d18e2cb4703787f13e",
+    "skills/game-world-building/agents/openai.yaml": "0f2354083f03b792580dbc7fb700d08d04854e84598f81cd06055acfb887e9d6",
+    "skills/godot-gameplay/SKILL.md": "347230c4f5e66a78dc2a6f9543cec8cb80df5aae65e3595ca0626b98779d2a42",
+    "skills/godot-gameplay/agents/openai.yaml": "100bb3e09938559630719d89cb184f543102914e1d411a2378f94d3f21ce2fb2",
+    "templates/AGENTS.md": "44f4ccdfb8e757a48a9c6dd3b363145c4238e8053c8eaee2104c81e7587b0e3d",
+    "templates/asset-manifest.json": "058d6610c9f8e53da759d27d610fdf8c68fcfa92ca7381878c1a6b728882b2aa",
+    "templates/gamegen-prefs.json": "d3349f70c90d5a620b82cac143cef0a6f09c74db07534ce2fa537a8676ce0169",
+    "tests/test_gamegen.py": "30bca500f11e3cfecf8bbd796c95f959fefcea849f03fa1af53748c6e02c86a5"
+  }
+}

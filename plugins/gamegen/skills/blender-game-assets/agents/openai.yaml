@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blender Game Assets"
+  short_description: "GameGen: blender game assets workflow"
+  default_prompt: "Use $blender-game-assets for this game using its saved GameGen preferences."
