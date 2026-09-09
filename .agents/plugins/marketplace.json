@@ -1,6 +1,6 @@
 {
-  "name": "local-plugins",
-  "interface": { "displayName": "Local Plugins" },
+  "name": "itsjavi-skills",
+  "interface": { "displayName": "@itsjavi Agent Skills and Plugins" },
   "plugins": [
     {
       "name": "gamegen",
