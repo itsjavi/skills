@@ -1,10 +1,10 @@
 ---
 name: trust-and-safety-review
 description:
-  Review how user-generated content and user interactions can enable harm, phishing, scams, harassment, spam, or
-  moderation failures in the current project. Use for product abuse, content safety, reporting, blocking, and policy
-  enforcement reviews across frontend, backend, API, CLI, or other interfaces. Technical exploits and OWASP
-  vulnerabilities belong to web-security-review.
+  Review product designs and implementation for abuse through user-generated content and interactions, including
+  phishing, scams, harassment, spam, and moderation failures. Use for content safety, reporting, blocking, consent, and
+  policy enforcement reviews. Produce findings and recommendations. Route technical vulnerabilities to
+  app-security-review when available.
 ---
 
 # Trust and Safety Review
@@ -22,7 +22,7 @@ designs, API contracts, CLI workflows, or a running application using the access
 - Review harmful use, exposure, distribution, consent, and the moderation lifecycle. A legitimate form used to solicit
   passwords is a trust-and-safety concern. Script execution through that form is an application security concern.
 - Route technical vulnerabilities such as injection, authentication bypass, or unauthorized API access to
-  `web-security-review` when available. Neither skill requires the other to be installed.
+  `app-security-review` when available. Neither skill requires the other to be installed.
 - When a problem spans both domains, explain the connection and avoid duplicate findings. Stay within the requested
   review scope; flag an adjacent issue briefly without silently starting another audit.
 - A review produces findings and recommendations. Apply fixes or change moderation settings only when the user's request

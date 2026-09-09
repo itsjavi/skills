@@ -1,13 +1,13 @@
 ---
-name: web-security-review
+name: app-security-review
 description:
-  Review the current project for exploitable application security weaknesses, common OWASP mistakes, unprotected APIs,
-  and broken trust boundaries. Use for security reviews of web frontends and backends, or applicable API, CLI, worker,
-  and library code. Adapt checks to the actual stack and exposure. Content abuse and moderation belong to
-  trust-and-safety-review.
+  Review repositories, features, or diffs for exploitable application security weaknesses, including injection,
+  authentication and authorization failures, exposed APIs, and broken trust boundaries. Applies to web applications,
+  APIs, CLIs, workers, and libraries. Produce findings and remediation recommendations. Route content abuse and
+  moderation concerns to trust-and-safety-review when available.
 ---
 
-# Web Security Review
+# Application Security Review
 
 Find credible attack paths in the current project and recommend concrete fixes at the boundary where trust should be
 enforced. Emphasize web application security across frontend and backend code while adapting the method to APIs, CLIs,
