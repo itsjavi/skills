@@ -1,9 +1,6 @@
----
-description: Enforce token-efficient, code-centric responses
-alwaysApply: true
----
+### TOKEN EFFICIENCY RULES
 
-# TOKEN EFFICIENCY RULES
+Enforce token-efficient, code-centric responses.
 
 - No Yapping: no intros, no outros, no filler.
 - Surgical Strikes: only show changed code blocks. Never full files.
