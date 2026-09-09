@@ -7,6 +7,8 @@ Reusable Codex/Claude skills and plugins, for:
 ### Skills
 
 - `coolify`: Coolify CLI usage.
+- `trust-and-safety-review`: User-generated content, harmful interactions, product abuse, and moderation reviews.
+- `web-security-review`: Application security, OWASP risks, API protection, and exploit reviews adapted to the project.
 
 > Setup skills by dropping them under `~/.agents/skills` (many LLMs support it including Codex), `~/.codex/skills` or
 > `~/.claude/skills`. You can also use local dirs to install them only for specific projects.
