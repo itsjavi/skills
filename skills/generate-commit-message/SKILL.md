@@ -1,9 +1,8 @@
 ---
-name: conventional-commits
+name: generate-commit-message
 description: >-
-  Generate a Conventional Commit message for the repository's current staged changes. Use when the user asks for a
-  commit message, commit title, git commit message, or conventional commit summary based on staged changes. The output
-  must be only the message as plaintext code, with no explanation or follow-up text.
+  Generate a Conventional Commit message from the repository's staged Git changes. Use when asked to write a commit
+  message, title, or summary. Return only the message in a plaintext code block. Does not stage files or create commits.
 ---
 
 # Generate Commit Message
