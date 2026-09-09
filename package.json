@@ -1,6 +1,7 @@
 {
   "type": "module",
   "scripts": {
+    "build": "pnpm generate:catalog && mkdir -p .local && pnpm generate:rules > .local/AGENTS.md",
     "format": "oxfmt --write . && sort-package-json",
     "generate:catalog": "node scripts/generate-catalog.mjs",
     "generate:rules": "node scripts/generate-agents-rules.mjs"

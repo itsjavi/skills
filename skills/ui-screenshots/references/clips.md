@@ -1,114 +1,79 @@
-# Clips: recording motion, and what GitHub will render
+# Recording and delivering UI motion
 
-Read this when the change is a scroll, an animation, a drag or a transition — and before publishing
-anything that is not a PNG.
+Read this for animation, scroll or sticky behaviour, drag-and-drop, or flows whose intermediate states matter. Choose
+the recorder and output format based on the available tools and delivery destination.
 
-## 1. What GitHub actually renders
+## Record the relevant behaviour
 
-| Asset | Served from the orphan branch as | In a PR body |
-| --- | --- | --- |
-| `.png` | `image/png` | `![](raw…)` renders inline |
-| `.gif` | `image/gif` | `![](raw…)` renders inline, autoplays, loops |
-| `.webm` | `audio/webm` — note the `audio/` | **No picture.** A `<video>` handed an audio type renders nothing useful |
-| `.mp4` | `application/octet-stream` + `nosniff` | **Never plays.** `<video src="raw…">` shows nothing |
+Reuse the application setup, authentication, data, and framing selected for screenshots. Start near the action, show
+enough initial and final state to make it understandable, and keep the clip focused. For a before/after comparison,
+repeat the same interaction with comparable timing and capture settings.
 
-An inline video *player* exists on GitHub, but only for files uploaded through its own attachment
-mechanism — drag-and-drop into the comment box, which mints a `user-attachments/assets/<uuid>` URL. That
-path needs a browser session in the web UI; there is no REST or GraphQL endpoint and no `gh` command for
-it, so an agent cannot do it. (That route accepts `.mp4`, `.mov` and `.webm`, capped at 100MB on a paid
-org plan, and recommends H.264.)
+Use the browser or screen recorder available in the environment. Check whether it includes a cursor, audio, or
+surrounding desktop content. Keep the action understandable through the UI's own focus and hover states or supported
+recorder annotations. Include audio only if it is relevant to the request.
 
-So the working shape is two files: **the GIF, embedded** so the reviewer sees the motion without clicking,
-and **the MP4, committed beside it and linked** for full frame rate and colour. If a clip genuinely needs
-an inline player at full fidelity, hand the MP4 to the user to drop into the body themselves — a one-drag
-job for a human, impossible for you.
-
-## 2. Record
-
-Record for behaviour that only exists over time: scroll and sticky behaviour, enter/exit animations,
-drag-and-drop reordering, skeleton → loaded transitions, a multi-step flow whose intermediate states
-matter. Everything else is a still — a clip of a static screen wastes the reviewer's click.
-
-Check `command -v ffmpeg` before you plan the deliverable; without one, §4 changes what you record.
-
-Playwright records **VP8 WebM**, never MP4, and the file is only finalised when the page closes:
+For projects using Playwright Test, enable recording for successful capture runs and set an explicit video size so the
+output is not unexpectedly scaled down:
 
 ```ts
 test.use({
   viewport: { width: 1280, height: 820 },
-  video: { mode: "on", size: { width: 1280, height: 820 } }, // the root config is retain-on-failure
-});
-
-test("capture clip", async ({ page, users }) => {
-  const user = await users.create();
-  await user.login();
-  await page.goto(`/workspaces/${user.workspaceId}/surveys`);
-
-  await page.getByRole("button", { name: "Filter" }).click();
-  await page.getByRole("dialog").waitFor();
-  await page.waitForTimeout(400); // deliberate: let the transition finish on camera
-
-  const video = page.video();
-  await page.close(); // required — saveAs waits for the file to be written
-  await video?.saveAs("/tmp/shots/filters.webm");
-});
+  video: { mode: "on", size: { width: 1280, height: 820 } },
+})
 ```
 
-Two constraints shape what you record:
+Add this to the capture spec using the project's `test` import. Perform the actual interaction and assert the resulting
+state. Wait for observable state changes; a short deliberate hold is appropriate when viewers need time to see the start
+or end of a transition.
 
-- **Video ignores `deviceScaleFactor`.** The same context that writes a 2560×1640 screenshot records a
-  1280×820 video. Record at the size people will watch; there is no retina clip.
-- **The mouse cursor is not drawn.** A recorded click or hover shows only its effect, so the clip has to be
-  legible without a pointer — let the UI's own hover and focus states carry it, or the reviewer sees things
-  happening for no visible reason.
+Playwright saves recordings when the browser context closes. Await closure for manually created contexts, and copy
+completed recordings into the capture directory's `artifacts/` subdirectory under `.local/ui-screenshots/<capture-id>/`
+before another run clears test results. Retain the originals alongside any converted clips for inspection. Treat video
+dimensions separately from screenshot scale. See the
+[Playwright video documentation](https://playwright.dev/docs/videos) for configuration supported by the installed
+version.
 
-Keep it under about ten seconds and start on the state that matters; nobody scrubs a PR clip.
+## Choose the deliverable
 
-## 3. Convert
+| Destination capability             | Deliverable                                                                              |
+| ---------------------------------- | ---------------------------------------------------------------------------------------- |
+| Native video attachment or player  | A supported video file, verified in that player                                          |
+| Inline animated images only        | A compact GIF when timing is still readable, optionally linked to a higher-quality video |
+| Local files or download links      | The original recording or a compatible converted video                                   |
+| No usable video or conversion tool | Labelled stills of key states, with a recording linked if available                      |
 
-WebM plays in Chrome and Firefox but not everywhere, so H.264 MP4 is the copy to publish:
+Verify the destination's supported formats, size limits, access controls, and actual preview. A raw file URL is not
+necessarily an embeddable player. Do not infer MIME types or playback support from the file extension alone. For GitHub,
+consult its
+[attachment documentation](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/attaching-files)
+and the available browser or CLI upload capabilities rather than assuming a particular upload method.
+
+## Convert only when needed
+
+Check whether an available converter supports the desired format. A recorder's bundled binary may have limited codecs;
+do not assume system ffmpeg is required or that every ffmpeg build has the same encoders.
+
+With ffmpeg and an H.264 encoder available, this example creates an MP4 from a WebM recording. Run conversion inside the
+capture's `.local/` directory or use explicit paths within it. Replace the filenames with the actual paths and keep the
+original recording:
 
 ```bash
-ffmpeg -y -i /tmp/shots/filters.webm -vf "scale=1280:-2" -c:v libx264 -pix_fmt yuv420p \
-  -crf 26 -preset veryfast -movflags +faststart -an /tmp/shots/filters.mp4
+ffmpeg -i ui-flow.webm -vf "scale=1280:-2" -c:v libx264 -pix_fmt yuv420p \
+  -crf 26 -preset veryfast -movflags +faststart -an ui-flow.mp4
 ```
 
-`-pix_fmt yuv420p` and `+faststart` are what make it play in a browser rather than download;
-`scale=…:-2` keeps the height even, which yuv420p requires. And the GIF, two-pass so the palette is
-per-clip:
+Choose a width that keeps UI text readable without unnecessarily upscaling the source. This example omits audio;
+preserve it when the interaction requires it. For an animated image, create a palette and use matching frame-rate and
+scale settings in both passes:
 
 ```bash
-ffmpeg -y -i /tmp/shots/filters.webm -vf "fps=12,scale=960:-1:flags=lanczos,palettegen=stats_mode=diff" /tmp/shots/palette.png
-ffmpeg -y -i /tmp/shots/filters.webm -i /tmp/shots/palette.png \
-  -lavfi "fps=12,scale=960:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle" \
-  /tmp/shots/filters.gif
+ffmpeg -i ui-flow.webm -vf "fps=12,scale=960:-1:flags=lanczos,palettegen" ui-flow-palette.png
+ffmpeg -i ui-flow.webm -i ui-flow-palette.png \
+  -lavfi "fps=12,scale=960:-1:flags=lanczos[x];[x][1:v]paletteuse" ui-flow.gif
 ```
 
-The GIF costs frames and bytes — 12fps against the WebM's 25, and roughly 19× the MP4's size for the same
-2.5 seconds. That is the price of rendering inline.
-
-## 4. Without a system ffmpeg
-
-No ffmpeg means no MP4 and no GIF, and the raw WebM does not embed either — so there is no inline motion
-at all. The deliverable becomes a **filmstrip**: three to five labelled stills at the moments that matter,
-in one table row, with the `.webm` committed beside them and linked for anyone who wants to watch it.
-
-The simplest way to get that filmstrip is to skip recording entirely and take a `page.screenshot()` at each
-step of the flow. Same artifact, no decode, and you choose the exact frames.
-
-If you already have a `.webm` and want frames out of it, Playwright ships its own ffmpeg wherever the
-browsers are installed:
-
-```bash
-FF=$(ls -1 ~/.cache/ms-playwright/ffmpeg-*/ffmpeg-* ~/Library/Caches/ms-playwright/ffmpeg-*/ffmpeg-* 2>/dev/null | head -1)
-"$FF" -i /tmp/shots/filters.webm -r 2 -vf "scale=960:-1" -f image2 /tmp/shots/filters-%02d.png
-"$FF" -ss 1.5 -i /tmp/shots/filters.webm -frames:v 1 -vf "scale=960:-1" /tmp/shots/filters-poster.png
-```
-
-That build is `--disable-everything` with just enough switched on to write a WebM: VP8 decode, matroska
-demux, PNG encode, `image2` mux, and the `scale`/`crop`/`pad` filters. So stills are all you get — no
-`libx264`, no `gif` encoder — and the `fps` filter is not compiled in either, which is why the frame rate
-above is `-r 2` rather than `-vf fps=2`.
-
-If the sandbox lets you install a real ffmpeg, do that instead and use §3; a filmstrip is a fallback, not
-an equal.
+Inspect the result for readable text, correct timing, and file size. Use a GIF only when its reduced fidelity still
+communicates the behaviour. Without suitable conversion tools, retain a playable source recording or capture labelled
+stills at meaningful steps. Stills show state changes but do not establish animation smoothness or timing; disclose that
+limitation when it matters.
