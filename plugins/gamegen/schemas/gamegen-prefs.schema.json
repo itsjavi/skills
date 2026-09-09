@@ -11,10 +11,7 @@
       "type": "object",
       "properties": {
         "status": {
-          "enum": [
-            "draft",
-            "ready"
-          ]
+          "enum": ["draft", "ready"]
         },
         "revision": {
           "type": "integer",
@@ -49,60 +46,37 @@
           "uniqueItems": true
         }
       },
-      "required": [
-        "status",
-        "revision",
-        "confirmed_sections",
-        "deferred"
-      ],
+      "required": ["status", "revision", "confirmed_sections", "deferred"],
       "additionalProperties": false
     },
     "game": {
       "type": "object",
       "properties": {
         "title": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "description": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "goal": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "genre": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "audience": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "scope": {
           "type": "object",
           "properties": {
             "deliverable": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "minLength": 1
             },
             "features": {
@@ -115,17 +89,11 @@
               "uniqueItems": true
             },
             "content": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "minLength": 1
             },
             "playtime_minutes": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 1
             },
             "exclusions": {
@@ -138,67 +106,31 @@
               "uniqueItems": true
             }
           },
-          "required": [
-            "deliverable",
-            "features",
-            "content",
-            "playtime_minutes",
-            "exclusions"
-          ],
+          "required": ["deliverable", "features", "content", "playtime_minutes", "exclusions"],
           "additionalProperties": false
         }
       },
-      "required": [
-        "title",
-        "description",
-        "goal",
-        "genre",
-        "audience",
-        "scope"
-      ],
+      "required": ["title", "description", "goal", "genre", "audience", "scope"],
       "additionalProperties": false
     },
     "presentation": {
       "type": "object",
       "properties": {
         "dimension": {
-          "enum": [
-            null,
-            "2d",
-            "2.5d",
-            "3d"
-          ]
+          "enum": [null, "2d", "2.5d", "3d"]
         },
         "rendering": {
-          "enum": [
-            null,
-            "sprites",
-            "tiles",
-            "sprites-in-3d",
-            "3d-rendered-sprites",
-            "meshes"
-          ]
+          "enum": [null, "sprites", "tiles", "sprites-in-3d", "3d-rendered-sprites", "meshes"]
         },
         "simulation": {
-          "enum": [
-            null,
-            "2d",
-            "3d"
-          ]
+          "enum": [null, "2d", "3d"]
         },
         "camera": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "orientation": {
-          "enum": [
-            "landscape",
-            "portrait",
-            "adaptive"
-          ]
+          "enum": ["landscape", "portrait", "adaptive"]
         },
         "viewport": {
           "type": "array",
@@ -213,44 +145,22 @@
           "type": "boolean"
         },
         "tile_grid": {
-          "enum": [
-            null,
-            "square",
-            "isometric",
-            "hex"
-          ]
+          "enum": [null, "square", "isometric", "hex"]
         },
         "tile_size": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 1
         },
         "sprite_directions": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 1
         },
         "units": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "forward_axis": {
-          "enum": [
-            null,
-            "+X",
-            "-X",
-            "+Y",
-            "-Y",
-            "+Z",
-            "-Z"
-          ]
+          "enum": [null, "+X", "-X", "+Y", "-Y", "+Z", "-Z"]
         }
       },
       "required": [
@@ -273,10 +183,7 @@
       "type": "object",
       "properties": {
         "style": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "palette": {
@@ -329,50 +236,30 @@
           "uniqueItems": true
         },
         "lighting": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "asset_budgets": {
           "type": "object",
           "properties": {
             "hero_triangles": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 1
             },
             "materials_per_actor": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 1
             },
             "texture_max_px": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 1
             },
             "sprite_frame_px": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 1
             }
           },
-          "required": [
-            "hero_triangles",
-            "materials_per_actor",
-            "texture_max_px",
-            "sprite_frame_px"
-          ],
+          "required": ["hero_triangles", "materials_per_actor", "texture_max_px", "sprite_frame_px"],
           "additionalProperties": false
         }
       },
@@ -395,14 +282,7 @@
         "targets": {
           "type": "array",
           "items": {
-            "enum": [
-              "macos",
-              "ios",
-              "windows",
-              "linux",
-              "android",
-              "web"
-            ]
+            "enum": ["macos", "ios", "windows", "linux", "android", "web"]
           },
           "minItems": 1,
           "uniqueItems": true
@@ -411,97 +291,53 @@
           "type": "object",
           "properties": {
             "macos": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "minLength": 1
             },
             "ios": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "minLength": 1
             },
             "windows": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "minLength": 1
             },
             "linux": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "minLength": 1
             },
             "android": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "minLength": 1
             },
             "web": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "minLength": 1
             }
           },
-          "required": [
-            "macos",
-            "ios",
-            "windows",
-            "linux",
-            "android",
-            "web"
-          ],
+          "required": ["macos", "ios", "windows", "linux", "android", "web"],
           "additionalProperties": false
         },
         "minimum_device": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "target_fps": {
-          "enum": [
-            30,
-            60,
-            90,
-            120
-          ]
+          "enum": [30, 60, 90, 120]
         },
         "memory_budget_mb": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 1
         },
         "engine": {
           "const": "godot"
         },
         "engine_version": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "renderer": {
-          "enum": [
-            null,
-            "mobile",
-            "gl_compatibility",
-            "forward_plus"
-          ]
+          "enum": [null, "mobile", "gl_compatibility", "forward_plus"]
         }
       },
       "required": [
@@ -522,12 +358,7 @@
         "methods": {
           "type": "array",
           "items": {
-            "enum": [
-              "keyboard",
-              "mouse",
-              "controller",
-              "touch"
-            ]
+            "enum": ["keyboard", "mouse", "controller", "touch"]
           },
           "minItems": 1,
           "uniqueItems": true
@@ -552,13 +383,7 @@
           "uniqueItems": true
         }
       },
-      "required": [
-        "methods",
-        "touch_layout",
-        "swap_sides",
-        "rebind",
-        "accessibility"
-      ],
+      "required": ["methods", "touch_layout", "swap_sides", "rebind", "accessibility"],
       "additionalProperties": false
     },
     "generation": {
@@ -571,14 +396,7 @@
               "type": "object",
               "properties": {
                 "provider": {
-                  "enum": [
-                    "builtin-gpt-image",
-                    "spritecook",
-                    "higgsfield",
-                    "blender",
-                    "local",
-                    "none"
-                  ]
+                  "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                 },
                 "model": {
                   "type": "string",
@@ -594,14 +412,7 @@
                     "type": "object",
                     "properties": {
                       "provider": {
-                        "enum": [
-                          "builtin-gpt-image",
-                          "spritecook",
-                          "higgsfield",
-                          "blender",
-                          "local",
-                          "none"
-                        ]
+                        "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                       },
                       "model": {
                         "type": "string",
@@ -612,37 +423,21 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "provider",
-                      "model",
-                      "quality"
-                    ],
+                    "required": ["provider", "model", "quality"],
                     "additionalProperties": false
                   },
                   "minItems": 0,
                   "uniqueItems": true
                 }
               },
-              "required": [
-                "provider",
-                "model",
-                "quality",
-                "fallbacks"
-              ],
+              "required": ["provider", "model", "quality", "fallbacks"],
               "additionalProperties": false
             },
             "textures": {
               "type": "object",
               "properties": {
                 "provider": {
-                  "enum": [
-                    "builtin-gpt-image",
-                    "spritecook",
-                    "higgsfield",
-                    "blender",
-                    "local",
-                    "none"
-                  ]
+                  "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                 },
                 "model": {
                   "type": "string",
@@ -658,14 +453,7 @@
                     "type": "object",
                     "properties": {
                       "provider": {
-                        "enum": [
-                          "builtin-gpt-image",
-                          "spritecook",
-                          "higgsfield",
-                          "blender",
-                          "local",
-                          "none"
-                        ]
+                        "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                       },
                       "model": {
                         "type": "string",
@@ -676,37 +464,21 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "provider",
-                      "model",
-                      "quality"
-                    ],
+                    "required": ["provider", "model", "quality"],
                     "additionalProperties": false
                   },
                   "minItems": 0,
                   "uniqueItems": true
                 }
               },
-              "required": [
-                "provider",
-                "model",
-                "quality",
-                "fallbacks"
-              ],
+              "required": ["provider", "model", "quality", "fallbacks"],
               "additionalProperties": false
             },
             "sprites": {
               "type": "object",
               "properties": {
                 "provider": {
-                  "enum": [
-                    "builtin-gpt-image",
-                    "spritecook",
-                    "higgsfield",
-                    "blender",
-                    "local",
-                    "none"
-                  ]
+                  "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                 },
                 "model": {
                   "type": "string",
@@ -722,14 +494,7 @@
                     "type": "object",
                     "properties": {
                       "provider": {
-                        "enum": [
-                          "builtin-gpt-image",
-                          "spritecook",
-                          "higgsfield",
-                          "blender",
-                          "local",
-                          "none"
-                        ]
+                        "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                       },
                       "model": {
                         "type": "string",
@@ -740,37 +505,21 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "provider",
-                      "model",
-                      "quality"
-                    ],
+                    "required": ["provider", "model", "quality"],
                     "additionalProperties": false
                   },
                   "minItems": 0,
                   "uniqueItems": true
                 }
               },
-              "required": [
-                "provider",
-                "model",
-                "quality",
-                "fallbacks"
-              ],
+              "required": ["provider", "model", "quality", "fallbacks"],
               "additionalProperties": false
             },
             "animation": {
               "type": "object",
               "properties": {
                 "provider": {
-                  "enum": [
-                    "builtin-gpt-image",
-                    "spritecook",
-                    "higgsfield",
-                    "blender",
-                    "local",
-                    "none"
-                  ]
+                  "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                 },
                 "model": {
                   "type": "string",
@@ -786,14 +535,7 @@
                     "type": "object",
                     "properties": {
                       "provider": {
-                        "enum": [
-                          "builtin-gpt-image",
-                          "spritecook",
-                          "higgsfield",
-                          "blender",
-                          "local",
-                          "none"
-                        ]
+                        "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                       },
                       "model": {
                         "type": "string",
@@ -804,37 +546,21 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "provider",
-                      "model",
-                      "quality"
-                    ],
+                    "required": ["provider", "model", "quality"],
                     "additionalProperties": false
                   },
                   "minItems": 0,
                   "uniqueItems": true
                 }
               },
-              "required": [
-                "provider",
-                "model",
-                "quality",
-                "fallbacks"
-              ],
+              "required": ["provider", "model", "quality", "fallbacks"],
               "additionalProperties": false
             },
             "ui": {
               "type": "object",
               "properties": {
                 "provider": {
-                  "enum": [
-                    "builtin-gpt-image",
-                    "spritecook",
-                    "higgsfield",
-                    "blender",
-                    "local",
-                    "none"
-                  ]
+                  "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                 },
                 "model": {
                   "type": "string",
@@ -850,14 +576,7 @@
                     "type": "object",
                     "properties": {
                       "provider": {
-                        "enum": [
-                          "builtin-gpt-image",
-                          "spritecook",
-                          "higgsfield",
-                          "blender",
-                          "local",
-                          "none"
-                        ]
+                        "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                       },
                       "model": {
                         "type": "string",
@@ -868,37 +587,21 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "provider",
-                      "model",
-                      "quality"
-                    ],
+                    "required": ["provider", "model", "quality"],
                     "additionalProperties": false
                   },
                   "minItems": 0,
                   "uniqueItems": true
                 }
               },
-              "required": [
-                "provider",
-                "model",
-                "quality",
-                "fallbacks"
-              ],
+              "required": ["provider", "model", "quality", "fallbacks"],
               "additionalProperties": false
             },
             "audio": {
               "type": "object",
               "properties": {
                 "provider": {
-                  "enum": [
-                    "builtin-gpt-image",
-                    "spritecook",
-                    "higgsfield",
-                    "blender",
-                    "local",
-                    "none"
-                  ]
+                  "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                 },
                 "model": {
                   "type": "string",
@@ -914,14 +617,7 @@
                     "type": "object",
                     "properties": {
                       "provider": {
-                        "enum": [
-                          "builtin-gpt-image",
-                          "spritecook",
-                          "higgsfield",
-                          "blender",
-                          "local",
-                          "none"
-                        ]
+                        "enum": ["builtin-gpt-image", "spritecook", "higgsfield", "blender", "local", "none"]
                       },
                       "model": {
                         "type": "string",
@@ -932,34 +628,18 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "provider",
-                      "model",
-                      "quality"
-                    ],
+                    "required": ["provider", "model", "quality"],
                     "additionalProperties": false
                   },
                   "minItems": 0,
                   "uniqueItems": true
                 }
               },
-              "required": [
-                "provider",
-                "model",
-                "quality",
-                "fallbacks"
-              ],
+              "required": ["provider", "model", "quality", "fallbacks"],
               "additionalProperties": false
             }
           },
-          "required": [
-            "concepts",
-            "textures",
-            "sprites",
-            "animation",
-            "ui",
-            "audio"
-          ],
+          "required": ["concepts", "textures", "sprites", "animation", "ui", "audio"],
           "additionalProperties": false
         },
         "higgsfield": {
@@ -973,29 +653,17 @@
               "minLength": 1
             }
           },
-          "required": [
-            "enabled",
-            "use_when"
-          ],
+          "required": ["enabled", "use_when"],
           "additionalProperties": false
         },
         "computer_use": {
-          "enum": [
-            "when-needed",
-            "disabled",
-            "requested"
-          ]
+          "enum": ["when-needed", "disabled", "requested"]
         },
         "prefer": {
           "const": "mcp-or-cli"
         }
       },
-      "required": [
-        "routes",
-        "higgsfield",
-        "computer_use",
-        "prefer"
-      ],
+      "required": ["routes", "higgsfield", "computer_use", "prefer"],
       "additionalProperties": false
     },
     "budget": {
@@ -1021,10 +689,7 @@
               "minimum": 0
             }
           },
-          "required": [
-            "spritecook",
-            "higgsfield"
-          ],
+          "required": ["spritecook", "higgsfield"],
           "additionalProperties": false
         },
         "max_attempts_per_asset": {
@@ -1055,11 +720,7 @@
       "type": "object",
       "properties": {
         "network": {
-          "enum": [
-            "offline",
-            "online",
-            "hybrid"
-          ]
+          "enum": ["offline", "online", "hybrid"]
         },
         "players": {
           "type": "integer",
@@ -1096,70 +757,36 @@
           "uniqueItems": true
         }
       },
-      "required": [
-        "network",
-        "players",
-        "save",
-        "languages",
-        "audio",
-        "monetization",
-        "content_constraints"
-      ],
+      "required": ["network", "players", "save", "languages", "audio", "monetization", "content_constraints"],
       "additionalProperties": false
     },
     "workflow": {
       "type": "object",
       "properties": {
         "autonomy": {
-          "enum": [
-            "assisted",
-            "unattended"
-          ]
+          "enum": ["assisted", "unattended"]
         },
         "concept_review": {
-          "enum": [
-            "user",
-            "agent"
-          ]
+          "enum": ["user", "agent"]
         },
         "asset_review": {
-          "enum": [
-            "user",
-            "agent"
-          ]
+          "enum": ["user", "agent"]
         },
         "parallel_agents": {
           "type": "integer",
           "minimum": 0
         },
         "tracker": {
-          "enum": [
-            "existing",
-            "none",
-            "backlog"
-          ]
+          "enum": ["existing", "none", "backlog"]
         },
         "delivery": {
-          "enum": [
-            "editor",
-            "local-build",
-            "device",
-            "store"
-          ]
+          "enum": ["editor", "local-build", "device", "store"]
         },
         "signing": {
-          "enum": [
-            "deferred",
-            "configured"
-          ]
+          "enum": ["deferred", "configured"]
         },
         "quality_priority": {
-          "enum": [
-            "balanced",
-            "visual",
-            "performance",
-            "speed"
-          ]
+          "enum": ["balanced", "visual", "performance", "speed"]
         },
         "fallback_on_unknown_cost": {
           "const": "unpaid-only"

@@ -16,12 +16,7 @@
     },
     "json_schema_2020_12": {
       "result": "passed",
-      "fixtures": [
-        "draft",
-        "2d",
-        "2.5d",
-        "3d"
-      ],
+      "fixtures": ["draft", "2d", "2.5d", "3d"],
       "checked_at_utc": "2026-09-08T12:28:16.936189+00:00",
       "basis": "Previous check retained; schema, preferences template, helper and test fixtures are unchanged."
     },

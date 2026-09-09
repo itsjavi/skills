@@ -26,10 +26,7 @@
     "simulation": null,
     "camera": null,
     "orientation": "landscape",
-    "viewport": [
-      1280,
-      720
-    ],
+    "viewport": [1280, 720],
     "pixel_art": false,
     "tile_grid": null,
     "tile_size": null,
@@ -42,13 +39,7 @@
     "palette": [],
     "references": [],
     "direction_doc": "docs/art-direction.md",
-    "required_views": [
-      "front",
-      "side",
-      "rear",
-      "front-three-quarter",
-      "gameplay-camera"
-    ],
+    "required_views": ["front", "side", "rear", "front-three-quarter", "gameplay-camera"],
     "required_clips": [],
     "expressions": [],
     "lighting": null,
@@ -60,10 +51,7 @@
     }
   },
   "platforms": {
-    "targets": [
-      "macos",
-      "ios"
-    ],
+    "targets": ["macos", "ios"],
     "minimum_os": {
       "macos": null,
       "ios": null,
@@ -80,19 +68,11 @@
     "renderer": null
   },
   "input": {
-    "methods": [
-      "keyboard",
-      "controller",
-      "touch"
-    ],
+    "methods": ["keyboard", "controller", "touch"],
     "touch_layout": "movement-left-actions-right",
     "swap_sides": true,
     "rebind": true,
-    "accessibility": [
-      "readable-text",
-      "non-color-cues",
-      "reduced-motion"
-    ]
+    "accessibility": ["readable-text", "non-color-cues", "reduced-motion"]
   },
   "generation": {
     "routes": {
@@ -155,9 +135,7 @@
     "network": "offline",
     "players": 1,
     "save": "local",
-    "languages": [
-      "en"
-    ],
+    "languages": ["en"],
     "audio": "music-and-sfx",
     "monetization": "none",
     "content_constraints": []
