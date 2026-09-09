@@ -8,22 +8,36 @@ Reusable Codex/Claude skills and plugins, for:
 
 <!-- catalog:skills:start -->
 
+- [app-security-review](skills/app-security-review/SKILL.md): Review repositories, features, or diffs for exploitable
+  application security weaknesses, including injection, authentication and authorization failures, exposed APIs, and
+  broken trust boundaries.
 - [backlog-authoring](skills/backlog-authoring/SKILL.md): Author plans and native records for existing Backlog.md
   projects, using their configured MCP or CLI workflow.
-- [changelog-authoring](skills/changelog-authoring/SKILL.md): Use when the user asks to generate, update, draft, or
-  compare a CHANGELOG.md or release notes from docs dirs, planning docs, milestones, checkpoints, bug-fix records,
-  decisions, business rules, manual QA, checks, security, env, setup, or other spec-based project records.
-- [conventional-commits](skills/conventional-commits/SKILL.md): Generate a Conventional Commit message for the
-  repository's current staged changes.
-- [coolify](skills/coolify/SKILL.md): Operate Coolify instances through the official coollabsio/coolify-cli.
-- [trust-and-safety-review](skills/trust-and-safety-review/SKILL.md): Review how user-generated content and user
-  interactions can enable harm, phishing, scams, harassment, spam, or moderation failures in the current project.
+- [changelog-authoring](skills/changelog-authoring/SKILL.md): Generate or update CHANGELOG.md and release notes from
+  commit messages in a pull request or the current branch compared with its base, usually main, or from project
+  specifications and planning records.
+- [coolify-cli](skills/coolify-cli/SKILL.md): Operate Coolify instances through the official coollabsio/coolify-cli.
+- [design-guide-authoring](skills/design-guide-authoring/SKILL.md): Create or update a design guide or design system
+  specification, usually DESIGN.md, for web or mobile interfaces.
+- [find-library-docs](skills/find-library-docs/SKILL.md): Find current documentation, API references, and code examples
+  for libraries, frameworks, SDKs, CLI tools, and cloud services.
+- [find-skills](skills/find-skills/SKILL.md): Discover and help install reusable agent skills.
+- [fix-page-metadata](skills/fix-page-metadata/SKILL.md): Audit and fix HTML metadata including page titles, meta
+  descriptions, canonical URLs, Open Graph tags, Twitter cards, favicons, JSON-LD structured data, and robots
+  directives.
+- [fix-web-accessibility](skills/fix-web-accessibility/SKILL.md): Audit and fix HTML accessibility issues including ARIA
+  labels, keyboard navigation, focus management, color contrast, and form errors.
+- [fix-web-rendering-performance](skills/fix-web-rendering-performance/SKILL.md): Audit and fix web rendering
+  performance, including animations, scrolling, layout thrashing, and expensive visual effects.
+- [generate-commit-message](skills/generate-commit-message/SKILL.md): Generate a Conventional Commit message from the
+  repository's staged Git changes.
+- [react-development](skills/react-development/SKILL.md): Build, debug, refactor, and review React web apps, components,
+  and hooks.
+- [trust-and-safety-review](skills/trust-and-safety-review/SKILL.md): Review product designs and implementation for
+  abuse through user-generated content and interactions, including phishing, scams, harassment, spam, and moderation
+  failures.
 - [ui-screenshots](skills/ui-screenshots/SKILL.md): Capture screenshots and short clips of any web application's UI for
   visual review, documentation, or pull requests.
-- [web-design-spec](skills/web-design-spec/SKILL.md): Create a design guide / design system spec document (typically
-  DESIGN.md) for a web or mobile UI project.
-- [web-security-review](skills/web-security-review/SKILL.md): Review the current project for exploitable application
-  security weaknesses, common OWASP mistakes, unprotected APIs, and broken trust boundaries.
 
 <!-- catalog:skills:end -->
 
