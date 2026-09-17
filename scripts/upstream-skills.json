@@ -1,0 +1,12 @@
+{
+  "skills": [
+    {
+      "path": "plugins/webcraft/skills/react-router",
+      "repository": "https://github.com/remix-run/react-router",
+      "branch": "main",
+      "source": ".agents/skills/react-router",
+      "license": "MIT",
+      "commit": "58c47cd0057513939b9f7605792d0aeddd231e0d"
+    }
+  ]
+}

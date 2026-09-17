@@ -70,6 +70,8 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
   interactions, progression and persistence using the saved GameGen concept, scope and 2D or 3D simulation settings.
 - [react-development](plugins/webcraft/skills/react-development/SKILL.md): Build, debug, refactor, and review React web
   apps, components, and hooks.
+- [react-router](plugins/webcraft/skills/react-router/SKILL.md): Build applications with React Router in Framework,
+  Data, Declarative, and unstable RSC modes.
 - [trust-and-safety-review](plugins/safeguard/skills/trust-and-safety-review/SKILL.md): Review product designs and
   implementation for abuse through user-generated content and interactions, including phishing, scams, harassment, spam,
   and moderation failures.
@@ -250,3 +252,29 @@ without bumping the version, use `npm run build`. `npm run check` and CI reject 
 broken local skill links. The release tests run real npm version commands in temporary repositories.
 
 See the official [npm version lifecycle](https://docs.npmjs.com/cli/v11/commands/npm-version/#description).
+
+## Vendored upstream skills
+
+Some packaged skills are mirrors of skills maintained in another repository. `scripts/upstream-skills.json` lists each
+one with its upstream repository, branch, source directory, license and the commit the local copy came from. Today that
+is [react-router](plugins/webcraft/skills/react-router/SKILL.md), mirrored from the MIT licensed
+[`.agents/skills/react-router`](https://github.com/remix-run/react-router/tree/main/.agents/skills/react-router) in
+`remix-run/react-router`.
+
+To pull the latest upstream revision, run:
+
+```sh
+npm run upstream:sync
+```
+
+Each listed directory is replaced with the upstream files for the tip of its configured branch, the resolved commit is
+recorded in the registry, and the README catalog is regenerated because a mirrored skill can change its own name or
+description. The command reports the commit it landed on, then runs `pnpm format`, so a mirror follows this repository’s
+formatting instead of the upstream file layout: prose is rewrapped and code samples are restyled. The sync needs network
+access to clone from the upstream repository, so it stays out of `npm run check` and CI.
+
+Do not hand-edit a mirrored file, because the next sync overwrites it. Improvements belong upstream. Fork the skill
+under a different name when this repository needs to diverge.
+
+To mirror another skill, add an entry to the registry and run `npm run upstream:sync`. `npm test` rejects a registry
+entry that is not a packaged skill or has no recorded commit.
