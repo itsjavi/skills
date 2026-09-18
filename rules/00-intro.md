@@ -1,4 +1,4 @@
-## General Agent Rules
+# General Agent Rules
 
-These rules should always apply by default, unless explicitly said otherwise, or other user general or project-based
-instructions supersedes the same rule(s).
+These rules apply by default unless explicitly overridden by the user or by more specific project/repository
+instructions.
