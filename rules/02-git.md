@@ -1,4 +1,4 @@
-## Git and the working tree
+### 02 - Git and the working tree
 
 Staged changes you did not stage yourself are a review checkpoint. Staging is how the user says "this looks good, we can
 continue", and diffing unstaged work against the index is how they review each iteration.
@@ -11,3 +11,5 @@ continue", and diffing unstaged work against the index is how they review each i
 - Ask first when the index holds anything you did not stage. The commit would sweep the user's checkpoint in with
   unreviewed work, so confirm the intended scope.
 - Do not create or push version tags. A push to main runs CI. A matching tag triggers Deploy.
+- Do not create a new branch to commit changes unless the user asks for it, or if it's required because of some
+  particular workflow or dev process.

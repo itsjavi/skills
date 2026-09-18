@@ -1,4 +1,4 @@
-### File editing
+#### 01c - File editing
 
 - Create and modify text files with the agent's dedicated file-editing tool, or the closest equivalent the harness
   provides. In Codex that is `apply_patch` for every operation. In Claude Code, `Write` creates and `Edit` modifies.

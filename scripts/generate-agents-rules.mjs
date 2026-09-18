@@ -16,4 +16,4 @@ const rules = await Promise.all(
 )
 
 const output = rules.filter(Boolean).join("\n\n")
-if (output) process.stdout.write(`## General Rules\n\n${output}\n`)
+if (output) process.stdout.write(`${output}\n`)
