@@ -11,6 +11,9 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
 - [app-security-review](plugins/safeguard/skills/app-security-review/SKILL.md): Review repositories, features, or diffs
   for exploitable application security weaknesses, including injection, authentication and authorization failures,
   exposed APIs, and broken trust boundaries.
+- [astra-develop](plugins/webcraft/skills/astra-develop/SKILL.md): End-to-end software development workflow that plans a
+  task, resolves material ambiguity, implements it, and verifies acceptance criteria while routing bounded work to an
+  appropriate model/reasoning level.
 - [backlog-authoring](plugins/devscout/skills/backlog-authoring/SKILL.md): Author plans and native records for existing
   Backlog.md projects, using their configured MCP or CLI workflow.
 - [blender-game-assets](plugins/gamegen/skills/blender-game-assets/SKILL.md): Build, texture, rig and export editable 3D
