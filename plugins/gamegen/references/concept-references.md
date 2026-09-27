@@ -10,11 +10,12 @@ Choose one canonical design according to `workflow.concept_review`. Reuse that e
 subsequent views. Record the chosen version and its distinguishing proportions. Generate individual readable views or a
 small clean sheet, not a crowded poster with tiny details.
 
-For a 3D character, normally request front, side and rear construction views in a neutral pose, orthographic-looking
-projection, consistent scale, a shared ground line and soft neutral lighting. Include the other side for asymmetric
-designs, and top/underside when they resolve hidden geometry. Request front and rear three-quarter views, an actual
-gameplay-camera view, a face/material detail study and relevant expressions separately. Humanoids may need an A or T
-pose; quadrupeds need separated limbs and a stance that reveals joints. Choose the pose that supports the intended rig.
+For a 3D character, request the views listed in `art.required_views`. Render construction views in a neutral pose,
+orthographic-looking projection, consistent scale, a shared ground line and soft neutral lighting. Include the other
+side for asymmetric designs, and top/underside when they resolve hidden geometry. Request three-quarter and
+gameplay-camera views from that list, a face/material detail study and relevant expressions separately. Humanoids may
+need an A or T pose; quadrupeds need separated limbs and a stance that reveals joints. Choose the pose that supports the
+intended rig.
 
 Compare all views for body length, head size, feature placement, appendage count and silhouette. Generated views are not
 guaranteed to be geometrically consistent. Resolve disagreements in a short construction note. For difficult designs,

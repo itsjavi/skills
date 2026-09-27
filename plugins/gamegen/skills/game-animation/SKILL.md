@@ -13,9 +13,12 @@ not force an RPG-specific five-clip set on every game.
 
 ## Motion contract
 
-Define clip names, duration, loop behavior, root-motion ownership, action events and transitions. Decide which system
-moves the actor. Match stride distance and cadence to real game travel speed. Use root motion only when the controller
-explicitly consumes it; otherwise keep the root stable and move through gameplay physics.
+Define clip names, duration, loop behavior, root-motion ownership, action events and transitions. This skill owns
+action-event markers such as contact, hit-window start and end, footsteps and effect spawn points, and records their
+clip times in the manifest. godot-gameplay and game-audio-vfx consume those markers instead of defining separate
+timings. Decide which system moves the actor. Match stride distance and cadence to real game travel speed. Use root
+motion only when the controller explicitly consumes it; otherwise keep the root stable and move through gameplay
+physics.
 
 For locomotion, establish contact, passing and flight/extreme poses as appropriate. Check planted feet and weight
 transfer before secondary ear, tail, cloth or leaf motion. Idle should support the character's personality without

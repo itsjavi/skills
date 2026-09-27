@@ -26,8 +26,11 @@ reference-generation round unless it is needed or requested.
 
 Own a dedicated collection, source file or isolated build and preserve unrelated objects and unsaved work. Resolve
 units, forward/up axes, origin, ground contact, bounds, material/texture budgets, collision ownership and
-animation/root-motion expectations from the existing contract and task. Ask only about consequential missing choices.
-Run Blender locally through repeatable `bpy` scripts; a third-party Blender MCP is not a dependency.
+animation/root-motion expectations from the existing contract and task. In a GameGen project, ask only about
+consequential asset-contract details that preferences, the manifest and the task leave open, and record the answers in
+the asset manifest. Route changes to saved preferences through the coordinating agent and `game-bootstrap` instead of
+asking production choices again. For standalone work, ask the user directly. Run Blender locally through repeatable
+`bpy` scripts; a third-party Blender MCP is not a dependency.
 
 ## Model and surface workflow
 

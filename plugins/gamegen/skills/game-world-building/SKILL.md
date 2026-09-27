@@ -27,6 +27,9 @@ For Blender-authored modular assets or procedural environment sources, use
 parameters and materials in the source. Export or realize geometry as required by the target workflow, and build runtime
 interaction and procedural behavior in Godot when the level needs them.
 
+For tile-based terrain, use [game-tilesets](../game-tilesets/SKILL.md) to create tiles, adjacency metadata and coverage
+maps. This skill places the validated tiles in levels and composes them with props, actors and cameras.
+
 ## Rendering paths
 
 - 2D: align sprites/tiles to the selected pixel density and filtering, handle Y/depth ordering, parallax and occluders
@@ -46,7 +49,7 @@ Differentiate rough, satin, glossy and emissive surfaces instead of applying one
 post-processing restrained enough for readable action. Pixel art, painterly scenes and miniature 3D worlds require
 different treatments.
 
-Reuse materials and modular pieces where useful; balance variation against draw calls and memory. Profile foliage,
-transparency, lighting and screen-space effects at the target workload. Capture a fixed comparison view and actual
-traversal footage in Godot. A beautiful Blender environment render is not evidence that the same lighting or materials
-work in the engine.
+Reuse materials and modular pieces where useful; balance variation against draw calls and memory. Use
+[game-optimization](../game-optimization/SKILL.md) to profile foliage, transparency, lighting and screen-space effects
+at the target workload. Capture a fixed comparison view and actual traversal footage in Godot. A beautiful Blender
+environment render is not evidence that the same lighting or materials work in the engine.

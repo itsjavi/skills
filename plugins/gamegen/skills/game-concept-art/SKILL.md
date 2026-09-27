@@ -26,10 +26,12 @@ against the updated preferences.
 
 1. Resolve one canonical design using the selected review policy. Present the design at the intended gameplay scale as
    well as a readable close view.
-2. Derive neutral front, side and rear construction views from that exact identity. Keep consistent projection, ground
-   line and scale. Add the other side for asymmetry and top/underside views when needed to model concealed forms.
-3. Add front/rear three-quarter and gameplay-camera views, face/material details, expressions and relevant motion key
-   poses. Favor individual readable images over crowded sheets. Effects must not hide anatomy.
+2. Build the view list from `art.required_views`. Derive its neutral construction views, usually front, side and rear,
+   from that exact identity. Keep consistent projection, ground line and scale. Add the other side for asymmetry and
+   top/underside views when needed to model concealed forms.
+3. Add the remaining required views, such as three-quarter and gameplay-camera views, then face/material details,
+   expressions and relevant motion key poses. Add a view outside the saved list only when concealed forms need it, and
+   record why. Favor individual readable images over crowded sheets. Effects must not hide anatomy.
 4. Reconcile differences between generated views. Record the intended construction if a tool changes proportions or
    appendages. Use fixed-camera Blender blockout renders through the
    [local CLI workflow](../../references/blender-cli.md) as reference inputs when stronger view consistency is needed.

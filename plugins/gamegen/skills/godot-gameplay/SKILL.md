@@ -22,8 +22,10 @@ through input, simulation, feedback and state update before expanding content. K
 putting content tables into UI or animation scripts.
 
 Use delta/time-based motion and cooldowns, normalize intended diagonal movement, and keep physics-driven motion in the
-appropriate physics update. Camera-relative movement should project onto the intended movement plane. Coordinate
-animation root ownership and action events with game-animation. Handle collisions and interruption explicitly rather
+appropriate physics update. Camera-relative movement should project onto the intended movement plane. Consume the
+root-motion ownership and action-event markers that game-animation records in the manifest for hit windows and action
+timing. Gameplay owns hitbox shapes, damage and state rules; when tuning needs a different window, update the marker
+through game-animation rather than hard-coding a second timing. Handle collisions and interruption explicitly rather
 than relying on visual mesh positions.
 
 Build only the configured network/player mode. For saves, store the required gameplay state with a version and

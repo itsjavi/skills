@@ -28,9 +28,10 @@ approved budget.
 
 ## Visual effects
 
-Tie effects and hit/impact feedback to gameplay or animation events. Verify the actual contact/apex moment rather than
-aligning a particle burst only to the start of a clip. Keep the actor silhouette and gameplay area readable, with clear
-directional and non-color information where needed.
+Tie effects and hit/impact feedback to the action-event markers that game-animation records in the manifest, or to
+gameplay events that have no animation. Verify the actual contact/apex moment rather than aligning a particle burst only
+to the start of a clip. Keep the actor silhouette and gameplay area readable, with clear directional and non-color
+information where needed.
 
 Choose particles, meshes, sprites or shaders based on the presentation and renderer. Limit transparent overlap, lights
 and emission to the target budget. Test effects on varied backgrounds, at the intended camera size, under repeated

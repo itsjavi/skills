@@ -36,7 +36,8 @@ adjacency and collision from the selected coordinate system.
    inside a chunk.
 4. Verify height layering, depth sorting and walkable entrances for isometric or elevated terrain. Keep visual
    projection and gameplay movement consistent.
-5. Inspect at the intended zoom and device aspect ratio. Measure large-map costs before expanding the terrain library.
+5. Inspect at the intended zoom and device aspect ratio. Measure large-map costs through
+   [game-optimization](../game-optimization/SKILL.md) before expanding the terrain library.
 
 Store the piece-to-mask map, tile dimensions, collision/navigation layers, palette/reference revision and output hashes
 with the asset. Handoff a playable test map and actual engine capture, not only a tileset PNG.
