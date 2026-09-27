@@ -79,6 +79,8 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
   message from the repository's staged Git changes.
 - [godot-gameplay](plugins/gamegen/skills/godot-gameplay/SKILL.md): Implement or extend Godot gameplay, actor
   interactions, progression and persistence using the saved GameGen concept, scope and 2D or 3D simulation settings.
+- [macos-app-development](plugins/nativeapps/skills/macos-app-development/SKILL.md): Bootstrap and build modern native
+  macOS apps in Swift (SwiftUI + AppKit, Swift 6, macOS 26+).
 - [react-development](plugins/webcraft/skills/react-development/SKILL.md): Build, debug, refactor, and review React web
   apps, components, and hooks.
 - [react-router](plugins/webcraft/skills/react-router/SKILL.md): Build applications with React Router in Framework,
@@ -113,6 +115,9 @@ manual updates. Remove any older standalone copies when switching to their plugi
   agent skills and library documentation, maintain Backlog.md plans and write changelogs for development workflows.
 - <img src="plugins/gamegen/assets/icon.png" width="40" height="40" alt=""> [GameGen](plugins/gamegen): Create 2D, 2.5D
   and 3D games with shared project preferences, concept art, Blender, Godot and measured validation.
+- <img src="plugins/nativeapps/assets/icon.png" width="40" height="40" alt=""> [Native Apps](plugins/nativeapps): Build
+  native desktop and mobile apps, starting with modern macOS apps in Swift, SwiftUI and AppKit, including project setup,
+  agent-safe test builds, distribution and platform quirks.
 - <img src="plugins/safeguard/assets/icon.png" width="40" height="40" alt=""> [Safeguard](plugins/safeguard): Review
   application security and trust and safety risks with evidence-backed findings and practical remediation guidance.
 - <img src="plugins/uxdesign/assets/icon.png" width="40" height="40" alt=""> [UX Design](plugins/uxdesign): Critique
@@ -209,8 +214,8 @@ Use `claude plugin marketplace list` to list configured marketplaces and
 
 #### Getting updates
 
-Git is the shared source for all six plugins. After a release reaches the marketplace’s Git branch, clients can fetch
-it. Claude compares the installed plugin version with the version in its manifest, so a new commit must also include a
+Git is the shared source for all plugins. After a release reaches the marketplace’s Git branch, clients can fetch it.
+Claude compares the installed plugin version with the version in its manifest, so a new commit must also include a
 version bump for changed plugin content to replace a cached installation.
 
 In Claude Code, third-party marketplace auto-updates are disabled by default. Open `/plugin`, choose **Marketplaces**,

@@ -32,6 +32,11 @@
       "name": "uxdesign",
       "source": "./plugins/uxdesign",
       "description": "Critique designs, audit accessibility, manage design systems, write UX copy, plan and synthesize user research and prepare developer handoff specs."
+    },
+    {
+      "name": "nativeapps",
+      "source": "./plugins/nativeapps",
+      "description": "Build native desktop and mobile apps, starting with modern macOS apps in Swift, SwiftUI and AppKit, including project setup, agent-safe test builds, distribution and platform quirks."
     }
   ]
 }

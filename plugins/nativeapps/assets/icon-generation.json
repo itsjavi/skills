@@ -1,0 +1,8 @@
+{
+  "tool": "hand-authored SVG rendered with headless Google Chrome",
+  "model_reported": null,
+  "prompt": "Deep midnight teal rounded-square background matching the GameGen style reference. Emblem: a violet desktop app window with window-control dots and a sidebar, overlapped by a mint phone with a coral content tile, and one ivory four-point spark.",
+  "reference": "plugins/gamegen/assets/icon.png",
+  "source": "icon.svg",
+  "output": "icon.png"
+}
