@@ -2,7 +2,8 @@
 name: game-bootstrap
 description:
   "Set up a new game project or resolve missing GameGen preferences using question tools, then prove its selected
-  asset-to-engine pipeline. Use also to update shared game choices."
+  asset-to-engine pipeline. Use also to update shared game choices, including saved art style fields; game-concept-art
+  produces the resulting concepts and art direction document."
 ---
 
 # Bootstrap a GameGen project

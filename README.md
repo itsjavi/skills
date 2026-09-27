@@ -19,7 +19,7 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
 - [backlog-authoring](plugins/devscout/skills/backlog-authoring/SKILL.md): Author plans and native records for existing
   Backlog.md projects, using their configured MCP or CLI workflow.
 - [blender-game-assets](plugins/gamegen/skills/blender-game-assets/SKILL.md): Build, texture, rig and export editable 3D
-  assets with local Blender CLI and bpy from references or a project brief.
+  game assets with local Blender CLI and bpy from references or a project brief.
 - [changelog-authoring](plugins/devscout/skills/changelog-authoring/SKILL.md): Generate or update CHANGELOG.md and
   release notes from commit messages in a pull request or the current branch compared with its base, usually main, or
   from project specifications and planning records.
@@ -49,8 +49,9 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
   music, sound and visual feedback with coherent style, synchronized action timing, accessibility and runtime budgets.
 - [game-bootstrap](plugins/gamegen/skills/game-bootstrap/SKILL.md): Set up a new game project or resolve missing GameGen
   preferences using question tools, then prove its selected asset-to-engine pipeline.
-- [game-concept-art](plugins/gamegen/skills/game-concept-art/SKILL.md): Create or revise game art direction, consistent
-  construction views, poses and visual targets from saved GameGen preferences before asset production.
+- [game-concept-art](plugins/gamegen/skills/game-concept-art/SKILL.md): Create or revise game concept art, the art
+  direction document, consistent construction views, poses and visual targets from saved GameGen preferences before
+  asset production.
 - [game-export](plugins/gamegen/skills/game-export/SKILL.md): For GameGen projects, prepare and verify Godot exports for
   the configured platform and delivery stage, including reproducible local builds and signing when device or store
   delivery is requested.

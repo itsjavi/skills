@@ -1,14 +1,18 @@
 ---
 name: blender-game-assets
 description:
-  "Build, texture, rig and export editable 3D assets with local Blender CLI and bpy from references or a project brief.
-  Use for game models and 3D sources for rendered sprites."
+  "Build, texture, rig and export editable 3D game assets with local Blender CLI and bpy from references or a project
+  brief. Use for game models and 3D sources for rendered sprites, in GameGen projects or as standalone asset work that
+  does not require GameGen setup."
 ---
 
 # Build Blender game assets
 
-Read [shared context](../../references/shared-context.md), the ready preferences and
-[repository contracts](../../references/repository.md). Use the
+In a GameGen project, or when the task is part of GameGen production, read
+[shared context](../../references/shared-context.md), the ready preferences and
+[repository contracts](../../references/repository.md). For a standalone Blender asset request outside a GameGen
+project, do not start `game-bootstrap` or create preferences: resolve the brief, target engine and export contract from
+the request and existing files, and report provenance and review evidence instead of writing a manifest. Use the
 [local Blender workflow](../../references/blender-cli.md) for executable discovery, background Python, the macOS startup
 workaround, renders and export checks. Use the supplied asset references, intended gameplay camera and project-specific
 budgets.

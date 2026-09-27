@@ -1,8 +1,9 @@
 ---
 name: game-concept-art
 description:
-  "Create or revise game art direction, consistent construction views, poses and visual targets from saved GameGen
-  preferences before asset production."
+  "Create or revise game concept art, the art direction document, consistent construction views, poses and visual
+  targets from saved GameGen preferences before asset production. Changes to saved art preferences go through
+  game-bootstrap."
 ---
 
 # Create production concept art
@@ -15,6 +16,11 @@ Use `game.title`, `description`, `goal` and `scope` to establish the visual brie
 saved art direction before generating. Separate silhouette, proportion, palette, material response, lighting, camera and
 detail density. Preserve the user's style and original character identity. Do not default every project to chibi
 creatures or a particular franchise aesthetic.
+
+This skill owns the document at `art.direction_doc`, the concept reference files and their manifest entries. It does not
+edit preferences. When the user changes a saved `art` choice such as style, palette, references, lighting or required
+views, the coordinating agent applies that change through `game-bootstrap` first; then regenerate or revise concepts
+against the updated preferences.
 
 ## Generate a usable reference package
 
