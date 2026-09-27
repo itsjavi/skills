@@ -1,0 +1,11 @@
+{
+  "name": "uxdesign",
+  "version": "0.1.0",
+  "description": "Critique designs, audit accessibility, manage design systems, write UX copy, plan and synthesize user research and prepare developer handoff specs.",
+  "author": { "name": "Javi" },
+  "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/uxdesign",
+  "repository": "https://github.com/itsjavi/skills",
+  "license": "Apache-2.0",
+  "skills": "./skills/",
+  "keywords": ["design", "ux", "accessibility", "research", "copywriting"]
+}

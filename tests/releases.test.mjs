@@ -7,7 +7,7 @@ import test from "node:test"
 import { fileURLToPath } from "node:url"
 
 const source = fileURLToPath(new URL("../", import.meta.url))
-const names = ["coolify", "devscout", "gamegen", "safeguard", "webcraft"]
+const names = ["coolify", "devscout", "gamegen", "safeguard", "uxdesign", "webcraft"]
 const manifests = names.flatMap((name) =>
   ["codex", "claude"].map((platform) => `plugins/${name}/.${platform}-plugin/plugin.json`)
 )

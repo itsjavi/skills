@@ -27,6 +27,11 @@
       "name": "webcraft",
       "source": "./plugins/webcraft",
       "description": "Build and improve web applications with React, design guides, accessibility, metadata, rendering performance, screenshots and commit messages."
+    },
+    {
+      "name": "uxdesign",
+      "source": "./plugins/uxdesign",
+      "description": "Critique designs, audit accessibility, manage design systems, write UX copy, plan and synthesize user research and prepare developer handoff specs."
     }
   ]
 }

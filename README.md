@@ -8,6 +8,8 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
 
 <!-- catalog:skills:start -->
 
+- [accessibility-review](plugins/uxdesign/skills/accessibility-review/SKILL.md): Run a WCAG 2.1 AA accessibility audit
+  on a design or page and report findings.
 - [app-security-review](plugins/safeguard/skills/app-security-review/SKILL.md): Review repositories, features, or diffs
   for exploitable application security weaknesses, including injection, authentication and authorization failures,
   exposed APIs, and broken trust boundaries.
@@ -23,8 +25,12 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
   from project specifications and planning records.
 - [coolify-cli](plugins/coolify/skills/coolify-cli/SKILL.md): Operate Coolify instances through the official
   coollabsio/coolify-cli.
+- [design-critique](plugins/uxdesign/skills/design-critique/SKILL.md): Get structured design feedback on usability,
+  hierarchy, and consistency.
 - [design-guide-authoring](plugins/webcraft/skills/design-guide-authoring/SKILL.md): Create or update a design guide or
   design system specification, usually DESIGN.md, for web or mobile interfaces.
+- [design-handoff](plugins/uxdesign/skills/design-handoff/SKILL.md): Generate developer handoff specs from a design.
+- [design-system](plugins/uxdesign/skills/design-system/SKILL.md): Audit, document, or extend your design system.
 - [find-library-docs](plugins/devscout/skills/find-library-docs/SKILL.md): Find current documentation, API references,
   and code examples for libraries, frameworks, SDKs, CLI tools, and cloud services.
 - [find-skills](plugins/devscout/skills/find-skills/SKILL.md): Discover and help install reusable agent skills.
@@ -75,11 +81,16 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
   apps, components, and hooks.
 - [react-router](plugins/webcraft/skills/react-router/SKILL.md): Build applications with React Router in Framework,
   Data, Declarative, and unstable RSC modes.
+- [research-synthesis](plugins/uxdesign/skills/research-synthesis/SKILL.md): Synthesize user research into themes,
+  insights, and recommendations.
 - [trust-and-safety-review](plugins/safeguard/skills/trust-and-safety-review/SKILL.md): Review product designs and
   implementation for abuse through user-generated content and interactions, including phishing, scams, harassment, spam,
   and moderation failures.
 - [ui-screenshots](plugins/webcraft/skills/ui-screenshots/SKILL.md): Capture screenshots and short clips of any web
   application's UI for visual review, documentation, or pull requests.
+- [user-research](plugins/uxdesign/skills/user-research/SKILL.md): Plan, conduct, and synthesize user research.
+- [ux-copy](plugins/uxdesign/skills/ux-copy/SKILL.md): Write or review UX copy , microcopy, error messages, empty
+  states, CTAs.
 
 <!-- catalog:skills:end -->
 
@@ -101,6 +112,9 @@ manual updates. Remove any older standalone copies when switching to their plugi
   and 3D games with shared project preferences, concept art, Blender, Godot and measured validation.
 - <img src="plugins/safeguard/assets/icon.png" width="40" height="40" alt=""> [Safeguard](plugins/safeguard): Review
   application security and trust and safety risks with evidence-backed findings and practical remediation guidance.
+- <img src="plugins/uxdesign/assets/icon.png" width="40" height="40" alt=""> [UX Design](plugins/uxdesign): Critique
+  designs, audit accessibility, manage design systems, write UX copy, plan and synthesize user research and prepare
+  developer handoff specs.
 - <img src="plugins/webcraft/assets/icon.png" width="40" height="40" alt=""> [Webcraft](plugins/webcraft): Build and
   improve web applications with React, design guides, accessibility, metadata, rendering performance, screenshots and
   commit messages.
@@ -192,7 +206,7 @@ Use `claude plugin marketplace list` to list configured marketplaces and
 
 #### Getting updates
 
-Git is the shared source for all five plugins. After a release reaches the marketplace’s Git branch, clients can fetch
+Git is the shared source for all six plugins. After a release reaches the marketplace’s Git branch, clients can fetch
 it. Claude compares the installed plugin version with the version in its manifest, so a new commit must also include a
 version bump for changed plugin content to replace a cached installation.
 
