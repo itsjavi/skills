@@ -35,7 +35,8 @@ information where needed.
 
 Choose particles, meshes, sprites or shaders based on the presentation and renderer. Limit transparent overlap, lights
 and emission to the target budget. Test effects on varied backgrounds, at the intended camera size, under repeated
-actions and pause/resume. Respect reduced-motion and flashing constraints.
+actions and pause/resume. Always honor the platform reduced-motion setting, plus the project's saved accessibility
+choices, and flashing constraints.
 
 For Blender-authored effect meshes or rendered particle/simulation sequences, use the
 [local CLI workflow](../../references/blender-cli.md). Save the procedural source and bake stateful simulations before

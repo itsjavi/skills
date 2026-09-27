@@ -33,12 +33,11 @@ A game made only of tiles can leave sprite directions and frame size unset. A ti
 both values. A fully 3D game uses 3D simulation; choose 2.5D for a hybrid such as 3D visuals with 2D movement.
 
 Proposed defaults include macOS and iOS, landscape presentation, Godot, GPT Image 2.5 for concepts, and computer use
-only when needed. Use Flare by default for exploration and routine generation, and Sunburst for precise edits or
-polished final artwork, following the [provider routing rules](references/providers.md#gpt-image-25) and available model
-controls. Draft defaults remain unconfirmed. SpriteCook uses its native MCP and installed specialist skills when
-selected. Higgsfield is disabled until the intake enables a justified route with a credit allowance. Provider model
-choices and fallback lists are saved per purpose. Built-in draft routes retain `provider-default` because some tools do
-not expose a model selector; this does not guarantee a particular model or flavor.
+only when needed. Image model flavors follow the [provider routing rules](references/providers.md#gpt-image-25). Draft
+defaults remain unconfirmed. SpriteCook uses its native MCP and installed specialist skills when selected. Higgsfield is
+disabled until the intake enables a justified route with a credit allowance. Provider model choices and fallback lists
+are saved per purpose. Built-in draft routes retain `provider-default` because some tools do not expose a model
+selector; this does not guarantee a particular model or flavor.
 
 Use `game-production` to continue an authorized project through its saved scope and selected review policy. The
 remaining skills cover concept art, Blender assets, sprites, tilesets, animation, gameplay, world presentation,

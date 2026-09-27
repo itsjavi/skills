@@ -17,14 +17,14 @@ Use the accepted palette and lighting. For a terrain set include the required fi
 inner-corner and isolated cases for the selected algorithm. Match joins at native resolution and avoid an obvious
 repeated stamp. Keep decorative props separate from terrain collision.
 
-When using SpriteCook, read workflow-essentials and generate-tilesets. Query current tileset options, preserve
-reference/edit/style ID semantics, use supported piece sets, and save the returned IDs, layout and dimensions. A model
-stored in preferences is an explicit project choice; validate its support. Respect inherited settings when a provider
-locks the size or layout for referenced assets.
+When using SpriteCook, read `spritecook-workflow-essentials` and `spritecook-generate-tilesets`. Query current tileset
+options, preserve reference/edit/style ID semantics, use supported piece sets, and save the returned IDs, layout and
+dimensions. A model stored in preferences is an explicit project choice; validate its support. Respect inherited
+settings when a provider locks the size or layout for referenced assets.
 
-For SpriteCook's 15-piece dual-grid set, read use-dual-grid-tilesets before implementation. Do not feed its indices
-directly into a different Godot terrain-mask convention. For square, isometric and hex layouts, derive placement,
-adjacency and collision from the selected coordinate system.
+For SpriteCook's 15-piece dual-grid set, read `spritecook-use-dual-grid-tilesets` before implementation. Do not feed its
+indices directly into a different Godot terrain-mask convention. For square, isometric and hex layouts, derive
+placement, adjacency and collision from the selected coordinate system.
 
 ## Verify in a map
 

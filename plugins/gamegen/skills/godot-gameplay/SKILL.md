@@ -29,16 +29,14 @@ through game-animation rather than hard-coding a second timing. Handle collision
 than relying on visual mesh positions.
 
 Build only the configured network/player mode. For saves, store the required gameplay state with a version and
-deliberate recovery behavior. Use an atomic replace/backup strategy suitable to the platform. Do not wipe ordinary saves
-during tests. Keep save migrations and world restoration behavior consistent with the current scope.
+deliberate recovery behavior. Use an atomic replace/backup strategy suitable to the platform. Keep save migrations and
+world restoration behavior consistent with the current scope.
 
 ## Integrate and test
 
 Connect the selected actor asset through its import contract. An asset import or animation swap should not silently
-change gameplay speed or hitboxes. Use the configured review scene for art iterations and preserve the main scene unless
-its behavior is the task.
+change gameplay speed or hitboxes. Use the configured review scene for art iterations.
 
 Test the meaningful loop, collision boundaries, state transitions, repeated inputs, loss/recovery and save/load when
-applicable. Use isolated save slots or temporary project copies. Headless checks establish simulation/import behavior;
-graphical playtesting establishes presentation and input feel. Deliver a playable scene and concise verification
-evidence at the configured delivery stage.
+applicable, following the shared verification rules. Deliver a playable scene and concise verification evidence at the
+configured delivery stage.

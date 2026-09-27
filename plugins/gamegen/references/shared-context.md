@@ -50,6 +50,14 @@ Follow `workflow.concept_review` and `workflow.asset_review`. User review requir
 review requires comparison against the saved art direction and evidence. Approval applies only to the selected revision.
 User-requested revisions update the decision rather than reopening unrelated questions.
 
+## Shared verification rules
+
+- Headless and fixed-fps runs establish imports and simulation invariants only. Rendering, visual quality, input feel
+  and performance need a real graphical run; performance measurement goes through `game-optimization`.
+- Test with isolated save slots or temporary project copies. Never wipe or overwrite ordinary saves.
+- Preserve the game's main scene, resource identifiers and unrelated sources. Add review scenes instead, unless changing
+  the main scene is the task.
+
 ## Shared completion evidence
 
 Report what changed, where the editable and runtime outputs live, what was checked, and material remaining limits.

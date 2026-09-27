@@ -61,14 +61,13 @@ fingers, tails or other movable appendages where relevant. Separate authoring co
 and facial shape keys or controls appropriate to the task. For other articulated assets, choose bone, object or
 constraint controls that suit their construction. Static props do not need a character rig.
 
-Bind the visible geometry, normalize weights within the target influence limit and check for unweighted vertices.
-Inspect extreme poses for collapsed joints, stretching, disconnected surfaces and face/appendage clipping. Verify vertex
-movement and facial deformation, not only bone transforms. Retain the editable rig in the source when baking constraints
-for export.
+Bind the visible geometry and follow the
+[skin and animation export checks](../../references/blender-cli.md#skin-and-animation-export-checks) for weights and
+baking. Inspect extreme poses for collapsed joints, stretching, disconnected surfaces and face/appendage clipping.
+Verify vertex movement and facial deformation, not only bone transforms. Retain the editable rig in the source.
 
 Use [game-animation](../game-animation/SKILL.md) for requested clips, readable timing, planted contacts, secondary
-motion and loop behavior. Render a short clip from the actual model and inspect continuous playback before a large
-animation batch or a user review of animation.
+motion, loop behavior and animation preview review.
 
 ## Export and review
 

@@ -29,23 +29,24 @@ Expressions and blinking must be deliberate, visible and free from clipping.
 
 - 3D: use [blender-game-assets](../blender-game-assets/SKILL.md) for the editable rig and the
   [local Blender workflow](../../references/blender-cli.md) for `bpy` authoring, rendering and export. Skin visible
-  geometry to the intended chains, normalize nonzero weights within the export limit, and inspect the final mesh through
-  extreme poses. Use IK/FK and facial controls appropriate to the motion, and bake evaluated constraints and driven
-  morphs when needed for export. Verify named actions, skin and facial animation after fresh import, including duration
-  and loop endpoints.
+  geometry to the intended chains and inspect the final mesh through extreme poses. Use IK/FK and facial controls
+  appropriate to the motion. Follow the
+  [skin and animation export checks](../../references/blender-cli.md#skin-and-animation-export-checks) for weights,
+  baking and fresh-import verification of named actions, facial animation, duration and loop endpoints.
 - Cutout: maintain consistent layer order, joint pivots and overlap through extreme poses. Test facing changes and
   attached props.
 - Frame animation: animate the exact accepted source at stable scale and pivot. Use explicit frame metadata and inspect
   identity consistency between frames.
-- SpriteCook: use workflow-essentials and animate-assets, uploading local sources through the upload skill first. Retain
-  the source asset ID, returned operation IDs and actual output frame size. Do not regenerate a new character for each
-  clip.
+- SpriteCook: use `spritecook-workflow-essentials` and `spritecook-animate-assets`, uploading local sources through
+  `spritecook-upload-assets` first. Retain the source asset ID, returned operation IDs and actual output frame size. Do
+  not regenerate a new character for each clip.
 
 ## Runtime verification
 
-Render a short playable preview from the actual Blender model when reviewing 3D animation. Check anticipation, contacts,
-head/eye expression, limb intersections and secondary motion in continuous playback. Verify the encoded frame count, fps
-and duration. A successful render or bone animation does not establish that exported skin and facial controls work.
+Render a short playable preview from the actual Blender model before a large animation batch or a user review of 3D
+animation. Check anticipation, contacts, head/eye expression, limb intersections and secondary motion in continuous
+playback. Verify the encoded frame count, fps and duration. A successful render or bone animation does not establish
+that exported skin and facial controls work.
 
 Inspect continuous playback, not only a pose sheet. Measure displacement over real elapsed time separately from
 animation playback rate. Test acceleration, stopping, blocked movement, direction changes, action interruption and

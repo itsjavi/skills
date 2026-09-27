@@ -19,18 +19,17 @@ unrelated changes.
   camera and size.
 - Performance checks: real-time profiling at the target workload, performed through game-optimization.
 
-A passing structural test cannot establish attractive anatomy or fluid animation. A fixed-fps movie cannot establish
-runtime frame rate. A short desktop profile cannot establish iPhone thermal or memory behavior.
+A passing structural test cannot establish attractive anatomy or fluid animation. Apply the shared verification rules to
+headless, fixed-fps and desktop evidence.
 
 ## Test the meaningful paths
 
-Use isolated save slots or a temporary project copy. Import the final asset, not a fixture or earlier revision. Record
-the asset/source hashes that were actually tested. Read errors from the current run separately from historical editor
-logs.
+Import the final asset, not a fixture or earlier revision. Record the asset/source hashes that were actually tested.
+Read errors from the current run separately from historical editor logs.
 
 Exercise the complete scoped loop and its failure/recovery path. Check continuous traversal across boundaries, repeated
 actions, pause/resume, focus loss, and the configured input methods. Test actual global overlays and mobile controls
-together. Save/load checks must assert meaningful restored state and preserve ordinary user data.
+together. Save/load checks must assert meaningful restored state.
 
 For animation, check visible vertex/frame changes, limb contacts, transitions and action-event timing. For
 tiles/sprites, check native scale, alpha edges, atlas layout, pivots, seams and direction changes. For 3D, compare

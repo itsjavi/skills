@@ -25,9 +25,10 @@ sprites.
   [Blender execution workflow](../../references/blender-cli.md). Bake any stateful simulations before rendering
   independent frame ranges, and preserve real alpha in the output sequence.
 
-Use the configured route. For SpriteCook, read workflow-essentials plus generate-sprites, upload-assets and
-use-assets-in-godot as applicable. Use the canonical approved source asset for edits and animations; persist provider
-IDs. Use actual output dimensions rather than the requested dimensions when slicing.
+Use the configured route. For SpriteCook, read `spritecook-workflow-essentials` plus `spritecook-generate-sprites`,
+`spritecook-upload-assets` and `spritecook-use-assets-in-godot` as applicable. Use the canonical approved source asset
+for edits and animations; persist provider IDs. Use actual output dimensions rather than the requested dimensions when
+slicing.
 
 ## Build a coherent sprite set
 

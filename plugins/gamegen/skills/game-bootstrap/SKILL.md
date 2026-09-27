@@ -41,9 +41,8 @@ required project file is `.agents/gamegen-prefs.json`. Never bootstrap the plugi
    serializes writes and rejects stale revisions.
 
 MacOS and iOS are proposed platform defaults. Godot, Blender, GPT Image 2.5 through built-in image generation and
-computer use only when needed are proposed tool choices. Apply the
-[shared flavor policy](../../references/providers.md#gpt-image-25): Flare is the default for exploration and routine
-generation; Sunburst suits precise edits and polished final artwork. Resolve whether the selected route supports flavor
+computer use only when needed are proposed tool choices. Propose image model flavors from the
+[shared flavor policy](../../references/providers.md#gpt-image-25). Resolve whether the selected route supports flavor
 selection or uses an accepted opaque `provider-default`; do not present a built-in route without a selector as an exact
 model choice. Higgsfield is disabled until an enabled purpose and credit allowance are resolved. SpriteCook is optional,
 uses its native MCP and installed skills, and needs its own credit allowance. These recommendations do not become

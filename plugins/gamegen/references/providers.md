@@ -82,11 +82,9 @@ Preserve unrelated scenes and unsaved editor work.
 ## Godot
 
 Use the connected Godot MCP for editor scene state, import refresh, live playtesting, logs and captures when available.
-Discover methods from its schema. CLI/headless runs are useful for import and simulation checks; use a real graphical
-run for rendering, visual review and performance. Check the installed version and official documentation for
-version-dependent properties. Preserve the game's main scene while adding review scenes unless the task calls for
-replacing it.
+Discover methods from its schema. Follow the [shared verification rules](shared-context.md#shared-verification-rules)
+for headless versus graphical runs, test saves and the main scene. Check the installed version and official
+documentation for version-dependent properties.
 
 A preflight should open or create one tiny asset, export/import it, run a minimal scene, exercise one input and capture
-the result. Check errors from this run separately from historical editor errors. Tests use isolated copies or save
-slots. Never infer target-device performance from a fixed-fps video or headless run.
+the result. Check errors from this run separately from historical editor errors.

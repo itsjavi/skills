@@ -13,7 +13,8 @@ focused on gameplay decisions rather than implementation details.
 
 Design around the actual device viewport and safe areas. Check readable text, contrast, focus states and sufficiently
 usable targets. Preserve art identity while keeping HUD information legible over the real world scene. Use non-color
-cues, scalable text and reduced motion when configured. Keep localization and text expansion in mind.
+cues and scalable text. Always honor the platform reduced-motion setting, plus the project's saved accessibility
+choices. Keep localization and text expansion in mind.
 
 ## Input behavior
 
@@ -30,9 +31,10 @@ Desktop developer controls can remain in a separate review harness; do not ship 
 
 ## UI assets and verification
 
-For a cohesive generated UI system through SpriteCook, use workflow-essentials and build-ui-kits so sheets/components
-share one accepted screen concept. An isolated icon can use the appropriate configured image route. Preserve labels and
-interactive semantics in the engine instead of baking important dynamic text into artwork.
+For a cohesive generated UI system through SpriteCook, use `spritecook-workflow-essentials` and
+`spritecook-build-ui-kits` so sheets/components share one accepted screen concept. An isolated icon can use the
+appropriate configured image route. Preserve labels and interactive semantics in the engine instead of baking important
+dynamic text into artwork.
 
 Verify the real HUD, controls, menus and overlays together at the narrowest target layout. Capture the actual engine
 state. Test pause/resume, touch release, switching input methods, side swapping, settings persistence and

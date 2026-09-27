@@ -41,10 +41,8 @@ against the updated preferences.
    mismatch with a targeted edit while preserving accepted details.
 
 Follow the saved provider, actual available model options and budget. For GPT image work, use GPT Image 2.5 through the
-existing imagegen skill when selected. Apply the [shared flavor policy](../../references/providers.md#gpt-image-25):
-default to Flare for exploration and routine generation; choose Sunburst for construction-view or identity edits that
-need tighter control across revisions and for polished final artwork. Choose per operation when the route permits it,
-and verify actual model selection through the tool's supported controls.
+existing imagegen skill when selected, and choose the flavor per operation with the
+[shared flavor policy](../../references/providers.md#gpt-image-25).
 
 Use SpriteCook for the selected sprite/tiles/UI purpose and its existing workflow skills. Higgsfield requires the
 configured need and allowance. A higher-quality setting alone does not guarantee a faithful asset reference.
