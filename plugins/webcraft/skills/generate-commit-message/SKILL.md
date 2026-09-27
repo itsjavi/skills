@@ -2,7 +2,7 @@
 name: generate-commit-message
 description: >-
   Generate a Conventional Commit message from the repository's staged Git changes. Use when asked to write a commit
-  message, title, or summary. Return only the message in a plaintext code block. Does not stage files or create commits.
+  message or commit title. Return only the message in a plaintext code block. Does not stage files or create commits.
 ---
 
 # Generate Commit Message

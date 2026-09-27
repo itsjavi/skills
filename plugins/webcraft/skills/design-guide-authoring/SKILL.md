@@ -3,7 +3,8 @@ name: design-guide-authoring
 description:
   Create or update a design guide or design system specification, usually DESIGN.md, for web or mobile interfaces. Use
   when asked to document visual direction, design tokens, typography, component patterns, or interaction guidelines for
-  developers and agents. Ground the guide in the project's existing design and stack.
+  developers and agents. Ground the guide in the project's existing design and stack. For auditing components against
+  the system or documenting a single component, use design-system when available.
 ---
 
 # Design Guide Generator

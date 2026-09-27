@@ -8,8 +8,8 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
 
 <!-- catalog:skills:start -->
 
-- [accessibility-review](plugins/uxdesign/skills/accessibility-review/SKILL.md): Run a WCAG 2.1 AA accessibility audit
-  on a design or page and report findings.
+- [accessibility-review](plugins/uxdesign/skills/accessibility-review/SKILL.md): Run a WCAG 2.2 AA accessibility audit
+  on a design, mockup, prototype or rendered page and report findings without changing code.
 - [app-security-review](plugins/safeguard/skills/app-security-review/SKILL.md): Review repositories, features, or diffs
   for exploitable application security weaknesses, including injection, authentication and authorization failures,
   exposed APIs, and broken trust boundaries.
@@ -30,7 +30,8 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
 - [design-guide-authoring](plugins/webcraft/skills/design-guide-authoring/SKILL.md): Create or update a design guide or
   design system specification, usually DESIGN.md, for web or mobile interfaces.
 - [design-handoff](plugins/uxdesign/skills/design-handoff/SKILL.md): Generate developer handoff specs from a design.
-- [design-system](plugins/uxdesign/skills/design-system/SKILL.md): Audit, document, or extend your design system.
+- [design-system](plugins/uxdesign/skills/design-system/SKILL.md): Audit, document, or extend an existing design system
+  at the component level.
 - [find-library-docs](plugins/devscout/skills/find-library-docs/SKILL.md): Find current documentation, API references,
   and code examples for libraries, frameworks, SDKs, CLI tools, and cloud services.
 - [find-skills](plugins/devscout/skills/find-skills/SKILL.md): Discover and help install reusable agent skills.
@@ -88,7 +89,8 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
   and moderation failures.
 - [ui-screenshots](plugins/webcraft/skills/ui-screenshots/SKILL.md): Capture screenshots and short clips of any web
   application's UI for visual review, documentation, or pull requests.
-- [user-research](plugins/uxdesign/skills/user-research/SKILL.md): Plan, conduct, and synthesize user research.
+- [user-research](plugins/uxdesign/skills/user-research/SKILL.md): Plan and run user research studies, including
+  choosing methods and writing research plans, interview guides, usability test scripts, and surveys.
 - [ux-copy](plugins/uxdesign/skills/ux-copy/SKILL.md): Write or review UX copy , microcopy, error messages, empty
   states, CTAs.
 

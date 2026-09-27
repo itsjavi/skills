@@ -54,6 +54,8 @@ describe or share their design.
 - Text readability
 - Alternative text for images
 
+Keep this a quick check. For a full WCAG audit, use the **accessibility-review** skill.
+
 ## How to Give Feedback
 
 - **Be specific**: "The CTA competes with the navigation" not "the layout is confusing"

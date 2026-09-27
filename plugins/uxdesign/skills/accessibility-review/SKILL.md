@@ -1,19 +1,22 @@
 ---
 name: accessibility-review
 description:
-  Run a WCAG 2.1 AA accessibility audit on a design or page and report findings. Trigger with "audit accessibility",
-  "check a11y", "is this accessible?", or when reviewing a design for color contrast, keyboard navigation, touch target
-  size, or screen reader behavior before handoff. To fix accessibility issues in code, use fix-web-accessibility when
-  available.
+  Run a WCAG 2.2 AA accessibility audit on a design, mockup, prototype or rendered page and report findings without
+  changing code. Trigger with "audit accessibility", "check a11y", "is this accessible?", or when reviewing a design for
+  color contrast, keyboard navigation, target size, or screen reader behavior before handoff. To fix accessibility
+  issues in HTML or component code, use fix-web-accessibility.
 ---
 
 # Accessibility Review
 
-Audit a design or page for WCAG 2.1 AA accessibility compliance.
+Audit a design or page for WCAG 2.2 AA accessibility compliance, honoring an explicit project conformance target when
+one exists.
 
-Audit the design, page, screenshot, file or description the user provides. If nothing is provided, ask for it.
+Audit the design, page, screenshot, file or description the user provides. If nothing is provided, ask for it. This
+skill produces an audit report. When the user also wants code fixed, hand the findings to fix-web-accessibility when
+available, which applies the same WCAG 2.2 AA target.
 
-## WCAG 2.1 AA Quick Reference
+## WCAG 2.2 AA Quick Reference
 
 ### Perceivable
 
@@ -27,13 +30,19 @@ Audit the design, page, screenshot, file or description the user provides. If no
 - **2.1.1** All functionality available via keyboard
 - **2.4.3** Logical focus order
 - **2.4.7** Visible focus indicator
-- **2.5.5** Touch target >= 44x44 CSS pixels
+- **2.4.11** Focus not obscured by sticky headers, banners or overlays
+- **2.5.7** Dragging movements have a single-pointer alternative
+- **2.5.8** Target size >= 24x24 CSS pixels, or enough spacing around smaller targets. For touch interfaces, recommend
+  44x44 (2.5.5, Level AAA) or the platform guideline as best practice, not as an AA failure
 
 ### Understandable
 
 - **3.2.1** Predictable on focus (no unexpected changes)
+- **3.2.6** Help mechanisms appear in a consistent place
 - **3.3.1** Error identification (describe the error)
 - **3.3.2** Labels or instructions for inputs
+- **3.3.7** Previously entered information is not requested again in the same process
+- **3.3.8** Authentication does not rely on a cognitive test without an alternative
 
 ### Robust
 
@@ -63,7 +72,7 @@ Audit the design, page, screenshot, file or description the user provides. If no
 ```markdown
 ## Accessibility Audit: [Design/Page Name]
 
-**Standard:** WCAG 2.1 AA | **Date:** [Date]
+**Standard:** WCAG 2.2 AA | **Date:** [Date]
 
 ### Summary
 

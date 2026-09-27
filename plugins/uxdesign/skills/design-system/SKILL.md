@@ -1,9 +1,10 @@
 ---
 name: design-system
 description:
-  Audit, document, or extend your design system. Use when checking for naming inconsistencies or hardcoded values across
-  components, writing documentation for a component's variants, states, and accessibility notes, or designing a new
-  pattern that fits the existing system.
+  Audit, document, or extend an existing design system at the component level. Use when checking for naming
+  inconsistencies or hardcoded values across components, writing documentation for a component's variants, states, and
+  accessibility notes, or designing a new pattern that fits the existing system. To create or rewrite a project-wide
+  design guide such as DESIGN.md, use design-guide-authoring.
 ---
 
 # Design System
@@ -16,8 +17,10 @@ Manage your design system — audit for consistency, document components, or des
 - **Document**: write documentation for a component
 - **Extend**: design a new component or pattern that fits the system
 
-Work from the component code, token files, screenshots or descriptions the user provides. To write a project-wide
-DESIGN.md guide, use design-guide-authoring when available.
+Work from the component code, token files, screenshots or descriptions the user provides. If the project has a DESIGN.md
+or an equivalent design guide, treat it as the source of truth: audit against it, keep component documentation
+consistent with it, and propose guide changes instead of contradicting it. To create or rewrite that project-wide guide,
+use design-guide-authoring when available.
 
 ## Components of a Design System
 

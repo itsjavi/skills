@@ -14,6 +14,8 @@ correctness issues and supported performance findings; edit only when the reques
 
 ## Establish the local contract
 
+- For React Router route configuration, route modules, loaders, actions, fetchers, and navigation APIs, also use the
+  react-router skill when available. It owns React Router API details; this skill owns general React behavior.
 - Inspect the relevant components and callers, installed React and framework versions, routing and data APIs, and
   existing checks. Identify whether the affected code runs on the server, client, or both, and whether React Compiler is
   configured for it.
