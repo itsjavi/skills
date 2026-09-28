@@ -10,6 +10,7 @@ load the same bundled skills.
 ## Included skills
 
 - [macos-app-development](skills/macos-app-development/SKILL.md)
+- [macos-app-icons](skills/macos-app-icons/SKILL.md)
 
 ## Maintenance
 

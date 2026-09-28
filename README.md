@@ -81,6 +81,8 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
   interactions, progression and persistence using the saved GameGen concept, scope and 2D or 3D simulation settings.
 - [macos-app-development](plugins/nativeapps/skills/macos-app-development/SKILL.md): Bootstrap and build modern native
   macOS apps in Swift (SwiftUI + AppKit, Swift 6, macOS 26+).
+- [macos-app-icons](plugins/nativeapps/skills/macos-app-icons/SKILL.md): Design and build macOS app icons and in-app
+  icon tiles procedurally, with no image generator.
 - [react-development](plugins/webcraft/skills/react-development/SKILL.md): Build, debug, refactor, and review React web
   apps, components, and hooks.
 - [react-router](plugins/webcraft/skills/react-router/SKILL.md): Build applications with React Router in Framework,

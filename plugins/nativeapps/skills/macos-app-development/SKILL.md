@@ -80,8 +80,8 @@ let package = Package(
 - **Helpers** go in `Contents/Helpers`, signed before the app. Check with `otool -L` that they link only system
   libraries. Don't depend on `/usr/bin/python3` or other `xcrun` shims: on Macs without Command Line Tools they pop an
   install prompt. Ship a small Swift helper instead.
-- **Icon:** a `swift scripts/make-icon.swift` that draws with AppKit and writes an `.icns` gets you started. An Icon
-  Composer `.icon` (Liquid Glass) needs compiling outside Xcode **(planned)**.
+- **Icon:** draw its layers with a `swift scripts/make-icon.swift` into an Icon Composer `.icon` (Liquid Glass) and
+  compile it with `xcrun actool` in the build script. See [macos-app-icons](../macos-app-icons/SKILL.md).
 
 The build script, roughly:
 
@@ -90,7 +90,7 @@ swift build -c "$CONFIG" --product App
 BIN="$(swift build -c "$CONFIG" --show-bin-path)"
 mkdir -p "$APP/Contents/"{MacOS,Helpers,Resources,Frameworks}
 cp "$BIN/App" "$APP/Contents/MacOS/"; cp Resources/Info.plist "$APP/Contents/"
-cp Resources/AppIcon.icns Resources/PrivacyInfo.xcprivacy "$APP/Contents/Resources/"
+cp Resources/PrivacyInfo.xcprivacy "$APP/Contents/Resources/"  # the icon comes from actool (macos-app-icons)
 # per-variant PlistBuddy patches (Build variants)
 codesign --force --sign "${SIGN_IDENTITY:--}" "$APP/Contents/Helpers/…"   # nested code first
 codesign --force --sign "${SIGN_IDENTITY:--}" ${ENTITLEMENTS…} "$APP"
