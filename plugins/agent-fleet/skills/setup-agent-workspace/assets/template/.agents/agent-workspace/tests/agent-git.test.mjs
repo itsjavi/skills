@@ -14,7 +14,7 @@ import {
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { spawnSync } from "node:child_process";
-import { captureBaseline, prepareSnapshot, commitSnapshot } from "../scripts/agent-git.mjs";
+import { captureBaseline, prepareSnapshot, commitSnapshot, authorizeCommitRequest } from "../scripts/agent-git.mjs";
 
 function submoduleFixture(t) {
   const f = fixture(t);
@@ -154,6 +154,43 @@ function fixture(t, { existing = true, repoPath = "." } = {}) {
   };
   return { root, cwd, git, write, repositories, baseline, prepare, commit, hook, workspacePath };
 }
+
+test("human commit handoff preserves dirty provenance and authorizes only exact inspected bytes", (t) => {
+  const f = fixture(t);
+  f.write("src/existing.txt", "approved handoff\n");
+  f.write("src/unknown.txt", "unapproved\n");
+  const original = captureBaseline({ root: f.root, repositories: f.repositories });
+  const options = { root: f.root, repoPath: ".", paths: ["src/existing.txt"], scopes: ["src"], baseline: original, repositories: f.repositories };
+  assert.throws(() => prepareSnapshot(options), /already dirty/);
+  assert.throws(() => authorizeCommitRequest(options, ""), /explicit human/);
+  const baseline = authorizeCommitRequest(options, "User: commit the reviewed assisted implementation");
+  assert.deepEqual(baseline.repositories, original.repositories);
+  assert.equal(original.commitRequest, undefined);
+  assert.throws(() => prepareSnapshot({ ...options, baseline, paths: ["src/unknown.txt"] }), /matching human commit request/);
+  f.write("src/existing.txt", "changed after authorization\n");
+  assert.throws(() => prepareSnapshot({ ...options, baseline }), /matching human commit request/);
+  f.write("src/existing.txt", "approved handoff\n");
+  const snapshot = prepareSnapshot({ ...options, baseline });
+  f.commit(snapshot);
+  assert.equal(f.git("show", "HEAD:src/existing.txt"), "approved handoff\n");
+  assert.match(f.git("status", "--porcelain"), /src\/unknown.txt/);
+});
+
+test("human commit handoff retains index, boundary, path and HEAD guards", (t) => {
+  const f = fixture(t);
+  f.write("src/existing.txt", "approved handoff\n");
+  const options = { root: f.root, repoPath: ".", paths: ["src/existing.txt"], scopes: ["src"],
+    baseline: captureBaseline({ root: f.root, repositories: f.repositories }), repositories: f.repositories };
+  f.git("add", "src/existing.txt");
+  assert.throws(() => authorizeCommitRequest(options, "User request"), /staged work/);
+  f.git("reset", "--quiet", "--", "src/existing.txt"); // Fixture owns this index.
+  assert.throws(() => authorizeCommitRequest({ ...options, repositories: [{ path: ".", readOnly: true }] }, "User request"), /read-only/);
+  assert.throws(() => authorizeCommitRequest({ ...options, paths: ["src"] }, "User request"), /explicit regular files/);
+  assert.throws(() => authorizeCommitRequest({ ...options, paths: ["../outside"] }, "User request"), /escapes/);
+  const baseline = authorizeCommitRequest(options, "User request");
+  f.git("commit", "--allow-empty", "--quiet", "-m", "Fixture changes HEAD");
+  assert.throws(() => prepareSnapshot({ ...options, baseline }), /matching human commit request/);
+});
 
 test("initial repository commits only selected owned files and replays its journal without another commit", (t) => {
   const f = fixture(t, { existing: false });

@@ -234,6 +234,22 @@ function snapshotFingerprint(snapshot) {
 }
 
 export function prepareSnapshot({ root, repoPath, paths, scopes, baseline, repositories }) {
+  return buildSnapshot({ root, repoPath, paths, scopes, baseline, repositories });
+}
+
+// An explicit later human commit request can take ownership of an inspected
+// assisted handoff. Keep the dirty baseline truthful and bind approval to bytes.
+export function authorizeCommitRequest(options, authorization) {
+  if (typeof authorization !== "string" || !authorization.trim())
+    throw new Error("An explicit human commit request is required.");
+  const snapshot = buildSnapshot(options, true);
+  return { ...structuredClone(options.baseline), commitRequest: {
+    authorization, repoIdentity: snapshot.repoIdentity, head: snapshot.head,
+    files: snapshot.files,
+  } };
+}
+
+function buildSnapshot({ root, repoPath, paths, scopes, baseline, repositories }, approving = false) {
   const repo = repository(root, repoPath, repositories);
   const inherited = baseline?.repositories?.[repo.repoPath];
   if (
@@ -263,10 +279,14 @@ export function prepareSnapshot({ root, repoPath, paths, scopes, baseline, repos
       )
     )
       throw new Error(`File crosses a repository boundary: ${path}`);
-    if (inherited.dirtyPaths.some((old) => foldedInside(path, old) || foldedInside(old, path))) {
-      throw new Error(`File was already dirty when claimed: ${path}`);
-    }
     const file = fileSnapshot(repo, path);
+    if (!approving && inherited.dirtyPaths.some((old) => foldedInside(path, old) || foldedInside(old, path))) {
+      const approval = baseline.commitRequest;
+      if (!approval?.authorization?.trim() || approval.head !== head(repo.cwd) ||
+          JSON.stringify(approval.repoIdentity) !== JSON.stringify(repo.identity) ||
+          !approval.files.some((approved) => JSON.stringify(approved) === JSON.stringify(file)))
+        throw new Error(`File was already dirty when claimed and has no matching human commit request: ${path}`);
+    }
     if (!dirty.has(file.repoPath)) throw new Error(`File is unchanged or ignored: ${path}`);
     if (!file.mode && !git(repo.cwd, ["ls-files", "--", file.repoPath]))
       throw new Error(`Deleted file was not tracked: ${path}`);

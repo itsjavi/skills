@@ -48,7 +48,7 @@ export async function archiveClaim(local, claim, run) {
   // errors. A release replay must publish the same record after a crash.
   const retained = Object.fromEntries([
     "id", "task", "session", "scopes", "claimedAt", "repositories", "baseline",
-    "outcome", "note", "handoff", "resumedFrom",
+    "outcome", "note", "handoff", "resumedFrom", "commitRequest",
   ].filter((key) => Object.hasOwn(claim, key)).map((key) => [key, claim[key]]));
   await publishOnce(historyPath(local, "claims", claim.id), {
     id: claim.id,

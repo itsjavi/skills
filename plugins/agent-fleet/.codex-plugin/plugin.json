@@ -1,6 +1,6 @@
 {
   "name": "agent-fleet",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Set up and update portable agent workspaces, coordinate scoped unattended work, and review UI changes with visual evidence.",
   "author": { "name": "Javi" },
   "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/agent-fleet",

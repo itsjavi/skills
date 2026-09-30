@@ -25,7 +25,7 @@ import { trackTask, assertTrackedTask, fileDigest } from "./agent-tracker.mjs"
 import { visualRecord, assertVisual } from "./agent-visual.mjs"
 
 // Generated from this entrypoint and its helpers by the setup skill's bundle command.
-const RUNTIME_BUILD = "46ea03a8c07da6e1ce435bc81293c7078996f48271e138f95659aa0cd779812b"
+const RUNTIME_BUILD = "7d63520b57b821a51c737bf0dbc12746e922c6151983dc4484c57b739e75ab67"
 
 const HELP = `Usage: node .agents/agent-workspace/scripts/agents.mjs COMMAND [options]
 
@@ -45,6 +45,9 @@ const HELP = `Usage: node .agents/agent-workspace/scripts/agents.mjs COMMAND [op
   claim       --session ID --task TASK-ID --scope PATH [--scope PATH ...]
               [--from-claim CLAIM-ID --note EVIDENCE]
               [--receipt FILE --confirm-receipt --note ORIGINAL-OUTPUT-SOURCE]
+  claim       --session ID --task DONE-TASK-ID --commit-request --repo PATH
+              --file PATH [--file PATH ...] --authorization ACTUAL-HUMAN-REQUEST
+              (on-request commits only; approve exact inspected handoff bytes)
   refresh-checks --session ID --task TASK-ID --repo PATH --note REASON
               (append checks from project config; invalidate prior evidence)
   reconcile   --session ID
@@ -115,7 +118,7 @@ const { values: opts, positionals } = parseArgs({
     ].map((key) => [key, { type: "string" }]),
     ["scope", { type: "string", multiple: true }],
     ...["allow-task", "file", "option"].map((key) => [key, { type: "string", multiple: true }]),
-    ...["json", "help", "confirm-stopped", "confirm-receipt"].map((key) => [key, { type: "boolean" }]),
+    ...["json", "help", "confirm-stopped", "confirm-receipt", "commit-request"].map((key) => [key, { type: "boolean" }]),
   ]),
 })
 const command = positionals[0]
@@ -527,11 +530,11 @@ async function sync(claim) {
   const label = `working:${owner.id}`
   const args = ["task", "edit", claim.task]
   if (claim.phase === "claiming") {
-    if (task.status === config.backlog.doneStatus)
+    if (task.status === config.backlog.doneStatus && !claim.commitRequest)
       fail("Task became Done while claim was pending; inspect before reconciliation.")
     args.push(
       "-s",
-      config.backlog.activeStatus,
+      claim.commitRequest ? config.backlog.doneStatus : config.backlog.activeStatus,
       "-a",
       `@${owner.agent}`,
       "--add-label",
@@ -541,10 +544,10 @@ async function sync(claim) {
     )
   } else if (claim.phase === "releasing") {
     if (claim.outcome === "done") complete(task)
-    else if (task.status === config.backlog.doneStatus)
+    else if (task.status === config.backlog.doneStatus && !claim.commitRequest)
       fail("Task is already Done; inspect before reconciling a nonterminal release.")
     const status =
-      claim.outcome === "done"
+      claim.outcome === "done" || claim.commitRequest
         ? config.backlog.doneStatus
         : claim.outcome === "paused"
           ? config.backlog.todoStatus
@@ -630,7 +633,7 @@ async function release(claim, outcome, note) {
           `Owned changes lack current verification/review: ${uncovered.join(", ")}. Create final snapshots before Done.`
         )
     }
-  } else if (task.status === config.backlog.doneStatus)
+  } else if (task.status === config.backlog.doneStatus && !claim.commitRequest)
     fail("Task already Done; use outcome done after verifying its evidence.")
   if (
     outcome === "done" &&
@@ -1026,6 +1029,9 @@ async function main() {
       if (!claim.baseline)
         fail("This claim predates Git baselines; release and reclaim before taking a commit snapshot.")
       if (!opts.file?.length) fail("Select exact --file paths; directories and broad staging are not supported.")
+      if (claim.commitRequest && (required("repo") !== claim.commitRequest.repo ||
+          opts.file.some((path) => !claim.commitRequest.files.includes(path))))
+        fail("Commit handoff snapshots can select only the explicitly approved files and repository.")
       const snapshot = (await gitModule()).prepareSnapshot({
         root,
         repoPath: required("repo"),
@@ -1195,14 +1201,25 @@ async function main() {
       const limit = runLimit(run, task.id)
       if (limit) fail(limit)
       if (state.claims[task.id]) fail(`${task.id} already claimed by ${state.claims[task.id].session}.`)
-      if (task.status === config.backlog.doneStatus || task.readiness?.isReady !== true)
+      const commitRequest = Boolean(opts["commit-request"])
+      if (commitRequest) {
+        if (run.policy.commits !== "on-request" || task.status !== config.backlog.doneStatus)
+          fail("Commit handoff requires a completed task and an on-request commit policy.")
+        required("authorization")
+        required("repo")
+        if (!opts.file?.length || opts.scope?.length || opts["from-claim"] || opts.receipt)
+          fail("Commit handoff selects exact --file paths, without scopes or recovery receipts.")
+        if (opts.file.some((path) => path.toLowerCase() === task.path.toLowerCase()))
+          fail("The task record is finalized separately; exclude it from --file paths.")
+        complete(task)
+      } else if (task.status === config.backlog.doneStatus || task.readiness?.isReady !== true)
         fail(`${task.id} is completed or has unresolved dependencies.`)
       if (task.labels.some((label) => label.startsWith("working:")))
         fail("Backlog has an existing working label without this local claim; inspect the other workspace/session.")
       if (gateLabels(task).length) fail(`Task has unresolved gates: ${gateLabels(task).join(", ")}.`)
       if (task.assignees.some((assignee) => assignee.replace(/^@/, "").toLowerCase() !== owner.agent))
         fail(`Task assigned to ${task.assignees.join(", ")}; resolve assignment before claiming.`)
-      const scopes = [...new Set(await Promise.all((opts.scope ?? []).map(canonicalScope)))]
+      const scopes = [...new Set(await Promise.all((commitRequest ? opts.file : opts.scope ?? []).map(canonicalScope)))]
       for (const other of Object.values(state.claims)) {
         if (scopes.some((scope) => other.scopes.some((existing) => overlaps(scope, existing))))
           fail(`Scope conflicts with ${other.task} (${other.session}).`)
@@ -1216,6 +1233,12 @@ async function main() {
         claimedAt: now(),
         repositories: structuredClone(run.repositories),
         baseline: (await gitModule()).captureBaseline({ root, repositories: run.repositories }),
+      }
+      if (commitRequest) {
+        claim.baseline = (await gitModule()).authorizeCommitRequest({ root,
+          repoPath: opts.repo, paths: opts.file, scopes, baseline: claim.baseline,
+          repositories: claim.repositories }, opts.authorization)
+        claim.commitRequest = { authorization: opts.authorization, at: now(), repo: opts.repo, files: opts.file }
       }
       if (opts["from-claim"] || opts.receipt) {
         if (opts["from-claim"] && opts.receipt) fail("Choose a recorded claim or legacy receipt, not both.")
