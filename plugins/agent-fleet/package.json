@@ -1,6 +1,6 @@
 {
   "name": "@itsjavi/agent-fleet",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Portable agent workspace setup, updates and project-pinned coordination CLI",
   "license": "MIT",
   "repository": {
