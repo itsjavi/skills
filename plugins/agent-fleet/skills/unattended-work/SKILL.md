@@ -20,6 +20,8 @@ This skill supports workspace schema 1 and runtime schema 1. For versioned proje
 
 Use the CLI's run record as the resolved policy for delegation, review, validation, commits, human input, agent count, task count, and elapsed time. Honor stricter explicit user constraints. Review and approval gates remain active regardless of profile.
 
+Before implementation, confirm every repository to be changed has meaningful configured checks. For a foundation task that creates its first checks, claim `agent-workspace.json` together with the implementation. After adding checks, use `refresh-checks --session ID --task TASK-ID --repo PATH --note REASON` before taking final snapshots. This imports only additional checks; existing definitions, execution order, permissions, limits and repository boundaries remain fixed. It invalidates all snapshots, verification, visual declarations and reviews in the run. Renew them before committing. Do not restart merely to load new checks and strand the implementation as inherited dirt. Older runtimes without this command need the setup skill's supported update first.
+
 ## Coordinate eligible work
 
 Use the CLI's ready-work view to select unblocked tasks within the authorized run. Inspect each task's dependencies, acceptance criteria, ownership, and human gates before claiming it. Claim literal writable scopes and record a researched implementation plan through the serialized Backlog wrapper.
@@ -27,6 +29,8 @@ Use the CLI's ready-work view to select unblocked tasks within the authorized ru
 Delegate only when the profile permits it and independent work or review benefits from another agent. Use available native agent tools; do not create user-owned chats or install another provider as a substitute. Workers join the existing run with their own session IDs and receive one bounded assignment, allowed paths, relevant acceptance criteria, and expected evidence. Workers follow the shared workflow; they do not start nested coordinator loops. Count reviewers and testers against the concurrent agent limit. If required independent review is unavailable, defer completion for review instead of silently weakening the profile.
 
 Keep active claims and heartbeats current. The coordinator integrates worker results and preserves unrelated changes. A stale heartbeat is a reason to inspect an owner, never permission to take its files. Use the shared recovery procedure for confirmed interruption or failed tracker synchronization.
+
+For a stopped run, inspect `history --claim CLAIM-ID` and the source session. Resume only authorized unfinished work with `claim ... --from-claim CLAIM-ID --note EVIDENCE`, using the original scopes. The guard requires a stopped source, unchanged repository identity/HEAD, an empty index, and exact recorded file hashes. Unknown dirty files stay protected. All checks and independent reviews must run again. If an older release discarded its claim, only inspected original claim and snapshot CLI outputs can supply `--receipt FILE --confirm-receipt`; see the project guide. Never reconstruct a clean baseline from current dirty files or hand-edit runtime to adopt them.
 
 ## Verify and complete
 

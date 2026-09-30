@@ -132,6 +132,15 @@ test("independent processes cannot claim the same task; identical names still ha
   assert.deepEqual(task.labels, ["keep-me", `working:${registry.claims["TASK-1"].session}`]);
 });
 
+test("native Backlog assignees with or without @ resolve to the same project agent", async (t) => {
+  const f = await fixture(t);
+  const owner = await f.start();
+  const tasks = await f.data();
+  tasks["TASK-1"].assignees = ["oak"];
+  await writeFile(resolve(f.root, "tasks.json"), JSON.stringify(tasks));
+  await f.ok("claim", "--session", owner.id, "--task", "TASK-1");
+});
+
 test("ancestor paths conflict across tasks; siblings and disjoint claims can proceed", async (t) => {
   const f = await fixture(t);
   const [a, b] = await Promise.all([f.start(), f.start("birch")]);

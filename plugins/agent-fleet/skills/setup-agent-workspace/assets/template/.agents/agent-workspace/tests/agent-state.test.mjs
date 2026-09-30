@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import {
   archiveFinished,
+  archiveClaim,
   readHistory,
   readJSON,
   saveState,
@@ -25,6 +26,21 @@ const session = (id, runId, status = "closed") => ({
   endedAt: "2026-01-01T00:00:00Z",
 });
 const empty = () => ({ schemaVersion: 1, sessions: {}, runs: {}, claims: {} });
+
+test("released claims preserve exact ownership outside active state and replay after finalization retry", async (t) => {
+  const local = await fixture(t);
+  const claim = { id: "claim-one", task: "TASK-1", session: "oak-one", scopes: ["src"],
+    baseline: { repositories: {} }, outcome: "paused", snapshots: { ".": { fingerprint: "exact-hash" } },
+    finalization: { error: "interrupted" } };
+  await archiveClaim(local, claim, { id: "run-one" });
+  claim.finalization = { commit: "finished" };
+  await archiveClaim(local, claim, { id: "run-one" });
+  const receipt = await readHistory(local, "claims", claim.id);
+  assert.equal(receipt.claim.finalization, undefined);
+  assert.deepEqual(receipt.snapshots, [{ fingerprint: "exact-hash" }]);
+  claim.baseline.repositories.changed = true;
+  await assert.rejects(archiveClaim(local, claim, { id: "run-one" }), /conflict/);
+});
 
 test("archives completed history larger than 10 MB without retaining an index in active state", async (t) => {
   const local = await fixture(t);

@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { strengthenedRepositories, assertLegacyReceipts, restoreOwnedBaseline } from "../scripts/agent-handoff.mjs";
 import {
   ASSISTED,
   resolveSelection,
@@ -15,6 +16,54 @@ import {
 const config = JSON.parse(
   await readFile(new URL("./fixtures/workspace.json", import.meta.url), "utf8"),
 );
+
+test("check refresh adds real checks without changing existing checks or repository policy", () => {
+  const first = { name: "first", command: ["node", "check.mjs"] };
+  const second = { name: "second", command: ["node", "test.mjs"] };
+  const old = [{ path: ".", readOnly: false, purpose: "original", checks: [first] }];
+  const incoming = [{ ...old[0], purpose: "changed", checks: [first, second] }];
+  const next = strengthenedRepositories(old, incoming, ".");
+  assert.deepEqual(next[0].checks, [first, second]);
+  assert.equal(next[0].purpose, "original");
+  assert.deepEqual(old[0].checks, [first]);
+  for (const checks of [[], [second], [{ ...first, command: ["true"] }], [first, first],
+    [first, { name: "bad", command: [] }]])
+    assert.throws(() => strengthenedRepositories(old, [{ ...old[0], checks }], "."));
+  assert.throws(() => strengthenedRepositories([{ ...old[0], checks: [first, second] }],
+    [{ ...old[0], checks: [second, first] }], "."), /reorder/);
+  assert.throws(() => strengthenedRepositories(old, [{ ...incoming[0], readOnly: true }], "."));
+  assert.throws(() => strengthenedRepositories(old, incoming, "other"));
+  assert.deepEqual(strengthenedRepositories([{ path: ".", readOnly: false }], incoming, ".")[0].checks,
+    [first, second]);
+});
+
+test("legacy recovery requires matching original claim and snapshot CLI receipts", () => {
+  const claim = { id: "fixture", task: "TASK-1" };
+  const snapshot = { fingerprint: "fixture-output" };
+  const receipt = { claim, snapshots: [snapshot], source: "Synthetic test tool outputs", receipts: [
+    { command: "node agents.mjs claim --task TASK-1", output: JSON.stringify(claim) },
+    { command: "node agents.mjs snapshot --task TASK-1", output: JSON.stringify(snapshot) },
+  ] };
+  assert.doesNotThrow(() => assertLegacyReceipts(receipt));
+  assert.throws(() => assertLegacyReceipts({ ...receipt, source: "" }));
+  assert.throws(() => assertLegacyReceipts({ ...receipt, receipts: receipt.receipts.slice(1) }));
+  assert.throws(() => assertLegacyReceipts({ ...receipt, snapshots: [{ fingerprint: "invented" }] }));
+});
+
+test("handoff rejects mismatched identities, unauthorized tasks, changed boundaries, and absent proof", () => {
+  const repositories = [{ path: ".", readOnly: false, checks: [] }];
+  const claim = { id: "claim-one", task: "TASK-1", session: "source", scopes: ["src"], repositories };
+  const args = { root: "/unused", task: "TASK-1", scopes: ["src"], baseline: {},
+    receipt: { claim, snapshots: [] }, previousRun: { id: "old", allowedTasks: ["TASK-1"], repositories },
+    previousSession: { id: "source", runId: "old", status: "closed" }, run: { repositories } };
+  assert.throws(() => restoreOwnedBaseline(args), /No exact snapshots/);
+  assert.throws(() => restoreOwnedBaseline({ ...args, task: "TASK-2" }), /matching stopped source/);
+  assert.throws(() => restoreOwnedBaseline({ ...args, previousRun: { ...args.previousRun, allowedTasks: ["TASK-2"] } }), /outside/);
+  assert.throws(() => restoreOwnedBaseline({ ...args, previousRun: { ...args.previousRun, completedTasks: ["TASK-1"] } }), /Completed/);
+  assert.throws(() => restoreOwnedBaseline({ ...args, previousSession: { ...args.previousSession, runId: "other" } }), /matching stopped source/);
+  assert.throws(() => restoreOwnedBaseline({ ...args, run: { repositories: [{ path: ".", readOnly: true }] } }), /boundaries/);
+  assert.throws(() => restoreOwnedBaseline({ ...args, previousRun: { ...args.previousRun, repositories: [] } }), /recorded source run/);
+});
 const unattended = () => resolveSelection(config, { profile: "unattended" });
 const scopedRun = (selection = unattended()) =>
   newRun(selection, {

@@ -39,9 +39,11 @@ Without an explicit baseline, adoption accepts only exact current-template bytes
 Edit runtime/schema/tests in the template; edit operating skills in their canonical sibling directories. Do not edit consumer copies independently. Run:
 
 ```sh
-node scripts/bundle.mjs --write --version 0.1.0
+node scripts/bundle.mjs --write --version 0.1.1
 node scripts/bundle.mjs --check
 node --test tests/init.test.mjs tests/update.test.mjs
 ```
 
 Bundle write synchronizes sibling skills, generates the embedded runtime build identity, and records deterministic hashes in `release.json`. It normalizes only the embedded identity while hashing runtime source, avoiding a self-reference. Check detects stale skill copies, an outdated embedded build identity, and unrecorded template edits without writing. A separately copied complete setup skill can check and install its self-contained bundle without sibling paths; regeneration requires canonical siblings. Run relevant runtime tests and a copied-skill lifecycle trial when synchronization/coordination changes. Then use the updater on consumer projects and review their diffs under their normal commit policy.
+
+Release 0.1.1 adds append-only run check refresh and durable released-claim receipts without changing workspace/runtime schema versions. Updating preserves existing history but cannot recreate claims discarded by older releases. A legacy handoff needs the original untruncated claim and snapshot CLI outputs; follow the generated guide's receipt recovery procedure. Existing dirty implementation must never be made eligible by rewriting baselines or deleting provenance.

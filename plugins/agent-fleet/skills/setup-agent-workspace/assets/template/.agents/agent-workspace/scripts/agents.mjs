@@ -5,7 +5,7 @@ import { mkdir, readFile, writeFile, rm, realpath, readdir } from "node:fs/promi
 import { hostname } from "node:os"
 import { resolve, relative, dirname, isAbsolute, sep } from "node:path"
 import { fileURLToPath } from "node:url"
-import { parseArgs } from "node:util"
+import { parseArgs, isDeepStrictEqual } from "node:util"
 
 import {
   ASSISTED,
@@ -19,12 +19,13 @@ import {
   assertCommitPolicy,
   assertEvidence,
 } from "./agent-policy.mjs"
-import { saveState, TaskRecords, readHistory } from "./agent-state.mjs"
+import { saveState, TaskRecords, readHistory, archiveClaim, writeJSON } from "./agent-state.mjs"
+import { strengthenedRepositories, restoreOwnedBaseline, assertLegacyReceipts } from "./agent-handoff.mjs"
 import { trackTask, assertTrackedTask, fileDigest } from "./agent-tracker.mjs"
 import { visualRecord, assertVisual } from "./agent-visual.mjs"
 
 // Generated from this entrypoint and its helpers by the setup skill's bundle command.
-const RUNTIME_BUILD = "ca4b145595876b0d33e6d3f073ad29d5b1eac9cdde139237632475413b640888"
+const RUNTIME_BUILD = "46ea03a8c07da6e1ce435bc81293c7078996f48271e138f95659aa0cd779812b"
 
 const HELP = `Usage: node .agents/agent-workspace/scripts/agents.mjs COMMAND [options]
 
@@ -35,13 +36,17 @@ const HELP = `Usage: node .agents/agent-workspace/scripts/agents.mjs COMMAND [op
               [--max-minutes N] [--on-human-input ask|defer]
   start       --agent NAME --provider NAME --context TEXT --run RUN-ID
   status      [--json]
-  history     --run RUN-ID | --session SESSION-ID (read one retained record)
+  history     --run RUN-ID | --session SESSION-ID | --claim CLAIM-ID
   provenance  --task TASK-ID (inspect that task's ownership ledger)
   compact     (archive finished runs; never remove live or unresolved ownership)
   ready       --session ID
   queue       (durable human gates and handoff notes)
   heartbeat   --session ID
   claim       --session ID --task TASK-ID --scope PATH [--scope PATH ...]
+              [--from-claim CLAIM-ID --note EVIDENCE]
+              [--receipt FILE --confirm-receipt --note ORIGINAL-OUTPUT-SOURCE]
+  refresh-checks --session ID --task TASK-ID --repo PATH --note REASON
+              (append checks from project config; invalidate prior evidence)
   reconcile   --session ID
   release     --session ID --task TASK-ID --outcome done|paused|review --note TEXT
   stop        --session ID
@@ -104,10 +109,13 @@ const { values: opts, positionals } = parseArgs({
       "verdict",
       "message",
       "onion",
+      "claim",
+      "from-claim",
+      "receipt",
     ].map((key) => [key, { type: "string" }]),
     ["scope", { type: "string", multiple: true }],
     ...["allow-task", "file", "option"].map((key) => [key, { type: "string", multiple: true }]),
-    ...["json", "help", "confirm-stopped"].map((key) => [key, { type: "boolean" }]),
+    ...["json", "help", "confirm-stopped", "confirm-receipt"].map((key) => [key, { type: "boolean" }]),
   ]),
 })
 const command = positionals[0]
@@ -455,6 +463,9 @@ async function finishRelease(claim) {
   const owner = state.sessions[claim.session]
   const run = runFor(owner)
   if (claim.outcome === "done" && !run.completedTasks.includes(claim.task)) run.completedTasks.push(claim.task)
+  // Publish ownership proof before deleting its live reservation. Interrupted
+  // release replays the same immutable archive instead of losing snapshots.
+  await archiveClaim(local, claim, run)
   delete state.claims[claim.task]
   beat(owner)
   await save()
@@ -690,11 +701,13 @@ async function main() {
     return
   }
   if (command === "history") {
-    if (Boolean(opts.run) === Boolean(opts.session)) fail("Supply exactly one --run or --session ID.")
-    const kind = opts.run ? "runs" : "sessions"
-    const id = opts.run ?? opts.session
+    if ([opts.run, opts.session, opts.claim].filter(Boolean).length !== 1)
+      fail("Supply exactly one --run, --session or --claim ID.")
+    const kind = opts.run ? "runs" : opts.session ? "sessions" : "claims"
+    const id = opts.run ?? opts.session ?? opts.claim
     const current = await readJSON(resolve(local, "state.json"), {})
-    print(current[kind]?.[id] ?? (await readHistory(local, kind, id)))
+    const live = kind === "claims" ? Object.values(current.claims ?? {}).find((claim) => claim.id === id) : current[kind]?.[id]
+    print(live ?? (await readHistory(local, kind, id)))
     return
   }
   if (command === "queue") {
@@ -976,6 +989,38 @@ async function main() {
       print(record)
       return
     }
+    if (command === "refresh-checks") {
+      const claim = ownClaim(owner)
+      assertCoordinator(owner, claim.task)
+      const note = required("note")
+      if (!claim.scopes.some((scope) => overlaps(scope, "agent-workspace.json")))
+        fail("Claim agent-workspace.json before refreshing repository checks.")
+      const repositories = strengthenedRepositories(run.repositories, config.repositories, required("repo"))
+      if (isDeepStrictEqual(repositories, run.repositories)) {
+        print({ refreshed: false, reason: "Run already has these checks." })
+        return
+      }
+      const affected = Object.values(state.claims).filter((item) => state.sessions[item.session]?.runId === run.id)
+      for (const item of affected) {
+        if (item.phase !== "active" || item.commits?.length || (await pendingCommits(item)).length)
+          fail("Finish pending transitions/commits before changing the run's check requirements.")
+      }
+      run.checkRefreshes ??= []
+      run.checkRefreshes.push({ repo: required("repo"), by: owner.id, note, at: now(),
+        previous: run.repositories.find((repo) => repo.path === required("repo"))?.checks ?? [],
+        checks: repositories.find((repo) => repo.path === required("repo")).checks })
+      run.repositories = repositories
+      // Snapshot fingerprints include repository config, so all snapshots in
+      // this run need renewal. Never reuse an approval of the old check set.
+      for (const item of affected) Object.assign(item, {
+        repositories: structuredClone(repositories), snapshot: null, snapshots: {},
+        verification: null, verifications: {}, review: null, reviews: {}, visual: null,
+      })
+      beat(owner)
+      await save()
+      print({ refreshed: true, repo: required("repo"), invalidatedTasks: affected.map((item) => item.task) })
+      return
+    }
     if (command === "snapshot") {
       const claim = ownClaim(owner)
       if (!claim.baseline)
@@ -1155,7 +1200,7 @@ async function main() {
       if (task.labels.some((label) => label.startsWith("working:")))
         fail("Backlog has an existing working label without this local claim; inspect the other workspace/session.")
       if (gateLabels(task).length) fail(`Task has unresolved gates: ${gateLabels(task).join(", ")}.`)
-      if (task.assignees.some((assignee) => assignee !== `@${owner.agent}`))
+      if (task.assignees.some((assignee) => assignee.replace(/^@/, "").toLowerCase() !== owner.agent))
         fail(`Task assigned to ${task.assignees.join(", ")}; resolve assignment before claiming.`)
       const scopes = [...new Set(await Promise.all((opts.scope ?? []).map(canonicalScope)))]
       for (const other of Object.values(state.claims)) {
@@ -1171,6 +1216,28 @@ async function main() {
         claimedAt: now(),
         repositories: structuredClone(run.repositories),
         baseline: (await gitModule()).captureBaseline({ root, repositories: run.repositories }),
+      }
+      if (opts["from-claim"] || opts.receipt) {
+        if (opts["from-claim"] && opts.receipt) fail("Choose a recorded claim or legacy receipt, not both.")
+        const note = required("note")
+        let receipt
+        if (opts.receipt) {
+          if (!opts["confirm-receipt"]) fail("Legacy recovery requires --confirm-receipt after inspecting original CLI outputs.")
+          receipt = await readJSON(resolve(root, opts.receipt))
+          assertLegacyReceipts(receipt)
+        } else receipt = await readHistory(local, "claims", opts["from-claim"])
+        const source = receipt.claim ?? fail("Missing handoff claim.")
+        const previousSession = state.sessions[source.session] ?? await readHistory(local, "sessions", source.session)
+        const previousRun = state.runs[previousSession.runId] ?? await readHistory(local, "runs", previousSession.runId)
+        const restored = restoreOwnedBaseline({ root, receipt, previousRun, previousSession,
+          run, baseline: claim.baseline, scopes, task: task.id })
+        claim.baseline = restored.baseline
+        // Preserve legacy receipts durably rather than depending on scratch or
+        // changing the old run. All checks, visuals and review start afresh.
+        const proofPath = resolve(local, "recovery", `${claim.id}.json`)
+        await writeJSON(proofPath, receipt)
+        claim.resumedFrom = { claim: source.id, run: previousRun.id, session: source.session,
+          proof: relative(root, proofPath), note, at: now(), files: restored.restored }
       }
       if (!run.touchedTasks.includes(task.id)) run.touchedTasks.push(task.id)
       state.claims[task.id] = claim

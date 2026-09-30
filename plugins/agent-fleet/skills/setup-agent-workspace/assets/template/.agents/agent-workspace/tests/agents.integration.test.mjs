@@ -8,6 +8,133 @@ import { spawnSync } from "node:child_process";
 
 const cli = fileURLToPath(new URL("../scripts/agents.mjs", import.meta.url));
 
+for (const proofMode of ["archive", "legacy"])
+  test(`bootstrap checks and exact-content stopped-run recovery (${proofMode})`, async (t) => {
+    const root = await mkdtemp(resolve(tmpdir(), "workspace-bootstrap-recovery-"));
+    t.after(() => rm(root, { recursive: true, force: true }));
+    const invoke = (command, args) => spawnSync(command, args, {
+      cwd: root, env: { ...process.env, BACKLOG_CWD: root }, encoding: "utf8", timeout: 30000,
+    });
+    const run = (command, args) => {
+      const result = invoke(command, args);
+      assert.equal(result.status, 0, `${command} ${args.join(" ")}\n${result.stderr}\n${result.stdout}`);
+      return result.stdout;
+    };
+    const git = (...args) => run("git", args);
+    const native = (...args) => run("backlog", args);
+    const agent = (...args) => JSON.parse(run(process.execPath, [cli, "--root", root, ...args]));
+    const rejected = (...args) => {
+      const result = invoke(process.execPath, [cli, "--root", root, ...args]);
+      assert.equal(result.status, 1, result.stdout);
+      return result.stderr;
+    };
+    git("init", "--quiet");
+    git("config", "user.name", "Fixture Agent");
+    git("config", "user.email", "fixture@example.invalid");
+    git("config", "commit.gpgsign", "false");
+    await mkdir(resolve(root, "backlog"));
+    await writeFile(resolve(root, "backlog/config.yml"), await readFile(new URL("./fixtures/backlog.yml", import.meta.url)));
+    await writeFile(resolve(root, ".gitignore"), ".agents/agent-workspace/runtime/\n.local/\n");
+    const config = JSON.parse(await readFile(new URL("./fixtures/workspace.json", import.meta.url), "utf8"));
+    config.repositories = [{ path: ".", readOnly: false, checks: [] }];
+    const writeConfig = () => writeFile(resolve(root, "agent-workspace.json"), JSON.stringify(config));
+    await writeConfig();
+    native("task", "create", "Bootstrap engine", "--ac", "Runtime returns forty-two");
+    git("add", ".");
+    git("commit", "-qm", "Fixture baseline");
+    const start = () => agent("start", "--provider", "codex", "--context", "Bootstrap fixture",
+      "--profile", "unattended", "--allow-task", "TASK-1", "--authorization", "Synthetic user authorized TASK-1 local commits");
+    let owner = start();
+    let reviewer = agent("start", "--agent", "rowan", "--provider", "claude", "--context", "Fixture review", "--run", owner.runId);
+    const args = () => ["--session", owner.id, "--task", "TASK-1"];
+    const scopes = ["--scope", "src", "--scope", "agent-workspace.json"];
+    agent("claim", ...args(), ...scopes);
+    await mkdir(resolve(root, "src"));
+    await writeFile(resolve(root, "src/app.cjs"), "module.exports = 42;\n");
+    config.repositories[0].checks = [{ name: "runtime", command: [process.execPath, "-e", "require('node:assert/strict').equal(require('./src/app.cjs'),42)"] }];
+    await writeConfig();
+    const snapshot = () => agent("snapshot", ...args(), "--repo", ".", "--file", "src/app.cjs", "--file", "agent-workspace.json");
+    const visual = () => agent("visual", ...args(), "--kind", "no-ui", "--note", "Runtime fixture has no UI");
+    const review = (snap) => agent("review", "--session", reviewer.id, "--task", "TASK-1", "--fingerprint", snap.fingerprint,
+      "--verdict", "pass", "--note", "Fixture reviewer inspected exact implementation and passing runtime assertion");
+    snapshot();
+    assert.match(rejected("verify", ...args()), /Configure repository checks/);
+    const policy = agent("status", "--json").runs[owner.runId].policy;
+    agent("refresh-checks", ...args(), "--repo", ".", "--note", "Bootstrap adds the first meaningful runtime check");
+    assert.deepEqual(agent("status", "--json").runs[owner.runId].policy, policy);
+    assert.match(rejected("verify", ...args()), /snapshot/i);
+    let snap = snapshot();
+    visual();
+    agent("verify", ...args());
+    review(snap);
+    config.repositories[0].checks.push({ name: "syntax", command: [process.execPath, "--check", "src/app.cjs"] });
+    await writeConfig();
+    agent("refresh-checks", ...args(), "--repo", ".", "--note", "Add syntax coverage without changing the original check");
+    const refreshed = agent("status", "--json").claims["TASK-1"];
+    assert.deepEqual(refreshed.snapshots, {});
+    assert.deepEqual(refreshed.reviews, {});
+    assert.deepEqual(refreshed.verifications, {});
+    assert.equal(refreshed.visual, null);
+    assert.match(rejected("review", "--session", reviewer.id, "--task", "TASK-1", "--fingerprint", snap.fingerprint,
+      "--verdict", "pass", "--note", "Stale review"), /snapshot/i);
+    snap = snapshot();
+    visual();
+    agent("verify", ...args());
+    review(snap);
+    run(process.execPath, [cli, "--root", root, "backlog", "--session", owner.id, "--", "task", "edit", "TASK-1",
+      "--check-ac", "1", "--final-summary", "Runtime assertion passed before handoff; completion awaits renewed evidence and commits"]);
+    const original = agent("status", "--json").claims["TASK-1"];
+    agent("release", ...args(), "--outcome", "paused", "--note", "Preserve exact ownership for a stopped-run handoff");
+    const receipt = agent("history", "--claim", original.id);
+    assert.deepEqual(receipt.snapshots, [snap]);
+    await mkdir(resolve(root, ".local"));
+    const receiptPath = resolve(root, ".local/original-receipts.json");
+    await writeFile(receiptPath, JSON.stringify({ claim: original, snapshots: [snap], source: "Synthetic original tool outputs",
+      receipts: [{ command: "node agents.mjs claim --task TASK-1", output: JSON.stringify(original) },
+        { command: "node agents.mjs snapshot --task TASK-1", output: JSON.stringify(snap) }] }));
+    const source = owner;
+    const proof = proofMode === "archive" ? ["--from-claim", original.id] : ["--receipt", receiptPath, "--confirm-receipt"];
+    // Released work still belongs to its live source until that session stops.
+    owner = start();
+    assert.match(rejected("claim", ...args(), ...scopes, ...proof, "--note", "Source still active"), /stopped source/);
+    agent("stop", "--session", reviewer.id);
+    agent("stop", "--session", source.id);
+    if (proofMode === "legacy") assert.match(rejected("claim", ...args(), ...scopes, "--receipt", receiptPath,
+      "--note", "Missing confirmation"), /confirm-receipt/);
+    await writeFile(resolve(root, "src/app.cjs"), "module.exports = 43;\n");
+    assert.match(rejected("claim", ...args(), ...scopes, ...proof, "--note", "Changed files"), /changed|match exactly/);
+    await writeFile(resolve(root, "src/app.cjs"), "module.exports = 42;\n");
+    git("add", "src/app.cjs");
+    assert.match(rejected("claim", ...args(), ...scopes, ...proof, "--note", "Staged checkpoint"), /staged/);
+    git("reset", "--quiet", "--", "src/app.cjs"); // This disposable fixture owns the entire index.
+    assert.match(rejected("claim", ...args(), "--scope", "src", ...proof, "--note", "Different scope"), /original claim scopes/);
+    assert.deepEqual(agent("status", "--json").claims, {});
+    await writeFile(resolve(root, "src/unknown.cjs"), "module.exports = 'unowned';\n");
+    const resumed = agent("claim", ...args(), ...scopes, ...proof, "--note", "Inspected exact preserved source and original receipts");
+    assert.equal(resumed.resumedFrom.claim, original.id);
+    assert.equal(resumed.snapshot, undefined);
+    assert.equal(resumed.review, undefined);
+    assert.match(rejected("snapshot", ...args(), "--repo", ".", "--file", "src/unknown.cjs"), /dirty|inherited/i);
+    await rm(resolve(root, "src/unknown.cjs"));
+    snap = snapshot();
+    visual();
+    assert.match(rejected("commit", ...args(), "--message", "feat(TASK-1): bootstrap runtime"), /configured checks/i);
+    agent("verify", ...args());
+    assert.match(rejected("commit", ...args(), "--message", "feat(TASK-1): bootstrap runtime"), /review/i);
+    reviewer = agent("start", "--agent", "rowan", "--provider", "claude", "--context", "Fresh handoff review", "--run", owner.runId);
+    review(snap);
+    const commit = agent("commit", ...args(), "--message", "feat(TASK-1): bootstrap runtime");
+    assert.equal(git("show", `${commit.commit}:src/app.cjs`), "module.exports = 42;\n");
+    run(process.execPath, [cli, "--root", root, "backlog", "--session", owner.id, "--", "task", "edit", "TASK-1",
+      "--check-ac", "1", "--final-summary", "Runtime assertion passed; exact restored contents independently reviewed and committed"]);
+    agent("release", ...args(), "--outcome", "done", "--note", "Bootstrap recovery completed through guarded implementation and bookkeeping commits");
+    agent("stop", "--session", reviewer.id);
+    agent("stop", "--session", owner.id);
+    assert.equal(JSON.parse(native("task", "view", "TASK-1", "--json")).task.status, "Done");
+    assert.equal(git("status", "--porcelain"), "");
+    assert.equal(git("rev-list", "--count", "HEAD").trim(), "3");
+  });
+
 test("submodule completion renews reviews for committed child and current parent snapshots", async (t) => {
   const directory = await mkdtemp(resolve(tmpdir(), "workspace-submodule-lifecycle-"));
   t.after(() => rm(directory, { recursive: true, force: true }));

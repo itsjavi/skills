@@ -21,8 +21,8 @@ export async function writeJSON(path, value) {
 }
 
 function historyPath(local, kind, id) {
-  if (!["runs", "sessions"].includes(kind) || !/^[a-z0-9][a-z0-9-]*$/i.test(id))
-    throw new Error("History requires an exact run or session ID.");
+  if (!["runs", "sessions", "claims"].includes(kind) || !/^[a-z0-9][a-z0-9-]*$/i.test(id))
+    throw new Error("History requires an exact run, session or claim ID.");
   return resolve(local, "history", kind, `${id}.json`);
 }
 
@@ -41,6 +41,23 @@ export async function readHistory(local, kind, id) {
   if (!record || record.id !== id)
     throw new Error("History record identity mismatch; inspect before use.");
   return record;
+}
+
+export async function archiveClaim(local, claim, run) {
+  // Archive stable ownership proof, not retry-specific verification/finalization
+  // errors. A release replay must publish the same record after a crash.
+  const retained = Object.fromEntries([
+    "id", "task", "session", "scopes", "claimedAt", "repositories", "baseline",
+    "outcome", "note", "handoff", "resumedFrom",
+  ].filter((key) => Object.hasOwn(claim, key)).map((key) => [key, claim[key]]));
+  await publishOnce(historyPath(local, "claims", claim.id), {
+    id: claim.id,
+    version: 1,
+    runId: run.id,
+    source: "Recorded by Agent Fleet before releasing ownership",
+    claim: retained,
+    snapshots: Object.values(claim.snapshots ?? {}),
+  });
 }
 
 export async function archiveFinished(local, state) {
