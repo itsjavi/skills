@@ -89,15 +89,23 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
   Data, Declarative, and unstable RSC modes.
 - [research-synthesis](plugins/uxdesign/skills/research-synthesis/SKILL.md): Synthesize user research into themes,
   insights, and recommendations.
+- [setup-agent-workspace](plugins/agent-fleet/skills/setup-agent-workspace/SKILL.md): Set up or update portable Codex
+  and Claude agent coordination in a Git project, with project-specific agents, execution policies, Backlog, versioned
+  tooling, and standalone preview/apply commands.
 - [trust-and-safety-review](plugins/safeguard/skills/trust-and-safety-review/SKILL.md): Review product designs and
   implementation for abuse through user-generated content and interactions, including phishing, scams, harassment, spam,
   and moderation failures.
 - [ui-screenshots](plugins/webcraft/skills/ui-screenshots/SKILL.md): Capture screenshots and short clips of any web
   application's UI for visual review, documentation, or pull requests.
+- [unattended-work](plugins/agent-fleet/skills/unattended-work/SKILL.md): Coordinate an authorized unattended project
+  run using configured agents, task claims, review, validation, and commit policy.
 - [user-research](plugins/uxdesign/skills/user-research/SKILL.md): Plan and run user research studies, including
   choosing methods and writing research plans, interview guides, usability test scripts, and surveys.
 - [ux-copy](plugins/uxdesign/skills/ux-copy/SKILL.md): Write or review UX copy , microcopy, error messages, empty
   states, CTAs.
+- [visual-evidence-review](plugins/agent-fleet/skills/visual-evidence-review/SKILL.md): Capture and inspect concise
+  before/after evidence for significant UI or design changes, store up to three WebP comparisons in Backlog tasks, and
+  document truthful text-only or visually unchanged exemptions.
 
 <!-- catalog:skills:end -->
 
@@ -111,6 +119,9 @@ manual updates. Remove any older standalone copies when switching to their plugi
 
 <!-- catalog:plugins:start -->
 
+- <img src="plugins/agent-fleet/assets/icon.png" width="40" height="40" alt=""> [Agent Fleet](plugins/agent-fleet): Set
+  up and update portable agent workspaces, coordinate scoped unattended work, and review UI changes with visual
+  evidence.
 - <img src="plugins/coolify/assets/icon.png" width="40" height="40" alt=""> [Coolify](plugins/coolify): Operate Coolify
   through its official CLI for configuration, deployments, logs, services, databases and infrastructure management.
 - <img src="plugins/devscout/assets/icon.png" width="40" height="40" alt=""> [DevScout](plugins/devscout): Discover

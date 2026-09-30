@@ -43,6 +43,12 @@
       "source": { "source": "local", "path": "./plugins/nativeapps" },
       "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
       "category": "Productivity"
+    },
+    {
+      "name": "agent-fleet",
+      "source": { "source": "local", "path": "./plugins/agent-fleet" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
     }
   ]
 }

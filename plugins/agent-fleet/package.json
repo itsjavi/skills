@@ -1,0 +1,30 @@
+{
+  "name": "@itsjavi/agent-fleet",
+  "version": "0.1.0",
+  "description": "Portable agent workspace setup, updates and project-pinned coordination CLI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsjavi/skills.git",
+    "directory": "plugins/agent-fleet"
+  },
+  "bin": {
+    "agent-fleet": "bin/agent-fleet.mjs"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepack": "node skills/setup-agent-workspace/scripts/bundle.mjs --check --quiet"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

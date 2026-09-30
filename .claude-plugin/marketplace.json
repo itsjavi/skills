@@ -37,6 +37,11 @@
       "name": "nativeapps",
       "source": "./plugins/nativeapps",
       "description": "Build native desktop and mobile apps, starting with modern macOS apps in Swift, SwiftUI and AppKit, including project setup, agent-safe test builds, distribution and platform quirks."
+    },
+    {
+      "name": "agent-fleet",
+      "source": "./plugins/agent-fleet",
+      "description": "Set up and update portable agent workspaces, coordinate scoped unattended work, and review UI changes with visual evidence."
     }
   ]
 }

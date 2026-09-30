@@ -1,16 +1,34 @@
 import assert from "node:assert/strict"
 import { spawnSync } from "node:child_process"
-import { cp, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises"
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import test from "node:test"
 import { fileURLToPath } from "node:url"
 
 const source = fileURLToPath(new URL("../", import.meta.url))
-const names = ["coolify", "devscout", "gamegen", "nativeapps", "safeguard", "uxdesign", "webcraft"]
+const names = (await readdir(join(source, "plugins"), { withFileTypes: true }))
+  .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
+  .map((entry) => entry.name)
+  .sort()
 const manifests = names.flatMap((name) =>
   ["codex", "claude"].map((platform) => `plugins/${name}/.${platform}-plugin/plugin.json`)
 )
+const versionFiles = manifests.map((path) => ({ path, field: "version" }))
+for (const name of names) {
+  for (const [relative, field] of [
+    ["package.json", "version"],
+    ["skills/setup-agent-workspace/release.json", "release"],
+  ]) {
+    const path = `plugins/${name}/${relative}`
+    try {
+      await readFile(join(source, path))
+      versionFiles.push({ path, field })
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error
+    }
+  }
+}
 
 async function fixture(t) {
   const directory = await mkdtemp(join(tmpdir(), "skills release test "))
@@ -68,9 +86,9 @@ test("version:sync repairs both platforms without bumping, staging, committing o
   const f = await fixture(t)
   const version = (await f.json("package.json")).version
   const head = f.git("rev-parse", "HEAD")
-  for (const path of manifests) await f.writeJson(path, { ...(await f.json(path)), version: "0.0.0" })
+  for (const { path, field } of versionFiles) await f.writeJson(path, { ...(await f.json(path)), [field]: "0.0.0" })
   f.npm("run", "version:sync")
-  for (const path of manifests) assert.equal((await f.json(path)).version, version)
+  for (const { path, field } of versionFiles) assert.equal((await f.json(path))[field], version)
   assert.equal((await f.json("package.json")).version, version)
   assert.equal(f.git("rev-parse", "HEAD"), head)
   assert.equal(f.git("tag", "--list"), "")
@@ -87,16 +105,16 @@ test("npm version includes every synchronized manifest in the release commit and
   const expected = `${major}.${minor}.${patch + 1}`
   f.npm("version", "patch", "-m", "chore(release): %s")
   assert.equal((await f.json("package.json")).version, expected)
-  for (const path of manifests) {
-    assert.equal((await f.json(path)).version, expected)
-    assert.equal(JSON.parse(f.git("show", `v${expected}:${path}`)).version, expected)
+  for (const { path, field } of versionFiles) {
+    assert.equal((await f.json(path))[field], expected)
+    assert.equal(JSON.parse(f.git("show", `v${expected}:${path}`))[field], expected)
   }
   assert.equal(f.git("rev-parse", `v${expected}^{commit}`), f.git("rev-parse", "HEAD"))
   assert.equal(f.git("rev-list", "--count", "HEAD"), "2")
   assert.equal(f.git("status", "--porcelain"), "")
   assert.deepEqual(
     f.git("diff", "--name-only", "HEAD^", "HEAD").split("\n").sort(),
-    ["package.json", ...manifests].sort()
+    ["package.json", ...versionFiles.map((file) => file.path)].sort()
   )
   f.npm("run", "check")
 })
@@ -106,11 +124,14 @@ test("--no-git-tag-version synchronizes versions and leaves all changes unstaged
   const head = f.git("rev-parse", "HEAD")
   f.npm("version", "patch", "--no-git-tag-version")
   const version = (await f.json("package.json")).version
-  for (const path of manifests) assert.equal((await f.json(path)).version, version)
+  for (const { path, field } of versionFiles) assert.equal((await f.json(path))[field], version)
   assert.equal(f.git("rev-parse", "HEAD"), head)
   assert.equal(f.git("tag", "--list"), "")
   assert.equal(f.git("diff", "--cached", "--name-only"), "")
-  assert.deepEqual(f.git("diff", "--name-only").split("\n").sort(), ["package.json", ...manifests].sort())
+  assert.deepEqual(
+    f.git("diff", "--name-only").split("\n").sort(),
+    ["package.json", ...versionFiles.map((file) => file.path)].sort()
+  )
   f.npm("run", "check")
 })
 

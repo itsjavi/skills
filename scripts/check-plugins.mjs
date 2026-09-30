@@ -1,4 +1,5 @@
 import assert from "node:assert/strict"
+import { execFileSync } from "node:child_process"
 import { access, readFile } from "node:fs/promises"
 import { dirname, resolve, sep } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -14,6 +15,23 @@ export async function checkPlugins() {
   for (const { name, path, codex, skills } of packages) {
     assert.equal(codex.skills, "./skills/", `${name}: skills must be packaged locally`)
     const pluginRoot = resolve(rootPath, path)
+    let hasWorkspaceRelease = false
+    try {
+      await access(resolve(pluginRoot, "skills/setup-agent-workspace/release.json"))
+      hasWorkspaceRelease = true
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error
+    }
+    if (hasWorkspaceRelease) {
+      execFileSync(
+        process.execPath,
+        [resolve(pluginRoot, "skills/setup-agent-workspace/scripts/bundle.mjs"), "--check"],
+        {
+          cwd: rootPath,
+          stdio: "pipe",
+        }
+      )
+    }
     for (const field of ["composerIcon", "logo", "logoDark"]) {
       const relative = codex.interface[field]
       assert.equal(typeof relative, "string", `${name}: missing ${field}`)

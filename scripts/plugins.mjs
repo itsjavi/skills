@@ -104,6 +104,21 @@ export async function pluginOutputs() {
     ]) {
       outputs.set(path, await formatted(path, JSON.stringify(manifest)))
     }
+    // A plugin may also ship a CLI and a self-contained project template.
+    for (const [relative, field] of [
+      ["package.json", "version"],
+      ["skills/setup-agent-workspace/release.json", "release"],
+    ]) {
+      const path = `${plugin.path}/${relative}`
+      let metadata
+      try {
+        metadata = await readJson(path)
+      } catch (error) {
+        if (error.code === "ENOENT") continue
+        throw error
+      }
+      outputs.set(path, await formatted(path, JSON.stringify({ ...metadata, [field]: version })))
+    }
   }
   for (const [index, path] of marketplacePaths.entries()) {
     const catalog = await readJson(path)

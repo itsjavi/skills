@@ -1,0 +1,28 @@
+{
+  "name": "agent-fleet",
+  "version": "0.1.0",
+  "description": "Set up and update portable agent workspaces, coordinate scoped unattended work, and review UI changes with visual evidence.",
+  "author": { "name": "Javi" },
+  "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/agent-fleet",
+  "repository": "https://github.com/itsjavi/skills",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": ["agents", "coordination", "backlog", "review", "workspace"],
+  "interface": {
+    "displayName": "Agent Fleet",
+    "shortDescription": "Build, coordinate and maintain agent workspaces.",
+    "longDescription": "Provider-independent task ownership, execution policy, guarded commits, visual review and versioned workspace updates for single repositories, monorepos and Git submodules.",
+    "developerName": "Javi",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "brandColor": "#44C8A2",
+    "defaultPrompt": [
+      "Set up this project for coordinated agent work.",
+      "Check whether this project's workflow scripts need an update.",
+      "Work unattended on the tasks I selected within this project's execution policy."
+    ],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png",
+    "logoDark": "./assets/icon.png"
+  }
+}
