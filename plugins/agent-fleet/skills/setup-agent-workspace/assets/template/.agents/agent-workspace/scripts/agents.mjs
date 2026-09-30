@@ -25,7 +25,7 @@ import { trackTask, assertTrackedTask, fileDigest } from "./agent-tracker.mjs"
 import { visualRecord, assertVisual } from "./agent-visual.mjs"
 
 // Generated from this entrypoint and its helpers by the setup skill's bundle command.
-const RUNTIME_BUILD = "7d63520b57b821a51c737bf0dbc12746e922c6151983dc4484c57b739e75ab67"
+const RUNTIME_BUILD = "d27f51fc830cad29a9eb1b49ba25591043c5ab500ec833b98b88ff58785aadad"
 
 const HELP = `Usage: node .agents/agent-workspace/scripts/agents.mjs COMMAND [options]
 
@@ -45,9 +45,9 @@ const HELP = `Usage: node .agents/agent-workspace/scripts/agents.mjs COMMAND [op
   claim       --session ID --task TASK-ID --scope PATH [--scope PATH ...]
               [--from-claim CLAIM-ID --note EVIDENCE]
               [--receipt FILE --confirm-receipt --note ORIGINAL-OUTPUT-SOURCE]
-  claim       --session ID --task DONE-TASK-ID --commit-request --repo PATH
+  claim       --session ID --task TASK-ID --commit-request --repo PATH
               --file PATH [--file PATH ...] --authorization ACTUAL-HUMAN-REQUEST
-              (on-request commits only; approve exact inspected handoff bytes)
+              (on-request commits only; checkpoint exact inspected handoff bytes)
   refresh-checks --session ID --task TASK-ID --repo PATH --note REASON
               (append checks from project config; invalidate prior evidence)
   reconcile   --session ID
@@ -534,7 +534,7 @@ async function sync(claim) {
       fail("Task became Done while claim was pending; inspect before reconciliation.")
     args.push(
       "-s",
-      claim.commitRequest ? config.backlog.doneStatus : config.backlog.activeStatus,
+      claim.commitRequest ? (claim.commitRequest.taskStatus ?? config.backlog.doneStatus) : config.backlog.activeStatus,
       "-a",
       `@${owner.agent}`,
       "--add-label",
@@ -547,11 +547,13 @@ async function sync(claim) {
     else if (task.status === config.backlog.doneStatus && !claim.commitRequest)
       fail("Task is already Done; inspect before reconciling a nonterminal release.")
     const status =
-      claim.outcome === "done" || claim.commitRequest
+      claim.outcome === "done"
         ? config.backlog.doneStatus
-        : claim.outcome === "paused"
-          ? config.backlog.todoStatus
-          : config.backlog.activeStatus
+        : claim.commitRequest
+          ? (claim.commitRequest.taskStatus ?? config.backlog.doneStatus)
+          : claim.outcome === "paused"
+            ? config.backlog.todoStatus
+            : config.backlog.activeStatus
     args.push("-s", status, "--remove-label", label)
     args.push(claim.outcome === "review" ? "--add-label" : "--remove-label", config.backlog.reviewLabel)
     if (claim.handoff) args.push("--add-label", HUMAN_GATES[claim.handoff.kind])
@@ -585,6 +587,8 @@ async function release(claim, outcome, note) {
   if (journals.some((journal) => journal.phase !== "committed"))
     fail("Unfinished Git journal: inspect commit-status and recover the Git transaction before releasing ownership.")
   if (outcome === "done") {
+    if (claim.commitRequest?.taskStatus && claim.commitRequest.taskStatus !== config.backlog.doneStatus)
+      fail("An unfinished commit checkpoint cannot complete the task; release paused and claim the clean baseline to continue.")
     complete(task)
     if (gateLabels(task).length) fail("Human gates must be resolved before completing a task.")
     assertVisual({ root, claim, task })
@@ -1154,7 +1158,10 @@ async function main() {
       const claim = ownClaim(owner)
       assertCommitPolicy(run, opts.authorization)
       const task = taskView(claim.task)
-      complete(task)
+      if (claim.commitRequest?.taskStatus && claim.commitRequest.taskStatus !== config.backlog.doneStatus) {
+        if (task.status !== claim.commitRequest.taskStatus)
+          fail("Checkpoint task status changed; preserve the unfinished handoff for inspection.")
+      } else complete(task)
       if (gateLabels(task).length) fail("Resolve human gates before committing.")
       const snapshot = claim.snapshot ?? fail("Create a snapshot first.")
       assertVisual({ root, claim, task })
@@ -1203,15 +1210,17 @@ async function main() {
       if (state.claims[task.id]) fail(`${task.id} already claimed by ${state.claims[task.id].session}.`)
       const commitRequest = Boolean(opts["commit-request"])
       if (commitRequest) {
-        if (run.policy.commits !== "on-request" || task.status !== config.backlog.doneStatus)
-          fail("Commit handoff requires a completed task and an on-request commit policy.")
+        if (run.policy.commits !== "on-request")
+          fail("Commit handoff requires an on-request commit policy.")
+        if (task.status !== config.backlog.doneStatus && task.readiness?.isReady !== true)
+          fail("Unfinished commit checkpoints require resolved dependencies.")
         required("authorization")
         required("repo")
         if (!opts.file?.length || opts.scope?.length || opts["from-claim"] || opts.receipt)
           fail("Commit handoff selects exact --file paths, without scopes or recovery receipts.")
         if (opts.file.some((path) => path.toLowerCase() === task.path.toLowerCase()))
           fail("The task record is finalized separately; exclude it from --file paths.")
-        complete(task)
+        if (task.status === config.backlog.doneStatus) complete(task)
       } else if (task.status === config.backlog.doneStatus || task.readiness?.isReady !== true)
         fail(`${task.id} is completed or has unresolved dependencies.`)
       if (task.labels.some((label) => label.startsWith("working:")))
@@ -1238,7 +1247,8 @@ async function main() {
         claim.baseline = (await gitModule()).authorizeCommitRequest({ root,
           repoPath: opts.repo, paths: opts.file, scopes, baseline: claim.baseline,
           repositories: claim.repositories }, opts.authorization)
-        claim.commitRequest = { authorization: opts.authorization, at: now(), repo: opts.repo, files: opts.file }
+        claim.commitRequest = { authorization: opts.authorization, at: now(), repo: opts.repo, files: opts.file,
+          taskStatus: task.status }
       }
       if (opts["from-claim"] || opts.receipt) {
         if (opts["from-claim"] && opts.receipt) fail("Choose a recorded claim or legacy receipt, not both.")

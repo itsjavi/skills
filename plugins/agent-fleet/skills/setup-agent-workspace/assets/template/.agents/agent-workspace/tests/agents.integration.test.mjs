@@ -48,7 +48,7 @@ test("explicit later commit request finalizes an assisted Done task without adop
     "--allow-task", "TASK-1", "--authorization", "Synthetic user request", ...extra);
   let owner = start();
   const args = () => ["--session", owner.id, "--task", "TASK-1"];
-  assert.match(rejected("claim", ...args(), "--commit-request", "--repo", ".", "--file", "src/feature.mjs", "--authorization", "Synthetic request"), /completed task/);
+  assert.match(rejected("claim", ...args(), "--commit-request", "--repo", ".", "--file", "src/feature.mjs", "--authorization", "Synthetic request"), /unchanged/);
   agent("claim", ...args(), "--scope", "src");
   await writeFile(resolve(root, "src/feature.mjs"), "export const value = 2;\n");
   run(process.execPath, ["--check", "src/feature.mjs"]);
@@ -89,6 +89,101 @@ test("explicit later commit request finalizes an assisted Done task without adop
   assert.equal(git("status", "--porcelain"), "?? human.txt\n");
   assert.deepEqual(agent("status", "--json").claims, {});
 });
+
+for (const initialStatus of ["To Do", "In Progress"])
+  test(`explicit unfinished checkpoint preserves ${initialStatus} and all Git/review guards`, async (t) => {
+    const root = await mkdtemp(resolve(tmpdir(), "workspace-unfinished-checkpoint-"));
+    t.after(() => rm(root, { recursive: true, force: true }));
+    const invoke = (command, args) => spawnSync(command, args, {
+      cwd: root, env: { ...process.env, BACKLOG_CWD: root }, encoding: "utf8", timeout: 30000,
+    });
+    const run = (command, args) => {
+      const result = invoke(command, args);
+      assert.equal(result.status, 0, `${args.join(" ")}\n${result.stderr}\n${result.stdout}`);
+      return result.stdout;
+    };
+    const git = (...args) => run("git", args);
+    const native = (...args) => run("backlog", args);
+    const raw = (...args) => run(process.execPath, [cli, "--root", root, ...args]);
+    const agent = (...args) => JSON.parse(raw(...args));
+    const rejected = (...args) => {
+      const result = invoke(process.execPath, [cli, "--root", root, ...args]);
+      assert.equal(result.status, 1, result.stdout);
+      return result.stderr;
+    };
+    git("init", "--quiet");
+    git("config", "user.name", "Fixture Agent");
+    git("config", "user.email", "fixture@example.invalid");
+    git("config", "commit.gpgsign", "false");
+    await mkdir(resolve(root, "backlog"));
+    await mkdir(resolve(root, "src"));
+    await writeFile(resolve(root, "backlog/config.yml"), await readFile(new URL("./fixtures/backlog.yml", import.meta.url)));
+    await writeFile(resolve(root, ".gitignore"), ".agents/agent-workspace/runtime/\n");
+    const config = JSON.parse(await readFile(new URL("./fixtures/workspace.json", import.meta.url), "utf8"));
+    config.repositories = [{ path: ".", readOnly: false, checks: [{ name: "syntax", command: [process.execPath, "--check", "src/feature.mjs"] }] }];
+    await writeFile(resolve(root, "agent-workspace.json"), JSON.stringify(config));
+    await writeFile(resolve(root, "src/feature.mjs"), "export const value = 1;\n");
+    native("task", "create", "Unfinished fixture", "--ac", "Complete behavior verified", "-s", initialStatus);
+    const task = () => JSON.parse(native("task", "view", "TASK-1", "--json")).task;
+    git("add", ".");
+    git("commit", "-qm", "Fixture baseline");
+    await writeFile(resolve(root, "src/feature.mjs"), "export const value = 2;\n");
+    await writeFile(resolve(root, "human.txt"), "Unrelated human work\n");
+    const owner = agent("start", "--provider", "codex", "--context", "Checkpoint fixture",
+      "--profile", "unattended", "--commits", "on-request", "--allow-task", "TASK-1",
+      "--authorization", "User explicitly asks to commit unfinished work and continue");
+    const reviewer = agent("start", "--agent", "rowan", "--provider", "claude", "--context", "Independent checkpoint review", "--run", owner.runId);
+    const args = ["--session", owner.id, "--task", "TASK-1"];
+    const request = ["--commit-request", "--repo", ".", "--file", "src/feature.mjs"];
+    const authorization = ["--authorization", "User explicitly asks to commit unfinished work and continue"];
+    assert.match(rejected("claim", ...args, ...request), /authorization/);
+    git("add", "src/feature.mjs");
+    assert.match(rejected("claim", ...args, ...request, ...authorization), /index|staged/i);
+    git("reset", "--quiet", "HEAD", "--", "src/feature.mjs");
+    const claim = agent("claim", ...args, ...request, ...authorization);
+    assert.equal(claim.commitRequest.taskStatus, initialStatus);
+    assert.ok(claim.baseline.repositories["."].dirtyPaths.includes("src/feature.mjs"));
+    assert.equal(task().status, initialStatus);
+    assert.match(rejected("release", ...args, "--outcome", "done", "--note", "Incomplete work"), /cannot complete/);
+    const snapshotArgs = ["snapshot", ...args, "--repo", ".", "--file", "src/feature.mjs"];
+    await writeFile(resolve(root, "src/feature.mjs"), "export const value = 3;\n");
+    assert.match(rejected(...snapshotArgs), /matching human commit request/);
+    await writeFile(resolve(root, "src/feature.mjs"), "export const value = 2;\n");
+    assert.match(rejected("snapshot", ...args, "--repo", ".", "--file", "human.txt"), /explicitly approved/);
+    const snapshot = agent(...snapshotArgs);
+    agent("visual", ...args, "--kind", "no-ui", "--note", "Inspected source-only unfinished checkpoint");
+    const commit = ["commit", ...args, "--message", "chore(TASK-1): checkpoint unfinished source", ...authorization];
+    assert.match(rejected(...commit), /verif|check/i);
+    agent("verify", ...args);
+    assert.match(rejected(...commit), /review/i);
+    assert.match(rejected("review", ...args, "--fingerprint", snapshot.fingerprint, "--verdict", "pass", "--note", "Self review"), /self-approved/);
+    agent("review", "--session", reviewer.id, "--task", "TASK-1", "--fingerprint", snapshot.fingerprint,
+      "--verdict", "pass", "--note", "Exact checkpoint bytes and passing syntax reviewed; feature remains incomplete");
+    git("add", "human.txt");
+    assert.match(rejected(...commit), /index|staged/i);
+    git("reset", "--quiet", "HEAD", "--", "human.txt");
+    agent(...commit);
+    assert.equal(task().status, initialStatus);
+    assert.equal(task().acceptanceCriteriaCompleted, 0);
+    assert.equal(task().acceptanceCriteriaCount, 1);
+    raw("backlog", "--session", owner.id, "--", "task", "edit", "TASK-1", "--check-ac", "1",
+      "--final-summary", "Fixture attempts completion during a checkpoint claim");
+    assert.match(rejected("release", ...args, "--outcome", "done", "--note", "Checked criteria cannot promote a checkpoint"), /cannot complete/);
+    raw("backlog", "--session", owner.id, "--", "task", "edit", "TASK-1", "--uncheck-ac", "1");
+    agent("release", ...args, "--outcome", "paused", "--note", "Checkpoint committed; implementation remains unfinished");
+    assert.equal(task().status, initialStatus);
+    assert.equal(git("show", "HEAD:src/feature.mjs"), "export const value = 2;\n");
+    assert.equal(git("rev-list", "--count", "HEAD").trim(), "2");
+    assert.ok(git("status", "--porcelain").includes("?? human.txt"));
+    // Continue through normal ownership against the clean implementation baseline.
+    agent("claim", ...args, "--scope", "src");
+    await writeFile(resolve(root, "src/feature.mjs"), "export const value = 3;\n");
+    agent(...snapshotArgs);
+    assert.match(rejected("release", ...args, "--outcome", "done", "--note", "Still incomplete"), /acceptance|criteria/i);
+    agent("release", ...args, "--outcome", "paused", "--note", "Fixture continuation proven");
+    agent("stop", "--session", reviewer.id);
+    agent("stop", "--session", owner.id);
+  });
 
 for (const proofMode of ["archive", "legacy"])
   test(`bootstrap checks and exact-content stopped-run recovery (${proofMode})`, async (t) => {
