@@ -242,6 +242,31 @@ export function prepareSnapshot({ root, repoPath, paths, scopes, baseline, repos
 export function authorizeCommitRequest(options, authorization) {
   if (typeof authorization !== "string" || !authorization.trim())
     throw new Error("An explicit human commit request is required.");
+  if (options.repoPaths?.length > 1) {
+    const repoPaths = [...new Set(options.repoPaths.map((path) => literalPath(path, true)))];
+    const groups = new Map(repoPaths.map((path) => [path, []]));
+    const configured = options.repositories
+      .map((entry) => literalPath(entry.path, true))
+      .sort((a, b) => a === "." ? 1 : b === "." ? -1 : b.length - a.length);
+    for (const input of options.paths) {
+      const path = literalPath(input);
+      const repoPath = configured.find((repo) => inside(path, repo));
+      if (!groups.has(repoPath))
+        throw new Error(`File is outside the explicitly requested repositories: ${path}`);
+      groups.get(repoPath).push(path);
+    }
+    const commitRequests = Object.create(null);
+    for (const [repoPath, paths] of groups) {
+      // A comparison may already be committed in another repository. Bind its
+      // exact bytes for evidence ownership; unchanged files remain unsnapshotable.
+      const snapshot = buildSnapshot({ ...options, repoPath, paths }, true, true);
+      commitRequests[repoPath] = {
+        authorization, repoIdentity: snapshot.repoIdentity, head: snapshot.head,
+        files: snapshot.files,
+      };
+    }
+    return { ...structuredClone(options.baseline), commitRequests };
+  }
   const snapshot = buildSnapshot(options, true);
   return { ...structuredClone(options.baseline), commitRequest: {
     authorization, repoIdentity: snapshot.repoIdentity, head: snapshot.head,
@@ -249,7 +274,7 @@ export function authorizeCommitRequest(options, authorization) {
   } };
 }
 
-function buildSnapshot({ root, repoPath, paths, scopes, baseline, repositories }, approving = false) {
+function buildSnapshot({ root, repoPath, paths, scopes, baseline, repositories }, approving = false, allowUnchanged = false) {
   const repo = repository(root, repoPath, repositories);
   const inherited = baseline?.repositories?.[repo.repoPath];
   if (
@@ -280,14 +305,15 @@ function buildSnapshot({ root, repoPath, paths, scopes, baseline, repositories }
     )
       throw new Error(`File crosses a repository boundary: ${path}`);
     const file = fileSnapshot(repo, path);
-    if (!approving && inherited.dirtyPaths.some((old) => foldedInside(path, old) || foldedInside(old, path))) {
-      const approval = baseline.commitRequest;
+    const approval = baseline.commitRequests?.[repo.repoPath] ?? baseline.commitRequest;
+    if (!approving && (approval || inherited.dirtyPaths.some((old) => foldedInside(path, old) || foldedInside(old, path)))) {
       if (!approval?.authorization?.trim() || approval.head !== head(repo.cwd) ||
           JSON.stringify(approval.repoIdentity) !== JSON.stringify(repo.identity) ||
           !approval.files.some((approved) => JSON.stringify(approved) === JSON.stringify(file)))
-        throw new Error(`File was already dirty when claimed and has no matching human commit request: ${path}`);
+        throw new Error(`File was already dirty or changed after approval and has no matching human commit request: ${path}`);
     }
-    if (!dirty.has(file.repoPath)) throw new Error(`File is unchanged or ignored: ${path}`);
+    if (!dirty.has(file.repoPath) && (!allowUnchanged || !git(repo.cwd, ["ls-files", "--", file.repoPath])))
+      throw new Error(`File is unchanged or ignored: ${path}`);
     if (!file.mode && !git(repo.cwd, ["ls-files", "--", file.repoPath]))
       throw new Error(`Deleted file was not tracked: ${path}`);
     return file;

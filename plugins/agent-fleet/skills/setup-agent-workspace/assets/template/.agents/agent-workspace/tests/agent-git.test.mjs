@@ -176,6 +176,57 @@ test("human commit handoff preserves dirty provenance and authorizes only exact 
   assert.match(f.git("status", "--porcelain"), /src\/unknown.txt/);
 });
 
+test("multi-repository commit requests preserve per-repository byte, index and HEAD guards", (t) => {
+  const f = fixture(t);
+  f.write(".gitignore", ".local/\nignored/\ne/\n");
+  f.git("add", ".gitignore");
+  f.git("commit", "-qm", "Ignore independent engine");
+  f.write("e/src/existing.txt", "original child\n");
+  const childGit = (...args) => f.git("-C", "e", ...args);
+  childGit("init", "--quiet");
+  childGit("config", "user.name", "Fixture Agent");
+  childGit("config", "user.email", "fixture@example.invalid");
+  childGit("config", "commit.gpgsign", "false");
+  childGit("add", ".");
+  childGit("commit", "-qm", "Child baseline");
+  f.write("src/existing.txt", "approved root\n");
+  f.write("e/src/existing.txt", "approved child\n");
+  f.write("src/unknown.txt", "unapproved root\n");
+  f.write("e/src/unknown.txt", "unapproved child\n");
+  const repositories = [{ path: ".", readOnly: false }, { path: "e", readOnly: false }];
+  const original = captureBaseline({ root: f.root, repositories });
+  const options = { root: f.root, repoPaths: [".", "e"], paths: ["src/existing.txt", "e/src/existing.txt"],
+    scopes: ["src", "e/src"], baseline: original, repositories };
+  const request = () => authorizeCommitRequest(options, "User: checkpoint both inspected repositories");
+  for (const [git, path] of [[f.git, "src/unknown.txt"], [childGit, "src/unknown.txt"]]) {
+    git("add", path);
+    const index = git("ls-files", "--stage");
+    assert.throws(request, /staged work/);
+    assert.equal(git("ls-files", "--stage"), index);
+    git("reset", "--quiet", "HEAD", "--", path); // Fixture owns the checkpoint.
+  }
+  assert.throws(() => authorizeCommitRequest({ ...options, repositories: [repositories[0], { path: "e", readOnly: true }] }, "User request"), /read-only/);
+  assert.throws(() => authorizeCommitRequest({ ...options, repoPaths: [".", "missing"] }, "User request"), /outside the explicitly requested/);
+  const baseline = request();
+  assert.deepEqual(baseline.repositories, original.repositories);
+  assert.equal(original.commitRequests, undefined);
+  const prepare = (repoPath, paths) => prepareSnapshot({ ...options, repoPath, paths, baseline });
+  assert.throws(() => prepare(".", ["src/unknown.txt"]), /matching human commit request/);
+  assert.throws(() => prepare("e", ["e/src/unknown.txt"]), /matching human commit request/);
+  assert.throws(() => prepare(".", ["e/src/existing.txt"]), /repository boundary/);
+  for (const [path, repo] of [["src/existing.txt", "."], ["e/src/existing.txt", "e"]]) {
+    const saved = readFileSync(resolve(f.root, path));
+    f.write(path, "changed after approval\n");
+    assert.throws(() => prepare(repo, [path]), /matching human commit request/);
+    f.write(path, saved);
+  }
+  f.git("commit", "--allow-empty", "-qm", "Changed root HEAD");
+  assert.throws(() => prepare(".", ["src/existing.txt"]), /matching human commit request/);
+  assert.equal(prepare("e", ["e/src/existing.txt"]).repoPath, "e");
+  childGit("commit", "--allow-empty", "-qm", "Changed child HEAD");
+  assert.throws(() => prepare("e", ["e/src/existing.txt"]), /matching human commit request/);
+});
+
 test("human commit handoff retains index, boundary, path and HEAD guards", (t) => {
   const f = fixture(t);
   f.write("src/existing.txt", "approved handoff\n");

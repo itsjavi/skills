@@ -1,6 +1,6 @@
 {
   "name": "nativeapps",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "Build native desktop and mobile apps, starting with modern macOS apps in Swift, SwiftUI and AppKit, including project setup, agent-safe test builds, distribution and platform quirks.",
   "author": { "name": "Javi" },
   "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/nativeapps",

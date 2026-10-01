@@ -52,7 +52,14 @@ export function visualRecord({ root, claim, task, kind, files = [], note, onion 
       )
     )
       throw new Error(`Claim the visual evidence path before writing: ${path}`);
-    return inspectWebp(root, path);
+    const artifact = inspectWebp(root, path);
+    if (claim.commitRequest) {
+      const approvals = claim.baseline.commitRequests ?? { single: claim.baseline.commitRequest };
+      const approved = Object.values(approvals).flatMap((entry) => entry.files).find((file) => file.path === path);
+      if (!approved || approved.hash !== artifact.hash)
+        throw new Error(`Visual comparison has no matching human commit request: ${path}`);
+    }
+    return artifact;
   });
   let retained = [];
   try {

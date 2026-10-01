@@ -90,6 +90,125 @@ test("explicit later commit request finalizes an assisted Done task without adop
   assert.deepEqual(agent("status", "--json").claims, {});
 });
 
+test("cross-repository checkpoints bind engine changes and visual evidence without adopting other files", async (t) => {
+  const root = await mkdtemp(resolve(tmpdir(), "workspace-cross-repo-checkpoint-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const invoke = (command, args) => spawnSync(command, args, {
+    cwd: root, env: { ...process.env, BACKLOG_CWD: root }, encoding: "utf8", timeout: 30000,
+  });
+  const run = (command, args) => {
+    const result = invoke(command, args);
+    assert.equal(result.status, 0, `${args.join(" ")}\n${result.stderr}\n${result.stdout}`);
+    return result.stdout;
+  };
+  const git = (...args) => run("git", args);
+  const native = (...args) => run("backlog", args);
+  const raw = (...args) => run(process.execPath, [cli, "--root", root, ...args]);
+  const agent = (...args) => JSON.parse(raw(...args));
+  const rejected = (...args) => {
+    const result = invoke(process.execPath, [cli, "--root", root, ...args]);
+    assert.equal(result.status, 1, result.stdout);
+    return result.stderr;
+  };
+  for (const repo of [".", "engine"]) {
+    await mkdir(resolve(root, repo), { recursive: true });
+    git("-C", repo, "init", "--quiet");
+    git("-C", repo, "config", "user.name", "Fixture Agent");
+    git("-C", repo, "config", "user.email", "fixture@example.invalid");
+    git("-C", repo, "config", "commit.gpgsign", "false");
+  }
+  await mkdir(resolve(root, "backlog"));
+  await writeFile(resolve(root, "backlog/config.yml"), await readFile(new URL("./fixtures/backlog.yml", import.meta.url)));
+  await writeFile(resolve(root, ".gitignore"), "engine/\n.agents/agent-workspace/runtime/\n");
+  const config = JSON.parse(await readFile(new URL("./fixtures/workspace.json", import.meta.url), "utf8"));
+  config.repositories = [
+    { path: ".", readOnly: false, checks: [{ name: "root-check", command: [process.execPath, "-e", "process.exit(0)"] }] },
+    { path: "engine", readOnly: false, checks: [{ name: "syntax", command: [process.execPath, "--check", "feature.mjs"] }] },
+  ];
+  await writeFile(resolve(root, "agent-workspace.json"), JSON.stringify(config));
+  await writeFile(resolve(root, "engine/feature.mjs"), "export const value = 1;\n");
+  native("task", "create", "Unfinished world fixture", "--ac", "Complete gameplay verified");
+  git("add", ".");
+  git("commit", "-qm", "Fixture baseline");
+  git("-C", "engine", "add", ".");
+  git("-C", "engine", "commit", "-qm", "Engine baseline");
+  const image = "backlog/assets/task-1/world.webp";
+  await mkdir(resolve(root, "backlog/assets/task-1"), { recursive: true });
+  // The guard checks the WebP container; visual inspection is an operator attestation.
+  const webp = Buffer.from("524946460c000000574542505650382000000000", "hex");
+  await writeFile(resolve(root, image), webp);
+  await writeFile(resolve(root, "engine/feature.mjs"), "export const value = 2;\n");
+  await writeFile(resolve(root, "human.txt"), "Unrelated root work\n");
+  await writeFile(resolve(root, "engine/human.txt"), "Unrelated child work\n");
+  const authorization = ["--authorization", "User: checkpoint the inspected world and its evidence in both repositories"];
+  const owner = agent("start", "--provider", "codex", "--context", "Cross-repository checkpoint",
+    "--profile", "unattended", "--commits", "on-request", "--allow-task", "TASK-1", ...authorization);
+  const reviewer = agent("start", "--agent", "rowan", "--provider", "codex", "--context", "Independent review", "--run", owner.runId);
+  const args = ["--session", owner.id, "--task", "TASK-1"];
+  const request = ["--commit-request", "--repo", ".", "--repo", "engine", "--file", image, "--file", "engine/feature.mjs", ...authorization];
+  git("-C", "engine", "add", "human.txt");
+  const staged = git("-C", "engine", "ls-files", "--stage");
+  assert.match(rejected("claim", ...args, ...request), /index|staged/i);
+  assert.equal(git("-C", "engine", "ls-files", "--stage"), staged);
+  git("-C", "engine", "reset", "--quiet", "HEAD", "--", "human.txt"); // Fixture-owned staging only.
+  const claim = agent("claim", ...args, ...request);
+  assert.deepEqual(Object.keys(claim.baseline.commitRequests).sort(), [".", "engine"]);
+  assert.ok(claim.scopes.includes(image));
+  assert.ok(claim.baseline.repositories["engine"].dirtyPaths.includes("engine/feature.mjs"));
+  assert.match(rejected("snapshot", ...args, "--repo", ".", "--file", "human.txt"), /explicitly approved/);
+  assert.match(rejected("snapshot", ...args, "--repo", ".", "--file", "engine/feature.mjs"), /explicitly approved/);
+  await writeFile(resolve(root, "engine/feature.mjs"), "export const value = 3;\n");
+  assert.match(rejected("snapshot", ...args, "--repo", "engine", "--file", "engine/feature.mjs"), /matching human commit request/);
+  await writeFile(resolve(root, "engine/feature.mjs"), "export const value = 2;\n");
+  const snapshots = {};
+  for (const [repo, path] of [[".", image], ["engine", "engine/feature.mjs"]])
+    snapshots[repo] = agent("snapshot", ...args, "--repo", repo, "--file", path);
+  agent("visual", ...args, "--kind", "comparison", "--file", image, "--note", "Inspected checkpoint comparison; gameplay remains unfinished");
+  await writeFile(resolve(root, image), Buffer.concat([webp.subarray(0, 19), Buffer.from([1])]));
+  assert.match(rejected("review", "--session", reviewer.id, "--task", "TASK-1", "--fingerprint", snapshots.engine.fingerprint, "--verdict", "pass", "--note", "Stale image"), /comparison changed/);
+  await writeFile(resolve(root, image), webp);
+  const sources = agent("status", "--json").claims["TASK-1"].visual.sources;
+  for (const [repo, path] of [["engine", "engine/feature.mjs"], [".", image]]) {
+    const snapshot = agent("snapshot", ...args, "--repo", repo, "--file", path);
+    assert.equal(snapshot.fingerprint, snapshots[repo].fingerprint);
+    agent("verify", ...args);
+    assert.match(rejected("review", ...args, "--fingerprint", snapshot.fingerprint, "--verdict", "pass", "--note", "Self review"), /self-approved/);
+    agent("review", "--session", reviewer.id, "--task", "TASK-1", "--fingerprint", snapshot.fingerprint,
+      "--verdict", "pass", "--note", "Exact checkpoint, combined visual evidence and passing repository checks reviewed");
+    agent("commit", ...args, "--message", `chore(TASK-1): checkpoint ${repo}`, ...authorization);
+  }
+  assert.equal(agent("status", "--json").claims["TASK-1"].visual.sources, sources);
+  assert.equal(git("-C", "engine", "show", "HEAD:feature.mjs"), "export const value = 2;\n");
+  assert.deepEqual(git("diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD").trim().split("\n"), [image]);
+  assert.deepEqual(git("-C", "engine", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD").trim().split("\n"), ["feature.mjs"]);
+  assert.match(rejected("release", ...args, "--outcome", "done", "--note", "Only a checkpoint"), /cannot complete/);
+  agent("release", ...args, "--outcome", "paused", "--note", "Both reviewed checkpoints committed; full gameplay remains unfinished");
+  const task = JSON.parse(native("task", "view", "TASK-1", "--json")).task;
+  assert.equal(task.status, "To Do");
+  assert.equal(task.acceptanceCriteriaCompleted, 0);
+  assert.match(git("status", "--porcelain"), /human.txt/);
+  assert.equal(git("-C", "engine", "status", "--porcelain"), "?? human.txt\n");
+  // A later checkpoint can reuse the now-committed workspace image without
+  // manufacturing a dirty image or another workspace implementation commit.
+  await writeFile(resolve(root, "engine/feature.mjs"), "export const value = 3;\n");
+  agent("claim", ...args, ...request);
+  assert.match(rejected("snapshot", ...args, "--repo", ".", "--file", image), /unchanged/);
+  const next = agent("snapshot", ...args, "--repo", "engine", "--file", "engine/feature.mjs");
+  await writeFile(resolve(root, image), Buffer.concat([webp.subarray(0, 19), Buffer.from([1])]));
+  assert.match(rejected("visual", ...args, "--kind", "comparison", "--file", image, "--note", "Changed evidence"), /matching human commit request/);
+  await writeFile(resolve(root, image), webp);
+  agent("visual", ...args, "--kind", "comparison", "--file", image, "--note", "Reinspected committed image for exact follow-up checkpoint; feature remains incomplete");
+  agent("verify", ...args);
+  agent("review", "--session", reviewer.id, "--task", "TASK-1", "--fingerprint", next.fingerprint,
+    "--verdict", "pass", "--note", "Exact follow-up checkpoint and immutable committed comparison reviewed");
+  agent("commit", ...args, "--message", "chore(TASK-1): checkpoint follow-up engine", ...authorization);
+  agent("release", ...args, "--outcome", "paused", "--note", "Follow-up checkpoint reuses committed evidence without new workspace commit");
+  assert.equal(git("rev-list", "--count", "HEAD").trim(), "2");
+  assert.equal(git("-C", "engine", "show", "HEAD:feature.mjs"), "export const value = 3;\n");
+  agent("stop", "--session", reviewer.id);
+  agent("stop", "--session", owner.id);
+});
+
 for (const initialStatus of ["To Do", "In Progress"])
   test(`explicit unfinished checkpoint preserves ${initialStatus} and all Git/review guards`, async (t) => {
     const root = await mkdtemp(resolve(tmpdir(), "workspace-unfinished-checkpoint-"));

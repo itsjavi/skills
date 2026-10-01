@@ -1,6 +1,6 @@
 {
   "name": "safeguard",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "Review application security and trust and safety risks with evidence-backed findings and practical remediation guidance.",
   "author": { "name": "Javi" },
   "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/safeguard",

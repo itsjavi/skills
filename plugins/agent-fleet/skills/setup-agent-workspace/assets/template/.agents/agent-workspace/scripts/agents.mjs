@@ -25,7 +25,7 @@ import { trackTask, assertTrackedTask, fileDigest } from "./agent-tracker.mjs"
 import { visualRecord, assertVisual } from "./agent-visual.mjs"
 
 // Generated from this entrypoint and its helpers by the setup skill's bundle command.
-const RUNTIME_BUILD = "d27f51fc830cad29a9eb1b49ba25591043c5ab500ec833b98b88ff58785aadad"
+const RUNTIME_BUILD = "aecb91fadd67cbf05257c457a7364c59eeb783613b5ebbda3a5515dfadf22772"
 
 const HELP = `Usage: node .agents/agent-workspace/scripts/agents.mjs COMMAND [options]
 
@@ -45,7 +45,7 @@ const HELP = `Usage: node .agents/agent-workspace/scripts/agents.mjs COMMAND [op
   claim       --session ID --task TASK-ID --scope PATH [--scope PATH ...]
               [--from-claim CLAIM-ID --note EVIDENCE]
               [--receipt FILE --confirm-receipt --note ORIGINAL-OUTPUT-SOURCE]
-  claim       --session ID --task TASK-ID --commit-request --repo PATH
+  claim       --session ID --task TASK-ID --commit-request --repo PATH [--repo PATH ...]
               --file PATH [--file PATH ...] --authorization ACTUAL-HUMAN-REQUEST
               (on-request commits only; checkpoint exact inspected handoff bytes)
   refresh-checks --session ID --task TASK-ID --repo PATH --note REASON
@@ -107,7 +107,6 @@ const { values: opts, positionals } = parseArgs({
       "kind",
       "question",
       "recommendation",
-      "repo",
       "fingerprint",
       "verdict",
       "message",
@@ -117,11 +116,15 @@ const { values: opts, positionals } = parseArgs({
       "receipt",
     ].map((key) => [key, { type: "string" }]),
     ["scope", { type: "string", multiple: true }],
-    ...["allow-task", "file", "option"].map((key) => [key, { type: "string", multiple: true }]),
+    ...["allow-task", "file", "option", "repo"].map((key) => [key, { type: "string", multiple: true }]),
     ...["json", "help", "confirm-stopped", "confirm-receipt", "commit-request"].map((key) => [key, { type: "boolean" }]),
   ]),
 })
 const command = positionals[0]
+const repoPaths = opts.repo ?? []
+opts.repo = repoPaths[0]
+if (repoPaths.length > 1 && !(command === "claim" && opts["commit-request"]))
+  throw new Error("Repeated --repo is supported only for an explicit commit handoff claim; snapshots and commits remain repository-specific.")
 const fail = (message) => {
   throw new Error(message)
 }
@@ -1033,9 +1036,13 @@ async function main() {
       if (!claim.baseline)
         fail("This claim predates Git baselines; release and reclaim before taking a commit snapshot.")
       if (!opts.file?.length) fail("Select exact --file paths; directories and broad staging are not supported.")
-      if (claim.commitRequest && (required("repo") !== claim.commitRequest.repo ||
-          opts.file.some((path) => !claim.commitRequest.files.includes(path))))
-        fail("Commit handoff snapshots can select only the explicitly approved files and repository.")
+      if (claim.commitRequest) {
+        const repo = required("repo")
+        const approved = claim.commitRequest.repositories?.[repo] ??
+          (repo === claim.commitRequest.repo ? claim.commitRequest.files : null)
+        if (!approved || opts.file.some((path) => !approved.includes(path)))
+          fail("Commit handoff snapshots can select only the explicitly approved files and repository.")
+      }
       const snapshot = (await gitModule()).prepareSnapshot({
         root,
         repoPath: required("repo"),
@@ -1245,10 +1252,12 @@ async function main() {
       }
       if (commitRequest) {
         claim.baseline = (await gitModule()).authorizeCommitRequest({ root,
-          repoPath: opts.repo, paths: opts.file, scopes, baseline: claim.baseline,
+          repoPath: opts.repo, repoPaths, paths: opts.file, scopes, baseline: claim.baseline,
           repositories: claim.repositories }, opts.authorization)
+        const approvals = claim.baseline.commitRequests ?? { [opts.repo]: claim.baseline.commitRequest }
         claim.commitRequest = { authorization: opts.authorization, at: now(), repo: opts.repo, files: opts.file,
-          taskStatus: task.status }
+          repositories: Object.fromEntries(Object.entries(approvals).map(([repo, approval]) =>
+            [repo, approval.files.map((file) => file.path)])), taskStatus: task.status }
       }
       if (opts["from-claim"] || opts.receipt) {
         if (opts["from-claim"] && opts.receipt) fail("Choose a recorded claim or legacy receipt, not both.")

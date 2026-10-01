@@ -1,6 +1,6 @@
 {
   "name": "coolify",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "Operate Coolify through its official CLI for configuration, deployments, logs, services, databases and infrastructure management.",
   "author": { "name": "Javi" },
   "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/coolify",
