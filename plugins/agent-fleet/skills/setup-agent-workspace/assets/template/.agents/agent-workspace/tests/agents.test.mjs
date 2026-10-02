@@ -1,20 +1,18 @@
-import { test } from "node:test";
-import assert from "node:assert/strict";
-import { mkdtemp, readFile, writeFile, mkdir, rm, symlink } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import { spawn } from "node:child_process";
+import assert from "node:assert/strict"
+import { spawn } from "node:child_process"
+import { mkdtemp, readFile, writeFile, mkdir, rm, symlink } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { resolve } from "node:path"
+import { test } from "node:test"
+import { fileURLToPath } from "node:url"
 
-const cli = fileURLToPath(new URL("../scripts/agents.mjs", import.meta.url));
-const baseConfig = JSON.parse(
-  await readFile(new URL("./fixtures/workspace.json", import.meta.url), "utf8"),
-);
+const cli = fileURLToPath(new URL("../scripts/agents.mjs", import.meta.url))
+const baseConfig = JSON.parse(await readFile(new URL("./fixtures/workspace.json", import.meta.url), "utf8"))
 
 async function fixture(t, changes = {}) {
-  const root = await mkdtemp(resolve(tmpdir(), "workspace-agents-"));
-  t.after(() => rm(root, { recursive: true, force: true }));
-  const fake = resolve(root, "fake-backlog.mjs");
+  const root = await mkdtemp(resolve(tmpdir(), "workspace-agents-"))
+  t.after(() => rm(root, { recursive: true, force: true }))
+  const fake = resolve(root, "fake-backlog.mjs")
   await writeFile(
     fake,
     `
@@ -49,14 +47,14 @@ if (args[1] === 'view') {
   if (existsSync('fail-after')) { console.error('Injected uncertain outcome'); process.exit(1); }
   console.log('Updated');
 }
-`,
-  );
+`
+  )
   const config = {
     ...baseConfig,
     ...changes,
     backlog: { ...baseConfig.backlog, command: process.execPath, args: [fake], ...changes.backlog },
-  };
-  await writeFile(resolve(root, "agent-workspace.json"), JSON.stringify(config));
+  }
+  await writeFile(resolve(root, "agent-workspace.json"), JSON.stringify(config))
   const tasks = Object.fromEntries(
     [1, 2, 3].map((id) => [
       `TASK-${id}`,
@@ -71,92 +69,90 @@ if (args[1] === 'view') {
         implementationNotes: "Existing evidence",
         finalSummary: null,
       },
-    ]),
-  );
-  await writeFile(resolve(root, "tasks.json"), JSON.stringify(tasks));
+    ])
+  )
+  await writeFile(resolve(root, "tasks.json"), JSON.stringify(tasks))
   const run = (...args) =>
     new Promise((done, reject) => {
-      const child = spawn(process.execPath, [cli, ...args, "--root", root]);
+      const child = spawn(process.execPath, [cli, ...args, "--root", root])
       let out = "",
-        err = "";
+        err = ""
       child.stdout.on("data", (chunk) => {
-        out += chunk;
-      });
+        out += chunk
+      })
       child.stderr.on("data", (chunk) => {
-        err += chunk;
-      });
-      child.on("error", reject);
-      child.on("close", (code) => done({ code, out, err }));
-    });
+        err += chunk
+      })
+      child.on("error", reject)
+      child.on("close", (code) => done({ code, out, err }))
+    })
   // --root must precede the native-CLI separator.
   const native = (...args) =>
     new Promise((done, reject) => {
-      const child = spawn(process.execPath, [cli, "--root", root, ...args]);
+      const child = spawn(process.execPath, [cli, "--root", root, ...args])
       let out = "",
-        err = "";
+        err = ""
       child.stdout.on("data", (chunk) => {
-        out += chunk;
-      });
+        out += chunk
+      })
       child.stderr.on("data", (chunk) => {
-        err += chunk;
-      });
-      child.on("error", reject);
-      child.on("close", (code) => done({ code, out, err }));
-    });
+        err += chunk
+      })
+      child.on("error", reject)
+      child.on("close", (code) => done({ code, out, err }))
+    })
   const ok = async (...args) => {
-    const result = await run(...args);
-    assert.equal(result.code, 0, result.err);
-    return JSON.parse(result.out);
-  };
+    const result = await run(...args)
+    assert.equal(result.code, 0, result.err)
+    return JSON.parse(result.out)
+  }
   const start = (agent = config.defaultAgent, provider = "codex") =>
-    ok("start", "--agent", agent, "--provider", provider, "--context", "test session");
+    ok("start", "--agent", agent, "--provider", provider, "--context", "test session")
   const registry = async () =>
-    JSON.parse(await readFile(resolve(root, ".agents/agent-workspace/runtime/state.json"), "utf8"));
-  const data = async () => JSON.parse(await readFile(resolve(root, "tasks.json"), "utf8"));
-  return { root, run, native, ok, start, registry, data };
+    JSON.parse(await readFile(resolve(root, ".agents/agent-workspace/runtime/state.json"), "utf8"))
+  const data = async () => JSON.parse(await readFile(resolve(root, "tasks.json"), "utf8"))
+  return { root, run, native, ok, start, registry, data }
 }
 
 test("independent processes cannot claim the same task; identical names still have unique sessions", async (t) => {
-  const f = await fixture(t);
-  const [a, b] = await Promise.all([f.start(), f.start("oak", "claude")]);
-  assert.notEqual(a.id, b.id);
+  const f = await fixture(t)
+  const [a, b] = await Promise.all([f.start(), f.start("oak", "claude")])
+  assert.notEqual(a.id, b.id)
   const results = await Promise.all(
-    [a, b].map((owner) =>
-      f.run("claim", "--session", owner.id, "--task", "TASK-1", "--scope", "src"),
-    ),
-  );
-  assert.deepEqual(results.map((result) => result.code).sort(), [0, 1]);
-  const registry = await f.registry();
-  assert.equal(Object.keys(registry.claims).length, 1);
-  const task = (await f.data())["TASK-1"];
-  assert.deepEqual(task.labels, ["keep-me", `working:${registry.claims["TASK-1"].session}`]);
-});
+    [a, b].map((owner) => f.run("claim", "--session", owner.id, "--task", "TASK-1", "--scope", "src"))
+  )
+  assert.deepEqual(results.map((result) => result.code).sort(), [0, 1])
+  const registry = await f.registry()
+  assert.equal(Object.keys(registry.claims).length, 1)
+  const task = (await f.data())["TASK-1"]
+  assert.deepEqual(task.labels, ["keep-me", `working:${registry.claims["TASK-1"].session}`])
+})
 
 test("native Backlog assignees with or without @ resolve to the same project agent", async (t) => {
-  const f = await fixture(t);
-  const owner = await f.start();
-  const tasks = await f.data();
-  tasks["TASK-1"].assignees = ["oak"];
-  await writeFile(resolve(f.root, "tasks.json"), JSON.stringify(tasks));
-  await f.ok("claim", "--session", owner.id, "--task", "TASK-1");
-});
+  const f = await fixture(t)
+  const owner = await f.start()
+  const tasks = await f.data()
+  tasks["TASK-1"].assignees = ["oak"]
+  await writeFile(resolve(f.root, "tasks.json"), JSON.stringify(tasks))
+  await f.ok("claim", "--session", owner.id, "--task", "TASK-1")
+})
 
 test("ancestor paths conflict across tasks; siblings and disjoint claims can proceed", async (t) => {
-  const f = await fixture(t);
-  const [a, b] = await Promise.all([f.start(), f.start("birch")]);
+  const f = await fixture(t)
+  const [a, b] = await Promise.all([f.start(), f.start("birch")])
   const results = await Promise.all([
     f.run("claim", "--session", a.id, "--task", "TASK-1", "--scope", "apps/web"),
     f.run("claim", "--session", b.id, "--task", "TASK-2", "--scope", "apps/web/src/main.ts"),
-  ]);
-  assert.deepEqual(results.map((result) => result.code).sort(), [0, 1]);
-  await f.ok("claim", "--session", a.id, "--task", "TASK-3", "--scope", "apps/website");
-});
+  ])
+  assert.deepEqual(results.map((result) => result.code).sort(), [0, 1])
+  await f.ok("claim", "--session", a.id, "--task", "TASK-3", "--scope", "apps/website")
+})
 
 test("scope validation protects reference repositories, Git, registry, escapes, symlink aliases, and case variants", async (t) => {
-  const f = await fixture(t);
-  const owner = await f.start();
-  await mkdir(resolve(f.root, "src"));
-  await symlink(resolve(f.root, "src"), resolve(f.root, "alias"), "dir");
+  const f = await fixture(t)
+  const owner = await f.start()
+  await mkdir(resolve(f.root, "src"))
+  await symlink(resolve(f.root, "src"), resolve(f.root, "alias"), "dir")
   for (const scope of [
     "reference/Assets",
     ".git/config",
@@ -170,42 +166,24 @@ test("scope validation protects reference repositories, Git, registry, escapes, 
     "/tmp",
     "src/*.js",
   ]) {
-    const result = await f.run(
-      "claim",
-      "--session",
-      owner.id,
-      "--task",
-      "TASK-1",
-      "--scope",
-      scope,
-    );
-    assert.equal(result.code, 1, `must reject ${scope}`);
+    const result = await f.run("claim", "--session", owner.id, "--task", "TASK-1", "--scope", scope)
+    assert.equal(result.code, 1, `must reject ${scope}`)
   }
-  await f.ok("claim", "--session", owner.id, "--task", "TASK-1", "--scope", "Future/File");
-  assert.equal(
-    (await f.run("claim", "--session", owner.id, "--task", "TASK-2", "--scope", "future/file"))
-      .code,
-    1,
-  );
-});
+  await f.ok("claim", "--session", owner.id, "--task", "TASK-1", "--scope", "Future/File")
+  assert.equal((await f.run("claim", "--session", owner.id, "--task", "TASK-2", "--scope", "future/file")).code, 1)
+})
 
 test("stale is advisory: ownership blocks new claims until explicitly recovered, and old owners cannot resume", async (t) => {
-  const f = await fixture(t);
-  const [a, b] = await Promise.all([f.start(), f.start("elm", "claude")]);
-  await f.ok("claim", "--session", a.id, "--task", "TASK-1");
-  const state = await f.registry();
-  state.sessions[a.id].lastSeenAt = "2000-01-01T00:00:00.000Z";
-  await writeFile(
-    resolve(f.root, ".agents/agent-workspace/runtime/state.json"),
-    JSON.stringify(state),
-  );
-  const status = await f.ok("status", "--json");
-  assert.equal(status.sessions.find((item) => item.id === a.id).stale, true);
-  assert.equal((await f.run("claim", "--session", b.id, "--task", "TASK-1")).code, 1);
-  assert.equal(
-    (await f.run("recover", "--session", a.id, "--by", b.id, "--note", "Stopped thread")).code,
-    1,
-  );
+  const f = await fixture(t)
+  const [a, b] = await Promise.all([f.start(), f.start("elm", "claude")])
+  await f.ok("claim", "--session", a.id, "--task", "TASK-1")
+  const state = await f.registry()
+  state.sessions[a.id].lastSeenAt = "2000-01-01T00:00:00.000Z"
+  await writeFile(resolve(f.root, ".agents/agent-workspace/runtime/state.json"), JSON.stringify(state))
+  const status = await f.ok("status", "--json")
+  assert.equal(status.sessions.find((item) => item.id === a.id).stale, true)
+  assert.equal((await f.run("claim", "--session", b.id, "--task", "TASK-1")).code, 1)
+  assert.equal((await f.run("recover", "--session", a.id, "--by", b.id, "--note", "Stopped thread")).code, 1)
   await f.ok(
     "recover",
     "--session",
@@ -214,28 +192,25 @@ test("stale is advisory: ownership blocks new claims until explicitly recovered,
     b.id,
     "--confirm-stopped",
     "--note",
-    "Owning thread verified stopped",
-  );
-  assert.equal((await f.data())["TASK-1"].status, "To Do");
-  assert.equal((await f.registry()).sessions[a.id], undefined);
-  assert.equal((await f.ok("history", "--session", a.id)).status, "recovered");
-  assert.equal((await f.run("heartbeat", "--session", a.id)).code, 1);
-  assert.deepEqual((await f.data())["TASK-1"].labels, ["keep-me"]);
-});
+    "Owning thread verified stopped"
+  )
+  assert.equal((await f.data())["TASK-1"].status, "To Do")
+  assert.equal((await f.registry()).sessions[a.id], undefined)
+  assert.equal((await f.ok("history", "--session", a.id)).status, "recovered")
+  assert.equal((await f.run("heartbeat", "--session", a.id)).code, 1)
+  assert.deepEqual((await f.data())["TASK-1"].labels, ["keep-me"])
+})
 
 test("uncertain tracker writes retain reservations; reconciliation replays release without duplicate notes", async (t) => {
-  const f = await fixture(t);
-  const a = await f.start();
-  await writeFile(resolve(f.root, "fail-before"), "");
-  assert.equal(
-    (await f.run("claim", "--session", a.id, "--task", "TASK-1", "--scope", "src")).code,
-    1,
-  );
-  assert.equal((await f.registry()).claims["TASK-1"].phase, "claiming");
-  assert.equal((await f.run("stop", "--session", a.id)).code, 1);
-  await rm(resolve(f.root, "fail-before"));
-  await f.ok("reconcile", "--session", a.id);
-  await writeFile(resolve(f.root, "fail-after"), "");
+  const f = await fixture(t)
+  const a = await f.start()
+  await writeFile(resolve(f.root, "fail-before"), "")
+  assert.equal((await f.run("claim", "--session", a.id, "--task", "TASK-1", "--scope", "src")).code, 1)
+  assert.equal((await f.registry()).claims["TASK-1"].phase, "claiming")
+  assert.equal((await f.run("stop", "--session", a.id)).code, 1)
+  await rm(resolve(f.root, "fail-before"))
+  await f.ok("reconcile", "--session", a.id)
+  await writeFile(resolve(f.root, "fail-after"), "")
   assert.equal(
     (
       await f.run(
@@ -247,58 +222,35 @@ test("uncertain tracker writes retain reservations; reconciliation replays relea
         "--outcome",
         "review",
         "--note",
-        "Please inspect evidence",
+        "Please inspect evidence"
       )
     ).code,
-    1,
-  );
-  assert.equal((await f.registry()).claims["TASK-1"].phase, "releasing");
-  await rm(resolve(f.root, "fail-after"));
-  await f.ok("reconcile", "--session", a.id);
-  const task = (await f.data())["TASK-1"];
-  assert.equal(task.implementationNotes.match(/Please inspect evidence/g).length, 1);
-  assert.ok(task.implementationNotes.startsWith("Existing evidence"));
-  assert.deepEqual(task.labels, ["keep-me", "needs-review"]);
-  assert.deepEqual((await f.registry()).claims, {});
-  await f.ok("stop", "--session", a.id);
-});
+    1
+  )
+  assert.equal((await f.registry()).claims["TASK-1"].phase, "releasing")
+  await rm(resolve(f.root, "fail-after"))
+  await f.ok("reconcile", "--session", a.id)
+  const task = (await f.data())["TASK-1"]
+  assert.equal(task.implementationNotes.match(/Please inspect evidence/g).length, 1)
+  assert.ok(task.implementationNotes.startsWith("Existing evidence"))
+  assert.deepEqual(task.labels, ["keep-me", "needs-review"])
+  assert.deepEqual((await f.registry()).claims, {})
+  await f.ok("stop", "--session", a.id)
+})
 
 test("finish requires evidence, preserves assignee, and wrapper rejects unowned task edits", async (t) => {
-  const f = await fixture(t);
-  const a = await f.start();
-  await f.ok("claim", "--session", a.id, "--task", "TASK-1");
+  const f = await fixture(t)
+  const a = await f.start()
+  await f.ok("claim", "--session", a.id, "--task", "TASK-1")
   assert.equal(
-    (
-      await f.run(
-        "release",
-        "--session",
-        a.id,
-        "--task",
-        "TASK-1",
-        "--outcome",
-        "done",
-        "--note",
-        "Verified",
-      )
-    ).code,
-    1,
-  );
+    (await f.run("release", "--session", a.id, "--task", "TASK-1", "--outcome", "done", "--note", "Verified")).code,
+    1
+  )
   assert.equal(
-    (
-      await f.native(
-        "backlog",
-        "--session",
-        a.id,
-        "--",
-        "task",
-        "edit",
-        "TASK-2",
-        "--final-summary",
-        "Wrong task",
-      )
-    ).code,
-    1,
-  );
+    (await f.native("backlog", "--session", a.id, "--", "task", "edit", "TASK-2", "--final-summary", "Wrong task"))
+      .code,
+    1
+  )
   const edit = await f.native(
     "backlog",
     "--session",
@@ -310,9 +262,9 @@ test("finish requires evidence, preserves assignee, and wrapper rejects unowned 
     "--check-ac",
     "1",
     "--final-summary",
-    "Behavior verified",
-  );
-  assert.equal(edit.code, 0, edit.err);
+    "Behavior verified"
+  )
+  assert.equal(edit.code, 0, edit.err)
   await f.ok(
     "visual",
     "--session",
@@ -322,24 +274,14 @@ test("finish requires evidence, preserves assignee, and wrapper rejects unowned 
     "--kind",
     "no-ui",
     "--note",
-    "Coordination-only fixture has no UI",
-  );
-  await f.ok(
-    "release",
-    "--session",
-    a.id,
-    "--task",
-    "TASK-1",
-    "--outcome",
-    "done",
-    "--note",
-    "Verified",
-  );
-  const task = (await f.data())["TASK-1"];
-  assert.equal(task.status, "Done");
-  assert.deepEqual(task.assignees, ["@oak"]);
-  assert.deepEqual(task.labels, ["keep-me"]);
-});
+    "Coordination-only fixture has no UI"
+  )
+  await f.ok("release", "--session", a.id, "--task", "TASK-1", "--outcome", "done", "--note", "Verified")
+  const task = (await f.data())["TASK-1"]
+  assert.equal(task.status, "Done")
+  assert.deepEqual(task.assignees, ["@oak"])
+  assert.deepEqual(task.labels, ["keep-me"])
+})
 
 test("project-specific names, statuses, and single-repo layout require no pnpm or nested repositories", async (t) => {
   const f = await fixture(t, {
@@ -347,68 +289,48 @@ test("project-specific names, statuses, and single-repo layout require no pnpm o
     agents: [{ name: "lead", role: "Maintainer" }],
     repositories: [{ path: ".", readOnly: false }],
     backlog: { todoStatus: "Ready", activeStatus: "Doing", doneStatus: "Finished" },
-  });
-  const a = await f.start("lead", "custom-provider");
-  await f.ok("claim", "--session", a.id, "--task", "TASK-1", "--scope", "packages/shared");
-  assert.equal((await f.data())["TASK-1"].status, "Doing");
-  await f.ok(
-    "release",
-    "--session",
-    a.id,
-    "--task",
-    "TASK-1",
-    "--outcome",
-    "paused",
-    "--note",
-    "Handoff",
-  );
-  assert.equal((await f.data())["TASK-1"].status, "Ready");
-});
+  })
+  const a = await f.start("lead", "custom-provider")
+  await f.ok("claim", "--session", a.id, "--task", "TASK-1", "--scope", "packages/shared")
+  assert.equal((await f.data())["TASK-1"].status, "Doing")
+  await f.ok("release", "--session", a.id, "--task", "TASK-1", "--outcome", "paused", "--note", "Handoff")
+  assert.equal((await f.data())["TASK-1"].status, "Ready")
+})
 
 test("blocked dependencies, approval gates, wrong assignments, and foreign working labels block claims", async (t) => {
-  const f = await fixture(t);
-  const a = await f.start();
+  const f = await fixture(t)
+  const a = await f.start()
   for (const change of [
     { readiness: { isReady: false } },
     { labels: ["approval-required"] },
     { assignees: ["@elm"] },
     { labels: ["working:foreign"] },
   ]) {
-    const data = await f.data();
-    Object.assign(
-      data["TASK-1"],
-      { readiness: { isReady: true }, labels: [], assignees: [] },
-      change,
-    );
-    await writeFile(resolve(f.root, "tasks.json"), JSON.stringify(data));
-    assert.equal((await f.run("claim", "--session", a.id, "--task", "TASK-1")).code, 1);
+    const data = await f.data()
+    Object.assign(data["TASK-1"], { readiness: { isReady: true }, labels: [], assignees: [] }, change)
+    await writeFile(resolve(f.root, "tasks.json"), JSON.stringify(data))
+    assert.equal((await f.run("claim", "--session", a.id, "--task", "TASK-1")).code, 1)
   }
-});
+})
 
 test("orphaned transaction locks fail closed; no age-based lock stealing", async (t) => {
-  const f = await fixture(t);
-  const lock = resolve(f.root, ".agents/agent-workspace/runtime/locks/write.lock");
-  await mkdir(lock, { recursive: true });
-  await writeFile(
-    resolve(lock, "owner.json"),
-    JSON.stringify({ pid: -1, startedAt: "2000-01-01" }),
-  );
-  const result = await f.run("start", "--provider", "codex", "--context", "must not steal");
-  assert.equal(result.code, 1);
-  assert.match(result.err, /Never delete a live lock/);
-  assert.ok(await readFile(resolve(lock, "owner.json")));
-});
+  const f = await fixture(t)
+  const lock = resolve(f.root, ".agents/agent-workspace/runtime/locks/write.lock")
+  await mkdir(lock, { recursive: true })
+  await writeFile(resolve(lock, "owner.json"), JSON.stringify({ pid: -1, startedAt: "2000-01-01" }))
+  const result = await f.run("start", "--provider", "codex", "--context", "must not steal")
+  assert.equal(result.code, 1)
+  assert.match(result.err, /Never delete a live lock/)
+  assert.ok(await readFile(resolve(lock, "owner.json")))
+})
 
 test("only the coordinator can record an approval gate; evidence persists without claiming or completing work", async (t) => {
-  const f = await fixture(t);
-  const [a, b] = await Promise.all([f.start(), f.start("elm")]);
-  const data = await f.data();
-  data["TASK-1"].labels.push("approval-required");
-  await writeFile(resolve(f.root, "tasks.json"), JSON.stringify(data));
-  assert.equal(
-    (await f.run("approve", "--session", b.id, "--task", "TASK-1", "--note", "User accepted")).code,
-    1,
-  );
+  const f = await fixture(t)
+  const [a, b] = await Promise.all([f.start(), f.start("elm")])
+  const data = await f.data()
+  data["TASK-1"].labels.push("approval-required")
+  await writeFile(resolve(f.root, "tasks.json"), JSON.stringify(data))
+  assert.equal((await f.run("approve", "--session", b.id, "--task", "TASK-1", "--note", "User accepted")).code, 1)
   await f.ok(
     "approve",
     "--session",
@@ -416,80 +338,48 @@ test("only the coordinator can record an approval gate; evidence persists withou
     "--task",
     "TASK-1",
     "--note",
-    "User explicitly approved template in test fixture",
-  );
-  const task = (await f.data())["TASK-1"];
-  assert.equal(task.status, "To Do");
-  assert.deepEqual(task.labels, ["keep-me"]);
-  assert.match(task.implementationNotes, /explicitly approved template/);
-  assert.deepEqual((await f.registry()).claims, {});
-});
+    "User explicitly approved template in test fixture"
+  )
+  const task = (await f.data())["TASK-1"]
+  assert.equal(task.status, "To Do")
+  assert.deepEqual(task.labels, ["keep-me"])
+  assert.match(task.implementationNotes, /explicitly approved template/)
+  assert.deepEqual((await f.registry()).claims, {})
+})
 
 test("read-only repository paths are normalized before checking scope boundaries", async (t) => {
   for (const path of ["./reference", "reference/", "reference/./nested/.."]) {
-    const f = await fixture(t, { repositories: [{ path, readOnly: true }] });
-    const result = await f.run("start", "--provider", "codex", "--context", "path validation");
+    const f = await fixture(t, { repositories: [{ path, readOnly: true }] })
+    const result = await f.run("start", "--provider", "codex", "--context", "path validation")
     if (path.includes("..")) {
-      assert.equal(result.code, 1);
-      continue;
+      assert.equal(result.code, 1)
+      continue
     }
-    assert.equal(result.code, 0, result.err);
-    const owner = JSON.parse(result.out);
+    assert.equal(result.code, 0, result.err)
+    const owner = JSON.parse(result.out)
     assert.equal(
-      (
-        await f.run(
-          "claim",
-          "--session",
-          owner.id,
-          "--task",
-          "TASK-1",
-          "--scope",
-          "reference/file.txt",
-        )
-      ).code,
-      1,
-    );
+      (await f.run("claim", "--session", owner.id, "--task", "TASK-1", "--scope", "reference/file.txt")).code,
+      1
+    )
   }
-  const f = await fixture(t, { repositories: [{ path: "reference/./nested", readOnly: true }] });
-  const owner = await f.start();
+  const f = await fixture(t, { repositories: [{ path: "reference/./nested", readOnly: true }] })
+  const owner = await f.start()
   assert.equal(
-    (
-      await f.run(
-        "claim",
-        "--session",
-        owner.id,
-        "--task",
-        "TASK-1",
-        "--scope",
-        "reference/nested/file.txt",
-      )
-    ).code,
-    1,
-  );
-});
+    (await f.run("claim", "--session", owner.id, "--task", "TASK-1", "--scope", "reference/nested/file.txt")).code,
+    1
+  )
+})
 
 test("coordinator can reassign unclaimed work with evidence, but cannot override existing claims", async (t) => {
-  const f = await fixture(t);
-  const [a, b] = await Promise.all([f.start(), f.start("elm")]);
-  const data = await f.data();
-  data["TASK-1"].assignees = ["@elm"];
-  await writeFile(resolve(f.root, "tasks.json"), JSON.stringify(data));
+  const f = await fixture(t)
+  const [a, b] = await Promise.all([f.start(), f.start("elm")])
+  const data = await f.data()
+  data["TASK-1"].assignees = ["@elm"]
+  await writeFile(resolve(f.root, "tasks.json"), JSON.stringify(data))
   assert.equal(
-    (
-      await f.run(
-        "assign",
-        "--session",
-        b.id,
-        "--task",
-        "TASK-1",
-        "--agent",
-        "oak",
-        "--note",
-        "Handoff",
-      )
-    ).code,
-    1,
-  );
+    (await f.run("assign", "--session", b.id, "--task", "TASK-1", "--agent", "oak", "--note", "Handoff")).code,
+    1
+  )
   await f.ok(
     "assign",
     "--session",
@@ -499,54 +389,41 @@ test("coordinator can reassign unclaimed work with evidence, but cannot override
     "--agent",
     "oak",
     "--note",
-    "Elm completed research; Oak integrates",
-  );
-  assert.match((await f.data())["TASK-1"].implementationNotes, /Oak integrates/);
-  await f.ok("claim", "--session", a.id, "--task", "TASK-1");
+    "Elm completed research; Oak integrates"
+  )
+  assert.match((await f.data())["TASK-1"].implementationNotes, /Oak integrates/)
+  await f.ok("claim", "--session", a.id, "--task", "TASK-1")
   assert.equal(
-    (
-      await f.run(
-        "assign",
-        "--session",
-        a.id,
-        "--task",
-        "TASK-1",
-        "--agent",
-        "elm",
-        "--note",
-        "Must not override",
-      )
-    ).code,
-    1,
-  );
-});
+    (await f.run("assign", "--session", a.id, "--task", "TASK-1", "--agent", "elm", "--note", "Must not override"))
+      .code,
+    1
+  )
+})
 
 test("terminated tracker writers retain the transaction lock until process inspection and recovery", async (t) => {
-  const f = await fixture(t);
-  const owner = await f.start();
-  await writeFile(resolve(f.root, "signal-after"), "");
-  const result = await f.run("claim", "--session", owner.id, "--task", "TASK-1", "--scope", "src");
-  assert.equal(result.code, 1);
-  assert.match(result.err, /Transaction lock retained/);
-  assert.equal((await f.registry()).claims["TASK-1"].phase, "claiming");
-  assert.ok(
-    await readFile(resolve(f.root, ".agents/agent-workspace/runtime/locks/write.lock/owner.json")),
-  );
+  const f = await fixture(t)
+  const owner = await f.start()
+  await writeFile(resolve(f.root, "signal-after"), "")
+  const result = await f.run("claim", "--session", owner.id, "--task", "TASK-1", "--scope", "src")
+  assert.equal(result.code, 1)
+  assert.match(result.err, /Transaction lock retained/)
+  assert.equal((await f.registry()).claims["TASK-1"].phase, "claiming")
+  assert.ok(await readFile(resolve(f.root, ".agents/agent-workspace/runtime/locks/write.lock/owner.json")))
   // The disposable child has exited; no descendants were launched by this fixture.
   await rm(resolve(f.root, ".agents/agent-workspace/runtime/locks/write.lock"), {
     recursive: true,
-  });
-  await rm(resolve(f.root, "signal-after"));
-  await f.ok("reconcile", "--session", owner.id);
-  assert.equal((await f.registry()).claims["TASK-1"].phase, "active");
-});
+  })
+  await rm(resolve(f.root, "signal-after"))
+  await f.ok("reconcile", "--session", owner.id)
+  assert.equal((await f.registry()).claims["TASK-1"].phase, "active")
+})
 
 test("CLI named-agent defaults, bounded runs, inherited workers, and deferred decisions compose", async (t) => {
-  const f = await fixture(t);
-  const goku = await f.start("Goku");
-  assert.equal(goku.agent, "goku");
-  assert.equal(goku.profile, "assisted");
-  assert.equal(goku.policy.commits, "on-request");
+  const f = await fixture(t)
+  const goku = await f.start("Goku")
+  assert.equal(goku.agent, "goku")
+  assert.equal(goku.profile, "assisted")
+  assert.equal(goku.policy.commits, "on-request")
   const lead = await f.ok(
     "start",
     "--provider",
@@ -560,8 +437,8 @@ test("CLI named-agent defaults, bounded runs, inherited workers, and deferred de
     "--allow-task",
     "TASK-2",
     "--authorization",
-    "User authorized these two tasks unattended",
-  );
+    "User authorized these two tasks unattended"
+  )
   const worker = await f.ok(
     "start",
     "--agent",
@@ -571,8 +448,8 @@ test("CLI named-agent defaults, bounded runs, inherited workers, and deferred de
     "--context",
     "delegated work",
     "--run",
-    lead.runId,
-  );
+    lead.runId
+  )
   const reviewer = await f.ok(
     "start",
     "--agent",
@@ -582,27 +459,16 @@ test("CLI named-agent defaults, bounded runs, inherited workers, and deferred de
     "--context",
     "review",
     "--run",
-    lead.runId,
-  );
-  assert.deepEqual(worker.policy, lead.policy);
+    lead.runId
+  )
+  assert.deepEqual(worker.policy, lead.policy)
   assert.equal(
-    (
-      await f.run(
-        "start",
-        "--agent",
-        "birch",
-        "--provider",
-        "codex",
-        "--context",
-        "too many",
-        "--run",
-        lead.runId,
-      )
-    ).code,
-    1,
-  );
-  assert.equal((await f.run("claim", "--session", worker.id, "--task", "TASK-3")).code, 1);
-  await f.ok("claim", "--session", worker.id, "--task", "TASK-1");
+    (await f.run("start", "--agent", "birch", "--provider", "codex", "--context", "too many", "--run", lead.runId))
+      .code,
+    1
+  )
+  assert.equal((await f.run("claim", "--session", worker.id, "--task", "TASK-3")).code, 1)
+  await f.ok("claim", "--session", worker.id, "--task", "TASK-1")
   await f.ok(
     "defer",
     "--session",
@@ -620,16 +486,16 @@ test("CLI named-agent defaults, bounded runs, inherited workers, and deferred de
     "--recommendation",
     "Versioned JSON",
     "--note",
-    "Architecture decision changes persistence contract",
-  );
-  const queue = await f.ok("queue");
-  assert.equal(queue.items.length, 1);
-  assert.match(queue.items[0].notes, /Which save format/);
+    "Architecture decision changes persistence contract"
+  )
+  const queue = await f.ok("queue")
+  assert.equal(queue.items.length, 1)
+  assert.match(queue.items[0].notes, /Which save format/)
   assert.deepEqual(
     (await f.ok("ready", "--session", lead.id)).tasks.map((task) => task.id),
-    ["TASK-2"],
-  );
-  assert.equal((await f.run("claim", "--session", worker.id, "--task", "TASK-1")).code, 1);
+    ["TASK-2"]
+  )
+  assert.equal((await f.run("claim", "--session", worker.id, "--task", "TASK-1")).code, 1)
   await f.ok(
     "resolve",
     "--session",
@@ -639,10 +505,10 @@ test("CLI named-agent defaults, bounded runs, inherited workers, and deferred de
     "--kind",
     "decision",
     "--note",
-    "User chose versioned JSON in fixture",
-  );
-  assert.equal((await f.ok("queue")).items.length, 0);
-  await f.ok("claim", "--session", worker.id, "--task", "TASK-1");
+    "User chose versioned JSON in fixture"
+  )
+  assert.equal((await f.ok("queue")).items.length, 0)
+  await f.ok("claim", "--session", worker.id, "--task", "TASK-1")
   await f.ok(
     "defer",
     "--session",
@@ -656,27 +522,19 @@ test("CLI named-agent defaults, bounded runs, inherited workers, and deferred de
     "--recommendation",
     "Review the prepared artifact",
     "--note",
-    "Prepared artifact requires actual approval",
-  );
-  assert.deepEqual((await f.ok("queue")).items[0].labels, ["approval-required"]);
-  await f.ok(
-    "approve",
-    "--session",
-    lead.id,
-    "--task",
-    "TASK-1",
-    "--note",
-    "Synthetic explicit user approval",
-  );
-  assert.equal((await f.run("stop", "--session", lead.id)).code, 1);
-  await f.ok("stop", "--session", worker.id);
-  await f.ok("stop", "--session", reviewer.id);
-  await f.ok("stop", "--session", lead.id);
-  await f.ok("stop", "--session", goku.id);
-});
+    "Prepared artifact requires actual approval"
+  )
+  assert.deepEqual((await f.ok("queue")).items[0].labels, ["approval-required"])
+  await f.ok("approve", "--session", lead.id, "--task", "TASK-1", "--note", "Synthetic explicit user approval")
+  assert.equal((await f.run("stop", "--session", lead.id)).code, 1)
+  await f.ok("stop", "--session", worker.id)
+  await f.ok("stop", "--session", reviewer.id)
+  await f.ok("stop", "--session", lead.id)
+  await f.ok("stop", "--session", goku.id)
+})
 
 test("automatic Done cannot bypass commit gates, including direct status edits", async (t) => {
-  const f = await fixture(t);
+  const f = await fixture(t)
   const owner = await f.ok(
     "start",
     "--provider",
@@ -688,14 +546,10 @@ test("automatic Done cannot bypass commit gates, including direct status edits",
     "--allow-task",
     "TASK-1",
     "--authorization",
-    "User scoped auto work",
-  );
-  await f.ok("claim", "--session", owner.id, "--task", "TASK-1");
-  assert.equal(
-    (await f.native("backlog", "--session", owner.id, "--", "task", "edit", "TASK-1", "-s", "Done"))
-      .code,
-    1,
-  );
+    "User scoped auto work"
+  )
+  await f.ok("claim", "--session", owner.id, "--task", "TASK-1")
+  assert.equal((await f.native("backlog", "--session", owner.id, "--", "task", "edit", "TASK-1", "-s", "Done")).code, 1)
   assert.equal(
     (
       await f.native(
@@ -709,22 +563,12 @@ test("automatic Done cannot bypass commit gates, including direct status edits",
         "--check-ac",
         "1",
         "--final-summary",
-        "Synthetic verified work",
+        "Synthetic verified work"
       )
     ).code,
-    0,
-  );
-  await f.ok(
-    "visual",
-    "--session",
-    owner.id,
-    "--task",
-    "TASK-1",
-    "--kind",
-    "no-ui",
-    "--note",
-    "No UI in fixture",
-  );
+    0
+  )
+  await f.ok("visual", "--session", owner.id, "--task", "TASK-1", "--kind", "no-ui", "--note", "No UI in fixture")
   const release = await f.run(
     "release",
     "--session",
@@ -734,39 +578,39 @@ test("automatic Done cannot bypass commit gates, including direct status edits",
     "--outcome",
     "done",
     "--note",
-    "no commit yet",
-  );
-  assert.equal(release.code, 1);
-  assert.match(release.err, /verified commits/);
-  assert.equal((await f.registry()).claims["TASK-1"].phase, "active");
-});
+    "no commit yet"
+  )
+  assert.equal(release.code, 1)
+  assert.match(release.err, /verified commits/)
+  assert.equal((await f.registry()).claims["TASK-1"].phase, "active")
+})
 
 test("serialized compaction preserves concurrent starts and archives only closed history", async (t) => {
-  const f = await fixture(t);
-  const old = await f.start();
-  await f.ok("stop", "--session", old.id);
-  const [owner, compacted] = await Promise.all([f.start(), f.ok("compact")]);
-  assert.equal(compacted.claims, 0);
-  assert.equal((await f.registry()).sessions[owner.id].status, "active");
-  assert.equal((await f.ok("history", "--session", old.id)).status, "closed");
-  assert.equal((await f.ok("history", "--run", old.runId)).id, old.runId);
-  await f.ok("stop", "--session", owner.id);
-  assert.deepEqual((await f.registry()).sessions, {});
-  assert.deepEqual((await f.registry()).runs, {});
-});
+  const f = await fixture(t)
+  const old = await f.start()
+  await f.ok("stop", "--session", old.id)
+  const [owner, compacted] = await Promise.all([f.start(), f.ok("compact")])
+  assert.equal(compacted.claims, 0)
+  assert.equal((await f.registry()).sessions[owner.id].status, "active")
+  assert.equal((await f.ok("history", "--session", old.id)).status, "closed")
+  assert.equal((await f.ok("history", "--run", old.runId)).id, old.runId)
+  await f.ok("stop", "--session", owner.id)
+  assert.deepEqual((await f.registry()).sessions, {})
+  assert.deepEqual((await f.registry()).runs, {})
+})
 
 test("archive failure persists closed status and compact finishes without reviving the session", async (t) => {
-  const f = await fixture(t);
-  const owner = await f.start();
-  const obstacle = resolve(f.root, ".agents/agent-workspace/runtime/history/sessions");
-  await mkdir(resolve(obstacle, ".."), { recursive: true });
-  await writeFile(obstacle, "fixture obstacle");
-  const stopped = await f.run("stop", "--session", owner.id);
-  assert.equal(stopped.code, 1);
-  assert.equal((await f.registry()).sessions[owner.id].status, "closed");
-  await rm(obstacle);
-  await f.ok("compact");
-  assert.equal((await f.ok("history", "--session", owner.id)).status, "closed");
-  assert.equal((await f.registry()).sessions[owner.id], undefined);
-  assert.equal((await f.run("heartbeat", "--session", owner.id)).code, 1);
-});
+  const f = await fixture(t)
+  const owner = await f.start()
+  const obstacle = resolve(f.root, ".agents/agent-workspace/runtime/history/sessions")
+  await mkdir(resolve(obstacle, ".."), { recursive: true })
+  await writeFile(obstacle, "fixture obstacle")
+  const stopped = await f.run("stop", "--session", owner.id)
+  assert.equal(stopped.code, 1)
+  assert.equal((await f.registry()).sessions[owner.id].status, "closed")
+  await rm(obstacle)
+  await f.ok("compact")
+  assert.equal((await f.ok("history", "--session", owner.id)).status, "closed")
+  assert.equal((await f.registry()).sessions[owner.id], undefined)
+  assert.equal((await f.run("heartbeat", "--session", owner.id)).code, 1)
+})

@@ -7,6 +7,7 @@ import { resolve, relative, dirname, isAbsolute, sep } from "node:path"
 import { fileURLToPath } from "node:url"
 import { parseArgs, isDeepStrictEqual } from "node:util"
 
+import { strengthenedRepositories, restoreOwnedBaseline, assertLegacyReceipts } from "./agent-handoff.mjs"
 import {
   ASSISTED,
   HUMAN_GATES,
@@ -20,7 +21,6 @@ import {
   assertEvidence,
 } from "./agent-policy.mjs"
 import { saveState, TaskRecords, readHistory, archiveClaim, writeJSON } from "./agent-state.mjs"
-import { strengthenedRepositories, restoreOwnedBaseline, assertLegacyReceipts } from "./agent-handoff.mjs"
 import { trackTask, assertTrackedTask, fileDigest } from "./agent-tracker.mjs"
 import { visualRecord, assertVisual } from "./agent-visual.mjs"
 
@@ -117,14 +117,19 @@ const { values: opts, positionals } = parseArgs({
     ].map((key) => [key, { type: "string" }]),
     ["scope", { type: "string", multiple: true }],
     ...["allow-task", "file", "option", "repo"].map((key) => [key, { type: "string", multiple: true }]),
-    ...["json", "help", "confirm-stopped", "confirm-receipt", "commit-request"].map((key) => [key, { type: "boolean" }]),
+    ...["json", "help", "confirm-stopped", "confirm-receipt", "commit-request"].map((key) => [
+      key,
+      { type: "boolean" },
+    ]),
   ]),
 })
 const command = positionals[0]
 const repoPaths = opts.repo ?? []
 opts.repo = repoPaths[0]
 if (repoPaths.length > 1 && !(command === "claim" && opts["commit-request"]))
-  throw new Error("Repeated --repo is supported only for an explicit commit handoff claim; snapshots and commits remain repository-specific.")
+  throw new Error(
+    "Repeated --repo is supported only for an explicit commit handoff claim; snapshots and commits remain repository-specific."
+  )
 const fail = (message) => {
   throw new Error(message)
 }
@@ -591,7 +596,9 @@ async function release(claim, outcome, note) {
     fail("Unfinished Git journal: inspect commit-status and recover the Git transaction before releasing ownership.")
   if (outcome === "done") {
     if (claim.commitRequest?.taskStatus && claim.commitRequest.taskStatus !== config.backlog.doneStatus)
-      fail("An unfinished commit checkpoint cannot complete the task; release paused and claim the clean baseline to continue.")
+      fail(
+        "An unfinished commit checkpoint cannot complete the task; release paused and claim the clean baseline to continue."
+      )
     complete(task)
     if (gateLabels(task).length) fail("Human gates must be resolved before completing a task.")
     assertVisual({ root, claim, task })
@@ -716,7 +723,8 @@ async function main() {
     const kind = opts.run ? "runs" : opts.session ? "sessions" : "claims"
     const id = opts.run ?? opts.session ?? opts.claim
     const current = await readJSON(resolve(local, "state.json"), {})
-    const live = kind === "claims" ? Object.values(current.claims ?? {}).find((claim) => claim.id === id) : current[kind]?.[id]
+    const live =
+      kind === "claims" ? Object.values(current.claims ?? {}).find((claim) => claim.id === id) : current[kind]?.[id]
     print(live ?? (await readHistory(local, kind, id)))
     return
   }
@@ -1016,16 +1024,28 @@ async function main() {
           fail("Finish pending transitions/commits before changing the run's check requirements.")
       }
       run.checkRefreshes ??= []
-      run.checkRefreshes.push({ repo: required("repo"), by: owner.id, note, at: now(),
+      run.checkRefreshes.push({
+        repo: required("repo"),
+        by: owner.id,
+        note,
+        at: now(),
         previous: run.repositories.find((repo) => repo.path === required("repo"))?.checks ?? [],
-        checks: repositories.find((repo) => repo.path === required("repo")).checks })
+        checks: repositories.find((repo) => repo.path === required("repo")).checks,
+      })
       run.repositories = repositories
       // Snapshot fingerprints include repository config, so all snapshots in
       // this run need renewal. Never reuse an approval of the old check set.
-      for (const item of affected) Object.assign(item, {
-        repositories: structuredClone(repositories), snapshot: null, snapshots: {},
-        verification: null, verifications: {}, review: null, reviews: {}, visual: null,
-      })
+      for (const item of affected)
+        Object.assign(item, {
+          repositories: structuredClone(repositories),
+          snapshot: null,
+          snapshots: {},
+          verification: null,
+          verifications: {},
+          review: null,
+          reviews: {},
+          visual: null,
+        })
       beat(owner)
       await save()
       print({ refreshed: true, repo: required("repo"), invalidatedTasks: affected.map((item) => item.task) })
@@ -1038,7 +1058,8 @@ async function main() {
       if (!opts.file?.length) fail("Select exact --file paths; directories and broad staging are not supported.")
       if (claim.commitRequest) {
         const repo = required("repo")
-        const approved = claim.commitRequest.repositories?.[repo] ??
+        const approved =
+          claim.commitRequest.repositories?.[repo] ??
           (repo === claim.commitRequest.repo ? claim.commitRequest.files : null)
         if (!approved || opts.file.some((path) => !approved.includes(path)))
           fail("Commit handoff snapshots can select only the explicitly approved files and repository.")
@@ -1217,8 +1238,7 @@ async function main() {
       if (state.claims[task.id]) fail(`${task.id} already claimed by ${state.claims[task.id].session}.`)
       const commitRequest = Boolean(opts["commit-request"])
       if (commitRequest) {
-        if (run.policy.commits !== "on-request")
-          fail("Commit handoff requires an on-request commit policy.")
+        if (run.policy.commits !== "on-request") fail("Commit handoff requires an on-request commit policy.")
         if (task.status !== config.backlog.doneStatus && task.readiness?.isReady !== true)
           fail("Unfinished commit checkpoints require resolved dependencies.")
         required("authorization")
@@ -1235,7 +1255,9 @@ async function main() {
       if (gateLabels(task).length) fail(`Task has unresolved gates: ${gateLabels(task).join(", ")}.`)
       if (task.assignees.some((assignee) => assignee.replace(/^@/, "").toLowerCase() !== owner.agent))
         fail(`Task assigned to ${task.assignees.join(", ")}; resolve assignment before claiming.`)
-      const scopes = [...new Set(await Promise.all((commitRequest ? opts.file : opts.scope ?? []).map(canonicalScope)))]
+      const scopes = [
+        ...new Set(await Promise.all((commitRequest ? opts.file : (opts.scope ?? [])).map(canonicalScope))),
+      ]
       for (const other of Object.values(state.claims)) {
         if (scopes.some((scope) => other.scopes.some((existing) => overlaps(scope, existing))))
           fail(`Scope conflicts with ${other.task} (${other.session}).`)
@@ -1251,35 +1273,68 @@ async function main() {
         baseline: (await gitModule()).captureBaseline({ root, repositories: run.repositories }),
       }
       if (commitRequest) {
-        claim.baseline = (await gitModule()).authorizeCommitRequest({ root,
-          repoPath: opts.repo, repoPaths, paths: opts.file, scopes, baseline: claim.baseline,
-          repositories: claim.repositories }, opts.authorization)
+        claim.baseline = (await gitModule()).authorizeCommitRequest(
+          {
+            root,
+            repoPath: opts.repo,
+            repoPaths,
+            paths: opts.file,
+            scopes,
+            baseline: claim.baseline,
+            repositories: claim.repositories,
+          },
+          opts.authorization
+        )
         const approvals = claim.baseline.commitRequests ?? { [opts.repo]: claim.baseline.commitRequest }
-        claim.commitRequest = { authorization: opts.authorization, at: now(), repo: opts.repo, files: opts.file,
-          repositories: Object.fromEntries(Object.entries(approvals).map(([repo, approval]) =>
-            [repo, approval.files.map((file) => file.path)])), taskStatus: task.status }
+        claim.commitRequest = {
+          authorization: opts.authorization,
+          at: now(),
+          repo: opts.repo,
+          files: opts.file,
+          repositories: Object.fromEntries(
+            Object.entries(approvals).map(([repo, approval]) => [repo, approval.files.map((file) => file.path)])
+          ),
+          taskStatus: task.status,
+        }
       }
       if (opts["from-claim"] || opts.receipt) {
         if (opts["from-claim"] && opts.receipt) fail("Choose a recorded claim or legacy receipt, not both.")
         const note = required("note")
         let receipt
         if (opts.receipt) {
-          if (!opts["confirm-receipt"]) fail("Legacy recovery requires --confirm-receipt after inspecting original CLI outputs.")
+          if (!opts["confirm-receipt"])
+            fail("Legacy recovery requires --confirm-receipt after inspecting original CLI outputs.")
           receipt = await readJSON(resolve(root, opts.receipt))
           assertLegacyReceipts(receipt)
         } else receipt = await readHistory(local, "claims", opts["from-claim"])
         const source = receipt.claim ?? fail("Missing handoff claim.")
-        const previousSession = state.sessions[source.session] ?? await readHistory(local, "sessions", source.session)
-        const previousRun = state.runs[previousSession.runId] ?? await readHistory(local, "runs", previousSession.runId)
-        const restored = restoreOwnedBaseline({ root, receipt, previousRun, previousSession,
-          run, baseline: claim.baseline, scopes, task: task.id })
+        const previousSession = state.sessions[source.session] ?? (await readHistory(local, "sessions", source.session))
+        const previousRun =
+          state.runs[previousSession.runId] ?? (await readHistory(local, "runs", previousSession.runId))
+        const restored = restoreOwnedBaseline({
+          root,
+          receipt,
+          previousRun,
+          previousSession,
+          run,
+          baseline: claim.baseline,
+          scopes,
+          task: task.id,
+        })
         claim.baseline = restored.baseline
         // Preserve legacy receipts durably rather than depending on scratch or
         // changing the old run. All checks, visuals and review start afresh.
         const proofPath = resolve(local, "recovery", `${claim.id}.json`)
         await writeJSON(proofPath, receipt)
-        claim.resumedFrom = { claim: source.id, run: previousRun.id, session: source.session,
-          proof: relative(root, proofPath), note, at: now(), files: restored.restored }
+        claim.resumedFrom = {
+          claim: source.id,
+          run: previousRun.id,
+          session: source.session,
+          proof: relative(root, proofPath),
+          note,
+          at: now(),
+          files: restored.restored,
+        }
       }
       if (!run.touchedTasks.includes(task.id)) run.touchedTasks.push(task.id)
       state.claims[task.id] = claim

@@ -111,15 +111,7 @@
       "type": "object",
       "description": "Independent controls for delegation, review, local commits, human input, and bounded work. Every field must be specified.",
       "additionalProperties": false,
-      "required": [
-        "delegation",
-        "maxAgents",
-        "review",
-        "commits",
-        "onHumanInput",
-        "maxTasks",
-        "maxMinutes"
-      ],
+      "required": ["delegation", "maxAgents", "review", "commits", "onHumanInput", "maxTasks", "maxMinutes"],
       "properties": {
         "delegation": {
           "type": "string",
