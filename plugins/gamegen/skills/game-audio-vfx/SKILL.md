@@ -9,7 +9,9 @@ description:
 
 Read [shared context](../../references/shared-context.md), ready preferences and the relevant gameplay/animation events.
 Use the configured audio and image routes, credit limits and required delivery. Load a provider's audio/video skill only
-when it actually matches the requested output.
+when it actually matches the requested output. For the `local` audio route, use
+[game-audio-procedural](../game-audio-procedural/SKILL.md) for synthesis, sonic identity, loudness, loops and audio
+records; this skill still owns the cue list, integration and evidence.
 
 Make a small cue list for the scoped loop: action, success/failure, interaction, ambience, UI and music as appropriate.
 Distinguish cues the player needs to react to from decoration. Avoid creating a large library before verifying how the

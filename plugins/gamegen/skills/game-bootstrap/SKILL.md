@@ -16,8 +16,10 @@ required project file is `.agents/gamegen-prefs.json`. Never bootstrap the plugi
 1. Inspect existing preferences, project layout, accepted concepts and user decisions. Carry forward the title,
    description, player goal and development scope already provided. Inspect available Godot, local Blender,
    image-generation and optional service capabilities. For Blender, discover the executable and run the background
-   Python probe in the [CLI workflow](../../references/blender-cli.md); no Blender MCP setup is needed. Reuse working
-   connections for providers that use them.
+   Python probe in the [CLI workflow](../../references/blender-cli.md); no Blender MCP setup is needed. When audio is in
+   scope, check `uv` and `ffmpeg` for the
+   [local procedural audio route](../../references/providers.md#local-procedural-audio). Reuse working connections for
+   providers that use them.
 2. If the file is absent, run `python3 <plugin-root>/scripts/prefs.py init --project <game-repository>`. This writes an
    unconfirmed draft, not approved defaults. Use `read` for an existing file and preserve its chosen paths.
 3. Run `questions --project <game-repository>` and use [the intake catalog](../../references/intake.json) to identify

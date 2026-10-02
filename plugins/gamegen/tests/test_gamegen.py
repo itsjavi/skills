@@ -1,7 +1,9 @@
+import ast
 import concurrent.futures
 from copy import deepcopy
 import json
 from pathlib import Path
+import shutil
 import struct
 import subprocess
 import sys
@@ -266,6 +268,78 @@ class AssetAuditTest(unittest.TestCase):
             path.write_bytes(path.read_bytes()[:-1])
             with self.assertRaises(ValueError):
                 asset_audit.audit(path)
+
+
+AUDIO = ROOT / 'skills/game-audio-procedural'
+
+
+def sfx_ids(source):
+    """Asset ids registered with @sfx(...) in a recipe module, expanding round-robin variants."""
+    ids = []
+    for node in ast.walk(ast.parse(source)):
+        for deco in getattr(node, 'decorator_list', []):
+            if isinstance(deco, ast.Call) and getattr(deco.func, 'id', None) == 'sfx':
+                name = deco.args[0].value
+                variants = next((k.value.value for k in deco.keywords if k.arg == 'variants'), 1)
+                ids += [f'sfx/{name}'] if variants <= 1 else [f'sfx/{name}_{i + 1}' for i in range(variants)]
+    return ids
+
+
+def assigned(source, name):
+    """Value node of a top-level `name = ...` or `name: T = ...` assignment."""
+    for node in ast.parse(source).body:
+        targets = node.targets if isinstance(node, ast.Assign) else [getattr(node, 'target', None)]
+        if any(getattr(target, 'id', None) == name for target in targets):
+            return node.value
+    raise AssertionError(f'{name} is not assigned')
+
+
+class ProceduralAudioTest(unittest.TestCase):
+    def test_toolkit_sources_compile(self):
+        for path in sorted(AUDIO.rglob('*.py')):
+            with self.subTest(path=path.relative_to(AUDIO)):
+                compile(path.read_text(), str(path), 'exec')
+
+    def test_project_registries_start_empty(self):
+        self.assertEqual(sfx_ids((AUDIO / 'scripts/sfx.py').read_text()), [])
+        tracks = assigned((AUDIO / 'scripts/music/__init__.py').read_text(), 'TRACKS')
+        self.assertEqual(ast.literal_eval(tracks), {})
+
+    def test_copy_guard_covers_every_example(self):
+        expected = set(sfx_ids((AUDIO / 'examples/sfx_examples.py').read_text()))
+        tracks = assigned((AUDIO / 'examples/render_examples.py').read_text(), 'TRACKS')
+        expected |= {f'music/{key.value}' for key in tracks.keys}
+        hashes = json.loads((AUDIO / 'scripts/example_hashes.json').read_text())
+        self.assertEqual(set(hashes), expected)
+
+    @unittest.skipUnless(shutil.which('uv'), 'uv is required to run the numpy toolkit')
+    def test_build_records_and_rejects_example_copies(self):
+        with tempfile.TemporaryDirectory(prefix='gamegen-audio-') as folder:
+            project = Path(folder)
+            tools = project / 'tools/audio'
+            shutil.copytree(AUDIO / 'scripts', tools)
+            sfx = tools / 'sfx.py'
+            sfx.write_text(sfx.read_text() + (
+                '\n\n@sfx("blip", -16, notes="Test cue.")\n'
+                'def blip():\n'
+                '    n = samples(0.1)\n'
+                '    return STYLE.finish(synth.sine(STYLE.tone(5), n) * _env(n, 0.001, 0.1))\n'))
+            command = ['uv', 'run', '--quiet', str(tools / 'build.py'), '--project-manifest', 'art_source/manifest.json']
+            result = subprocess.run(command, cwd=project, capture_output=True, text=True, timeout=600)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            record = json.loads((project / 'art_source/manifest.json').read_text())['assets'][0]
+            self.assertEqual((record['id'], record['provider'], record['review']), ('audio/sfx/blip', 'local', 'draft'))
+            self.assertTrue((project / record['files'][0]['path']).exists())
+            self.assertEqual(record['source'], 'sfx.py#blip')
+
+            examples = (AUDIO / 'examples/sfx_examples.py').read_text()
+            whoosh = examples[examples.index('def _whoosh('):examples.index('def _thump(')]
+            jump = examples[examples.index('@sfx("jump"'):examples.index('@sfx("land"')]
+            sfx.write_text(sfx.read_text() + '\n\n' + whoosh + jump)
+            result = subprocess.run(command + ['--only', 'jump'], cwd=project, capture_output=True, text=True,
+                                    timeout=600)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('unmodified copies', result.stderr)
 
 
 if __name__ == '__main__':

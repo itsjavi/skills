@@ -79,6 +79,19 @@ construction, textures, rigs and exports, and [game-animation](../skills/game-an
 sources with a scoped background script; use computer control only when the project policy and visual task justify it.
 Preserve unrelated scenes and unsaved editor work.
 
+## Local procedural audio
+
+The `local` audio route synthesizes music and sound effects in code. Use
+[game-audio-procedural](../skills/game-audio-procedural/SKILL.md): it vendors a numpy/scipy toolkit into
+`<paths.tools>/audio`, defines the game's sonic identity before any cue, renders deterministic OGG files with loudness,
+loop and provenance metadata, and adds per-asset records to the project manifest. Discover `uv` and `ffmpeg`; Godot loop
+verification uses the local Godot executable. It costs no credits and needs no service connection.
+
+The route suits synth, chiptune, electronic, ambient and stylized SFX. It cannot convincingly produce acoustic
+instruments, orchestras, vocals or realistic field recordings; when the brief needs those, report the limit and ask for
+a stylized alternative or a licensed-asset fallback instead of substituting silently. The agent cannot listen, so
+subjective approval of melodies, mood and fatigue follows the configured review policy.
+
 ## Godot
 
 Use the connected Godot MCP for editor scene state, import refresh, live playtesting, logs and captures when available.

@@ -39,8 +39,9 @@ SpriteCook's `sha12` if its installed workflow uses it.
 3D records specify scale, forward/up axes, origin/ground contact, bounds, collision ownership, skeleton and animation
 paths, clip names, durations, looping and root-motion ownership. 2D records specify frame dimensions, layout/columns,
 frame count, rate, loop behavior, pivot, direction, filtering, alpha and trim offsets. Tiles add grid type, piece
-layout/masks, cell dimensions, terrain rules and collision/navigation layers. Use actual exported metadata, not intended
-values.
+layout/masks, cell dimensions, terrain rules and collision/navigation layers. Audio records specify the generating
+source, duration, channels, loop flag and loop offset, round-robin group and a pointer to the detailed audio manifest
+with loudness and seam measurements. Use actual exported metadata, not intended values.
 
 Asset progression is `draft`, `concept-approved`, `asset-review`, then `integrated`, with the reviewing actor and
 revision recorded. Follow the selected approval policy. A folder name such as `approved` is not proof of review.

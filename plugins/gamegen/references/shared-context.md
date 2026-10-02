@@ -1,9 +1,9 @@
 # Shared project context
 
-Every GameGen skill reads `.agents/gamegen-prefs.json` from the active game repository. The exception is a standalone
-`blender-game-assets` request outside a GameGen project, which follows that skill's standalone rules instead. Resolve
-paths from that repository, never from the installed plugin or the agent's home directory. The plugin root is the
-directory containing this reference's parent `references/` and `.codex-plugin/`.
+Every GameGen skill reads `.agents/gamegen-prefs.json` from the active game repository. The exceptions are standalone
+`blender-game-assets` and `game-audio-procedural` requests outside a GameGen project, which follow those skills'
+standalone rules instead. Resolve paths from that repository, never from the installed plugin or the agent's home
+directory. The plugin root is the directory containing this reference's parent `references/` and `.codex-plugin/`.
 
 Run `python3 <plugin-root>/scripts/prefs.py read --project <game-repository>`. Read the returned `prefs`, `ready` and
 `setup.revision`. This helper uses the Python standard library and discovers an existing preferences file from nested

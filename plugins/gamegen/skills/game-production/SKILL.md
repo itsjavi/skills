@@ -17,20 +17,21 @@ Inspect current files and evidence before treating inherited work as complete.
 
 ## Select only the needed workflows
 
-| Work                                           | Skill               |
-| ---------------------------------------------- | ------------------- |
-| Visual direction and construction views        | game-concept-art    |
-| 3D sources and exports                         | blender-game-assets |
-| Pixel, painted, cutout or rendered sprites     | game-sprites        |
-| Terrain tiles and adjacency rules              | game-tilesets       |
-| Skeletal, cutout or frame animation            | game-animation      |
-| Gameplay and persistence                       | godot-gameplay      |
-| Levels, camera, lighting and 2.5D presentation | game-world-building |
-| Interface and cross-device input               | game-ui-input       |
-| Sound, music and action effects                | game-audio-vfx      |
-| Gameplay and visual verification               | game-qa             |
-| Measured runtime optimization                  | game-optimization   |
-| Packaged delivery                              | game-export         |
+| Work                                           | Skill                                         |
+| ---------------------------------------------- | --------------------------------------------- |
+| Visual direction and construction views        | game-concept-art                              |
+| 3D sources and exports                         | blender-game-assets                           |
+| Pixel, painted, cutout or rendered sprites     | game-sprites                                  |
+| Terrain tiles and adjacency rules              | game-tilesets                                 |
+| Skeletal, cutout or frame animation            | game-animation                                |
+| Gameplay and persistence                       | godot-gameplay                                |
+| Levels, camera, lighting and 2.5D presentation | game-world-building                           |
+| Interface and cross-device input               | game-ui-input                                 |
+| Sound, music and action effects                | game-audio-vfx                                |
+| Procedural music and SFX (`local` audio route) | game-audio-procedural, through game-audio-vfx |
+| Gameplay and visual verification               | game-qa                                       |
+| Measured runtime optimization                  | game-optimization                             |
+| Packaged delivery                              | game-export                                   |
 
 Load only the selected skill and its relevant references. Provider skills are dependencies for the selected service, not
 replacements for the game brief or GameGen preferences.

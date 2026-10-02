@@ -7,5 +7,5 @@
   "repository": "https://github.com/itsjavi/skills",
   "license": "MIT",
   "skills": "./skills/",
-  "keywords": ["games", "godot", "blender", "sprites", "gamegen"]
+  "keywords": ["games", "godot", "blender", "sprites", "audio", "gamegen"]
 }

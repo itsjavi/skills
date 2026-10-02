@@ -1,18 +1,23 @@
 {
   "plugin": "gamegen",
   "display_name": "GameGen",
-  "version": "0.1.0",
-  "checked_at_utc": "2026-09-08T23:19:12.720975+00:00",
+  "version": "0.1.4",
+  "checked_at_utc": "2026-10-02T11:50:22.448170+00:00",
   "checks": {
-    "codex_plugin_validator": "passed",
+    "codex_plugin_validator": {
+      "result": "not-rerun",
+      "basis": "No local Codex validator command was available (the codex CLI has no plugin validate subcommand); the earlier pass predates game-audio-procedural."
+    },
     "codex_skill_validator": {
-      "result": "passed",
-      "skills": 14
+      "result": "not-rerun",
+      "skills": 15,
+      "basis": "Same as codex_plugin_validator; frontmatter and agents/openai.yaml follow the existing skills' format."
     },
     "helper_tests": {
       "result": "passed",
-      "tests": 28,
-      "command": "python3 -m unittest discover -s tests -v"
+      "tests": 32,
+      "command": "python3 -m unittest discover -s tests -v",
+      "note": "The uv-backed procedural audio build test is skipped when uv is unavailable."
     },
     "json_schema_2020_12": {
       "result": "passed",
@@ -23,8 +28,8 @@
     "skill_ui_metadata": "passed",
     "local_markdown_links": {
       "result": "passed",
-      "links_checked": 52,
-      "anchors_checked": 3
+      "links_checked": 50,
+      "scope": "Links in gamegen SKILL.md files, using the repository check-plugins logic; generated manifests and README catalogs were up to date."
     },
     "text_and_json_files": "passed",
     "gpt_image_25_guidance": {
@@ -81,6 +86,23 @@
         "https://community.openai.com/t/how-does-gpt-6-actually-generate-3d-models-in-release-demo-via-codex-local-blender-or-mcps-apis/1395391"
       ],
       "boundary": "The approved local asset exercised primitive/custom mesh construction, solid-color materials and UVs, skinning, IK, driven eyelids, animation rendering and fresh GLB import. Particle/simulation baking and painted or baked texture-map production were reviewed as guidance and were not exercised by that asset. No new game-engine or target-device verification was performed."
+    },
+    "claude_plugin_validator": {
+      "result": "passed",
+      "checked_at_utc": "2026-10-02T11:50:22.448170+00:00",
+      "commands": [
+        "claude plugin validate --strict .claude-plugin/marketplace.json",
+        "claude plugin validate --strict plugins/gamegen"
+      ]
+    },
+    "procedural_audio": {
+      "result": "passed",
+      "checked_at_utc": "2026-10-02T11:50:22.448170+00:00",
+      "renders": "All 43 example assets (38 SFX including variants, 5 music cues) rendered; loop seam ratios 0.003-0.35; decoded lengths matched; no clipping.",
+      "example_hashes": "Re-rendering the examples reproduced scripts/example_hashes.json exactly on this machine.",
+      "copy_guard": "A verbatim example recipe was rejected; an original STYLE-based cue built and was recorded in the project manifest.",
+      "godot_loops": "engines/godot/godot_loops.py verified loop flags, offsets and lengths of 43 assets headlessly in a scratch Godot project before packaging; not re-run after packaging.",
+      "boundary": "Checks are objective (loudness, peaks, seams, lengths, spectrograms). Musical and sonic quality was not judged by listening; example hashes are platform-dependent, so the copy guard is best-effort."
     }
   },
   "icon": {
@@ -99,53 +121,83 @@
     "The question-tool intake was reviewed as instructions; an actual user conversation was not automated.",
     "External SpriteCook and Higgsfield generation, paid quotas and service authentication were not exercised.",
     "The package was not installed into Codex as part of these checks.",
-    "Asset audit tests inspect metadata; complete game production, engine playback and target-device performance need project-level verification."
+    "Asset audit tests inspect metadata; complete game production, engine playback and target-device performance need project-level verification.",
+    "Repository-wide npm run check and npm test fail identically on the unchanged HEAD because of agent-fleet runtime build identity drift (bundle.mjs --check); gamegen generated files, catalogs and links were checked separately."
   ],
   "sha256": {
-    ".codex-plugin/plugin.json": "90907dc7412b611709e01934d859dd1a8b73b284a3ae44e911773206c50e212f",
-    "README.md": "694ffe403166ce471010e1ef5ddeb5fb18866a1c8304475ecec74e8c7a2b12d8",
+    ".codex-plugin/plugin.json": "b19303a411fb853f2a5f4240b771cf446482af0aa9077fef11e607f385c166c6",
+    "README.md": "d0e5b09430cef25825e64a799fcb05f70e042f26541cefcfd685746cf8f5d07a",
     "assets/icon-generation.json": "03820cd0faaa8ce683fa5863055d94173ef554288d5ff7bb43d0d9ba8cb42c97",
     "assets/icon.png": "c4151af11d83cf8cb14a437f713e5f94624a3bea2e25e5771972b4a8908758fc",
-    "references/blender-cli.md": "bf979d76352f527ff35f8e7c99ceed4913c15eefa5356dcdc4647bf94fe5ea00",
-    "references/concept-references.md": "508484f0c9afa0ef2f5e01040a629da3c33dade318950fa220bd4d53919fb84a",
-    "references/intake.json": "4ed808f2d456ce321b9d9868aea251c0862b89e8c0f6ce1e5cd96274aa9d48ab",
-    "references/providers.md": "645be280c2990784f1e4fd4f866cbf75a898071e819f80950b8e2398b0da105a",
-    "references/repository.md": "31bb0a548053888625280a2df5f8309551e9010df24ab41de5b29d7f802a03a3",
-    "references/shared-context.md": "6c22c1c2fbc4ab16736044053f2501baf9a5af1b013d4fc4604569594c06bdd3",
-    "schemas/gamegen-prefs.schema.json": "799a6658569ec411df0e4199266a167ca5469963d475bd79e5406cabd271142e",
+    "references/blender-cli.md": "e4b593fef1f286e1c07a904c77bbddfe65c5ec7c44afaedc2bc14cbdd50acf43",
+    "references/concept-references.md": "93ed8a02c457cbcb2b637c12a60bdea631ef35b1ea61c053d9d207b2d48c8b0d",
+    "references/intake.json": "e6655bdadeab777e0e5fedf2903efea0c52f0e1636bed142bfabd5fb949b3186",
+    "references/providers.md": "7c75a426777a15e9438ef204b8ef70939fc9f6b149847b9d4d575e459afa5bdf",
+    "references/repository.md": "af0d659428f9b87c24e5542c2eed2591fed2e09022b2f549311b8b806d9c8e5d",
+    "references/shared-context.md": "20081b36a049567fdc2b14c374b7e4756c12c1db783c84368cc2599b19e93e01",
+    "schemas/gamegen-prefs.schema.json": "c24e93a1d05d5bb15e10bde0d3887c7583d1ee6ddef0be180aec8b739656d209",
     "scripts/asset_audit.py": "ab3933e663cb4e146808d39a8bfc92c7408789111679d2f5b2fc571a65dcba70",
     "scripts/prefs.py": "f39dfba447dd7d349a1e57b6ecf32c85261d417ae205b5398d54e40110752354",
-    "skills/blender-game-assets/SKILL.md": "5aa2c5d626af468212fc9c7d057ed2e0eb5f1ca11fed7ff4b8a04bc9cac0629b",
-    "skills/blender-game-assets/agents/openai.yaml": "dd8d59fb1d57919f9a8f8a07dee7957dbff5d8ae4db009ccefb80fbe00fd6828",
-    "skills/game-animation/SKILL.md": "46433898663dba956c872a02512c74d155663b3e334f8032f6f82a36381e7442",
+    "skills/blender-game-assets/SKILL.md": "d6e9ab7a073fb753afa9b5b8ff9d352e97ed14e2a919a6e9edd116fa22a75d26",
+    "skills/blender-game-assets/agents/openai.yaml": "bb072407ace35fb5d1f0ae604bd4e4a39b1f72485d77a59efce75cd3446cce27",
+    "skills/game-animation/SKILL.md": "831ebc3a54a98f9702c0429f86046511b2fb5c9bd48e5f17869e879eab676ee1",
     "skills/game-animation/agents/openai.yaml": "2aa7b5048736b70ce296e89a823ed261a0f7f962e8782b0a45abb13eb50c6c04",
-    "skills/game-audio-vfx/SKILL.md": "029c2efc5e2bfb6328896efd82bb98f9f0deabe60eb49eec8bc1e340aa0e24db",
+    "skills/game-audio-procedural/SKILL.md": "3b70aac07cd9f55a83d6a7cdfe6f5f784a66ce174a5fbbdbbc1ea6f2465cd115",
+    "skills/game-audio-procedural/agents/openai.yaml": "321f636768191a6d74054ce7a02d0c03e5517fd7ee1776fd8513525bdc723eec",
+    "skills/game-audio-procedural/examples/music_ambient.py": "94288423a351471a375860d8f58b71f880bb336d0907de155d077c3c352aa4db",
+    "skills/game-audio-procedural/examples/music_chip.py": "2831de997a5da8a9466862dac5e8f595b844956ecae6c04f39451bdc776044fe",
+    "skills/game-audio-procedural/examples/music_jingles.py": "dec8cff0f75e7b2400cf14f85176ef230c4f61af14d7f7610a9ee06b8fd24077",
+    "skills/game-audio-procedural/examples/music_stage.py": "4fd2b2146d4dbeb7ae72b7244b74975bc30c51e8b3c03c11a790b1a4d19928ea",
+    "skills/game-audio-procedural/examples/render_examples.py": "d002cf8b7084cd1bc61dfcdef3c0a131ddc41d14207c05d4c6744689b682cd25",
+    "skills/game-audio-procedural/examples/sfx_examples.py": "117dedb680ce87101b38949574b495b414e896f89c13b3db5befac1e03b18096",
+    "skills/game-audio-procedural/references/audio-direction-template.md": "5562495e28ee7f1804e9afb55169f3f6dce9bad0d8e8126beaa05267ef1fab4d",
+    "skills/game-audio-procedural/references/engine-integration.md": "50418ab6d4a6c0164ad9c4b457930e5ce1fe54184e5143b01bb13352db866a28",
+    "skills/game-audio-procedural/references/mixing-and-loops.md": "16bf0619f8577e28ef7352cb3bcac0a320b354916cf4ead0b7c17efe1fcdc7ef",
+    "skills/game-audio-procedural/references/music-composition.md": "51e5564713c53ae2054cffd3b1edabd85c4a1a54d575c4e84fcec274c59c98c4",
+    "skills/game-audio-procedural/references/sfx-design.md": "78b1440e6e4b0afdaec7103a68ea9da2698c2e56262c02929f68bc8b8aae6f56",
+    "skills/game-audio-procedural/scripts/build.py": "a7297fab6fb9090d4877ec45c485ecc687799d1812a8e8a53cd2ad1a1145c6b0",
+    "skills/game-audio-procedural/scripts/core.py": "73dc44af2cf1447250516e69be6680622a42740dcc15cfaaefe730b3b8e211f6",
+    "skills/game-audio-procedural/scripts/drums.py": "38d89da3ff6b1d530bb3f4fe596910b09e356c1be7916358dc361eeb5564e23f",
+    "skills/game-audio-procedural/scripts/engines/godot/godot_loops.py": "f7cd3f065551394e2267516f719194cdafeb4579a4cfd5f7337b78cdfa7e4253",
+    "skills/game-audio-procedural/scripts/engines/godot/verify_audio.gd": "015ac7fb43a89a70b2d4bcd75f9b770014d8c32fe36a253e01cdea3f0663233e",
+    "skills/game-audio-procedural/scripts/example_hashes.json": "8f6021c236c967bc7a64b4a28cdb83605af96c6280228cf4c1f37191ef8e8aa2",
+    "skills/game-audio-procedural/scripts/fx.py": "305d654b6b2fee2aedec661c12ab3bd599559e384b004c317b2c59eaf46b8b25",
+    "skills/game-audio-procedural/scripts/instruments.py": "c0ebaa8534b49ebcfe0803962ea9730876083ec4c28f20b4c772e188db696cf9",
+    "skills/game-audio-procedural/scripts/mixer.py": "0d5f403de74c2e3b301c93bc962d9a4bad609500bbbe516afa0464a659b0235b",
+    "skills/game-audio-procedural/scripts/music/__init__.py": "59b3ed94eb442558d703345afce874e7f220fd7ae4ecd7308757646867f8f570",
+    "skills/game-audio-procedural/scripts/music/common.py": "9de69ca6f611333b5e13f2f5e44f2782d8077897985f5661cfce9a4baaec937b",
+    "skills/game-audio-procedural/scripts/review.py": "99ca8cb2b39aed8ff673367b9b414073148c690366873a040b7db94927a89b92",
+    "skills/game-audio-procedural/scripts/sequencer.py": "6222a8b2127eeb95d43ed77f91347ed075b9735eb43ffa613259300c0976bda2",
+    "skills/game-audio-procedural/scripts/sfx.py": "20c81cfb4eea0c45c80e91f6943128d0fedc12dbfca01c770f3c892e738672f9",
+    "skills/game-audio-procedural/scripts/style.py": "ccb1120dfa8b1b7ea3cd0139bbd0815ff3dccaf28491fdb271696e4d31a04463",
+    "skills/game-audio-procedural/scripts/synth.py": "32dd2ab40868e6d10286ba7ac5626a9c2d247173759e98e1e38aa2b3a2588f25",
+    "skills/game-audio-vfx/SKILL.md": "c5eccadbe06bcb22780125574bceae4b93bc5f3c2eb4b89fd07ab19836f79967",
     "skills/game-audio-vfx/agents/openai.yaml": "6b7529e2e994cb6254bf6792301b7920eebefe5d6498e0ff9a5e2f26b73c5109",
-    "skills/game-bootstrap/SKILL.md": "1b71923ff1f32db7dd1fae866ccba52d4e7a7bf8830f5d827891fd4df8f15831",
+    "skills/game-bootstrap/SKILL.md": "74e271a94e8fb2d4194619dbf8af6923f4b9118e9b78b4a29975d88495b2ad57",
     "skills/game-bootstrap/agents/openai.yaml": "464a65b49f0714efe62d8fe63cd54c1cf60e2970da83155ac97d88442f182c05",
-    "skills/game-concept-art/SKILL.md": "4d0efe51bc7408eafa00b007f659a3da8cb0dc42b4ea79d1fb2057e3a1a3ab5d",
+    "skills/game-concept-art/SKILL.md": "e038d53e6cc0422c7dab0c6914b2ab20bb4d5726d3103875c1f290434e2583b1",
     "skills/game-concept-art/agents/openai.yaml": "aff826926d1910fa5e6dcf975bca71c4847e8362e89cbffb0e9b9b34435a52df",
-    "skills/game-export/SKILL.md": "5e708fe87a74cab1d7abd4691ff35a3078a0615dc7b7a9659ed2dd27d8cab729",
+    "skills/game-export/SKILL.md": "6934a6c75a4f70ad03572d2b2d4a5bd4864a9b4ae2be9692d487bd9a8923a2be",
     "skills/game-export/agents/openai.yaml": "f7d9206ecc1b37635147299bc13fca577c9095a40506554f57d1c551b9b7dd85",
-    "skills/game-optimization/SKILL.md": "357b21248831c036ba0dcf41e65606c8c768fa03d9715136204aa7db35cfde6e",
+    "skills/game-optimization/SKILL.md": "e6774bd364b04477755b44ca1b25f17e25712fe7e1b84c25eab5c7890e40bb0e",
     "skills/game-optimization/agents/openai.yaml": "0e5b830bceacaa949dbcd4217729e1f198640db4ed1d3e2fcc4c133f945802f5",
-    "skills/game-production/SKILL.md": "b413d38ad4e23221a0273f93387607c33b12ed2f9f0d1f26f6853c7ee8d6a3ba",
+    "skills/game-production/SKILL.md": "9feaa4586272ce5d3e6283e9ec7c9c60e27b9e123568a2b53a3a94d4b2a0f3ef",
     "skills/game-production/agents/openai.yaml": "7dce7b757c271da926e346ffc1097299c497531648830b9511bc05b3b3f47d13",
-    "skills/game-qa/SKILL.md": "2bdeb8b4e5773c6f90bd7341648b7cfca4183b70af46a2f7cc134ffd3661d5b4",
+    "skills/game-qa/SKILL.md": "208cec7c412a8576f9c5af9057b33e89bf427ab4f188c1edb533dfb3a502cfee",
     "skills/game-qa/agents/openai.yaml": "2ccc4c340053529a852b1a85b56208b3aba663f3d954072d3bec9b99160b371e",
-    "skills/game-sprites/SKILL.md": "b9072de14b0ca7cebab9be1112e93007606b9c53341751149e109e098fcd758d",
+    "skills/game-sprites/SKILL.md": "741ccc447c622f72a26069c963e3a8ab50aa5a25f57478f9a80971d49d9821fe",
     "skills/game-sprites/agents/openai.yaml": "f18c25bad622cdca7545ab3f2550149257efd12d9c81f602c73f26893ddfe593",
-    "skills/game-tilesets/SKILL.md": "abf15c5feba449f2917474794fafc7298b31474ae785a693593cd3373a1337a3",
+    "skills/game-tilesets/SKILL.md": "43fa7b9ec97140737304843314df1e2a26ed9cda036824cc8832c094bea07f35",
     "skills/game-tilesets/agents/openai.yaml": "60e8529b153e437d970a1ea0019dc29e3ca54e92567bff32d7a996fff8824308",
-    "skills/game-ui-input/SKILL.md": "7ce27695fa33e8fc84d51b1b8139871c3e696dfe43586dfe92bc1114044fdc08",
+    "skills/game-ui-input/SKILL.md": "f1d0aa368dbf5a9d6fcad296f80b0805ca41b6b77c06773626abdef59f5f3d09",
     "skills/game-ui-input/agents/openai.yaml": "dfbf1090eb0aadc826ef81489489260241ead70bf61394131a2054d9409c67bb",
-    "skills/game-world-building/SKILL.md": "fb38fdf91b472cd7cdc989705fc8e360921cab1d96b9b4d18e2cb4703787f13e",
+    "skills/game-world-building/SKILL.md": "80da2e964fb547a788536669652c96b24f4c63ff91d3e1ddc24abd5be1bed0dc",
     "skills/game-world-building/agents/openai.yaml": "0f2354083f03b792580dbc7fb700d08d04854e84598f81cd06055acfb887e9d6",
-    "skills/godot-gameplay/SKILL.md": "347230c4f5e66a78dc2a6f9543cec8cb80df5aae65e3595ca0626b98779d2a42",
+    "skills/godot-gameplay/SKILL.md": "daf9d53f4d7ace4459357f16ca27dd55c33642b7c16e79dda312d55833e5fe97",
     "skills/godot-gameplay/agents/openai.yaml": "100bb3e09938559630719d89cb184f543102914e1d411a2378f94d3f21ce2fb2",
-    "templates/AGENTS.md": "44f4ccdfb8e757a48a9c6dd3b363145c4238e8053c8eaee2104c81e7587b0e3d",
+    "templates/AGENTS.md": "927968dfc4604c62733b123037bdc97e1e432c88e245bf7100b65022cfbc9088",
     "templates/asset-manifest.json": "058d6610c9f8e53da759d27d610fdf8c68fcfa92ca7381878c1a6b728882b2aa",
-    "templates/gamegen-prefs.json": "d3349f70c90d5a620b82cac143cef0a6f09c74db07534ce2fa537a8676ce0169",
-    "tests/test_gamegen.py": "30bca500f11e3cfecf8bbd796c95f959fefcea849f03fa1af53748c6e02c86a5"
+    "templates/gamegen-prefs.json": "cb4cd2b16927efdd6e56e0da7bd0870babc136142aa7b78ff11c2a79df5540e3",
+    "tests/test_gamegen.py": "430efe9ace21bc8fca43b9ffdb5b24f115c070ba5c6fff4a1f82521aa7b2bfc9"
   }
 }

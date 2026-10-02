@@ -27,7 +27,7 @@
   {
     "section": "generation",
     "prompt": "Which image and asset providers, models and quality settings may each production stage use?",
-    "guidance": "Offer GPT Image 2.5 for concepts, with Flare as the default for exploration and routine generation and Sunburst for precise edits or polished final artwork. Use references/providers.md for flavor selection and tool availability rules. Offer SpriteCook for 2D assets when connected, local Blender for 3D work, and Higgsfield only if needed. Resolve provider-default versus explicit model per purpose, permitted fallbacks, and computer use only when needed."
+    "guidance": "Offer GPT Image 2.5 for concepts, with Flare as the default for exploration and routine generation and Sunburst for precise edits or polished final artwork. Use references/providers.md for flavor selection and tool availability rules. Offer SpriteCook for 2D assets when connected, local Blender for 3D work, local procedural audio for music and sound effects, and Higgsfield only if needed. Resolve provider-default versus explicit model per purpose, permitted fallbacks, and computer use only when needed."
   },
   {
     "section": "budget",
@@ -37,7 +37,7 @@
   {
     "section": "features",
     "prompt": "Which supporting features belong in this delivery?",
-    "guidance": "Resolve players/network, saves, languages, audio, monetization and content constraints. Ask only about relevant possibilities and record accepted exclusions."
+    "guidance": "Resolve players/network, saves, languages, audio, monetization and content constraints. When audio is in scope, also ask for its aesthetic in words (genre, era, mood, sound palette) so the audio direction can define a distinct sonic identity. Ask only about relevant possibilities and record accepted exclusions."
   },
   {
     "section": "workflow",

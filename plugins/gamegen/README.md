@@ -48,6 +48,12 @@ dependency. Build from primitives and custom geometry to match references, use p
 and retain editable materials, textures, rigs and animations. The [Blender workflow](references/blender-cli.md) covers
 the verified macOS launch workaround, observable rendering and fresh-import checks.
 
+The default `local` audio route uses `game-audio-procedural`: music and sound effects are synthesized in code with a
+bundled numpy/scipy toolkit that is copied into the game's tools directory. Each game first defines its own sonic
+identity, so games built with the toolkit do not share sounds. Builds are deterministic, measure loudness and loop
+seams, and record provenance in the asset manifest. It needs `uv`, plus `ffmpeg` for review images; it uses no paid
+service. See [the skill](skills/game-audio-procedural/SKILL.md) for its scope and limits.
+
 ## Preferences helper
 
 The helper requires Python 3.9 or later and uses only the standard library. Run these examples from this plugin
@@ -94,8 +100,9 @@ performance. Those checks belong in the actual engine workflow.
 
 ## Package contents and validation
 
-The package contains 14 skill entrypoints with Codex UI metadata, shared references, question catalog, preferences
-schema/defaults, project and manifest templates, standard-library helpers, tests and a generated icon. It keeps
+The package contains 15 skill entrypoints with Codex UI metadata, shared references, question catalog, preferences
+schema/defaults, project and manifest templates, standard-library helpers, the procedural audio toolkit (run with `uv`;
+it needs numpy, scipy and soundfile, unlike the standard-library helpers), tests and a generated icon. It keeps
 service-specific skills as external dependencies and uses the fallback policy when a selected dependency is unavailable.
 It contains no MCP authentication configuration.
 

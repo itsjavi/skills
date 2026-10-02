@@ -7,11 +7,11 @@
   "repository": "https://github.com/itsjavi/skills",
   "license": "MIT",
   "skills": "./skills/",
-  "keywords": ["games", "godot", "blender", "sprites", "gamegen"],
+  "keywords": ["games", "godot", "blender", "sprites", "audio", "gamegen"],
   "interface": {
     "displayName": "GameGen",
     "shortDescription": "From game idea to a tested playable build.",
-    "longDescription": "Fourteen coordinated game-production skills with question-driven setup, reusable project preferences, concept references, 2D and 3D asset workflows, and optional SpriteCook or Higgsfield integrations.",
+    "longDescription": "Fifteen coordinated game-production skills with question-driven setup, reusable project preferences, concept references, 2D and 3D asset workflows, procedural music and sound effects, and optional SpriteCook or Higgsfield integrations.",
     "developerName": "Javi",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],

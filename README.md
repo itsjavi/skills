@@ -45,6 +45,9 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
 - [game-animation](plugins/gamegen/skills/game-animation/SKILL.md): For GameGen projects, author and verify skeletal,
   cutout or frame animations for game assets, including locomotion cadence, action timing, transitions and expressive
   motion.
+- [game-audio-procedural](plugins/gamegen/skills/game-audio-procedural/SKILL.md): Compose game music and design sound
+  effects in code with a bundled numpy/scipy synthesis toolkit, then export loop-ready OGG with a metadata manifest and
+  objective checks.
 - [game-audio-vfx](plugins/gamegen/skills/game-audio-vfx/SKILL.md): For GameGen projects, create and integrate game
   music, sound and visual feedback with coherent style, synchronized action timing, accessibility and runtime budgets.
 - [game-bootstrap](plugins/gamegen/skills/game-bootstrap/SKILL.md): Set up a new game project or resolve missing GameGen
