@@ -25,7 +25,7 @@ import { trackTask, assertTrackedTask, fileDigest } from "./agent-tracker.mjs"
 import { visualRecord, assertVisual } from "./agent-visual.mjs"
 
 // Generated from this entrypoint and its helpers by the setup skill's bundle command.
-const RUNTIME_BUILD = "aecb91fadd67cbf05257c457a7364c59eeb783613b5ebbda3a5515dfadf22772"
+const RUNTIME_BUILD = "8f28bff0737bbe2c6b4a8e5d4883e56abeb67a356cb131091dcdab0455b2ece6"
 
 const HELP = `Usage: node .agents/agent-workspace/scripts/agents.mjs COMMAND [options]
 
