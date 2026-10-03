@@ -72,6 +72,10 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
 - [game-tilesets](plugins/gamegen/skills/game-tilesets/SKILL.md): For GameGen projects, create and validate game
   tilesets, terrain transitions and tile metadata for square, isometric or hexagonal levels, including optional
   SpriteCook generation.
+- [game-trailer](plugins/gamegen/skills/game-trailer/SKILL.md): Produce promo trailers from real gameplay of a Godot 4
+  game: a beat-synced 16:9 1080p60 trailer, a native 9:16 vertical cut, a looping GIF and posters, rendered with Movie
+  Maker from bot playthroughs in the game's own fonts and art, cut on the bar grid of a procedural cue, and reproducible
+  from a marketing/ directory the game never depends on.
 - [game-ui-input](plugins/gamegen/skills/game-ui-input/SKILL.md): Build or refine game interfaces and keyboard,
   controller or touch input from GameGen platform preferences, including accessible layouts and simultaneous mobile
   controls.

@@ -32,6 +32,7 @@ Inspect current files and evidence before treating inherited work as complete.
 | Gameplay and visual verification               | game-qa                                       |
 | Measured runtime optimization                  | game-optimization                             |
 | Packaged delivery                              | game-export                                   |
+| Trailers, gameplay videos and GIFs             | game-trailer                                  |
 
 Load only the selected skill and its relevant references. Provider skills are dependencies for the selected service, not
 replacements for the game brief or GameGen preferences.

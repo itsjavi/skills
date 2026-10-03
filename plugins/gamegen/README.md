@@ -41,7 +41,8 @@ selector; this does not guarantee a particular model or flavor.
 
 Use `game-production` to continue an authorized project through its saved scope and selected review policy. The
 remaining skills cover concept art, Blender assets, sprites, tilesets, animation, gameplay, world presentation,
-UI/input, audio/VFX, QA, optimization and exports. See [the production routing table](skills/game-production/SKILL.md).
+UI/input, audio/VFX, QA, optimization, exports and gameplay trailers. See
+[the production routing table](skills/game-production/SKILL.md).
 
 Blender work uses the installed executable and background Python through `bpy`, with no third-party Blender MCP
 dependency. Build from primitives and custom geometry to match references, use procedural construction where it helps,
@@ -100,7 +101,7 @@ performance. Those checks belong in the actual engine workflow.
 
 ## Package contents and validation
 
-The package contains 15 skill entrypoints with Codex UI metadata, shared references, question catalog, preferences
+The package contains 16 skill entrypoints with Codex UI metadata, shared references, question catalog, preferences
 schema/defaults, project and manifest templates, standard-library helpers, the procedural audio toolkit (run with `uv`;
 it needs numpy, scipy and soundfile, unlike the standard-library helpers), tests and a generated icon. It keeps
 service-specific skills as external dependencies and uses the fallback policy when a selected dependency is unavailable.
