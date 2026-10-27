@@ -9,8 +9,9 @@
 # The private EdDSA key stays out of the repo: by default Sparkle's tools read it from the login
 # Keychain (account "<app>", made by `generate_keys --account <app>`). CI passes SPARKLE_KEY_FILE
 # instead, a file holding the exported key (`generate_keys --account <app> -x <file>`).
-# Release notes: put <App>-<version>.html or .md next to the zip in build/appcast and they're
-# embedded in the feed.
+# Release notes: the version's CHANGELOG.md section (scripts/changelog.sh), written next to the zip as
+# <App>-<version>.md and embedded in the feed, so Sparkle's update window shows it. An
+# <App>-<version>.html or .md already in build/appcast is used instead.
 #
 # Template from the macos-app-releases skill: replace <App> and <app>.
 set -euo pipefail
@@ -57,6 +58,13 @@ if [ ! -f "$OUT/appcast.xml" ] && [ -z "${NEW_FEED:-}" ]; then
   esac
 fi
 cp "$ZIP" "$OUT/"
+NOTES="$OUT/$APP_NAME-$VERSION"
+if [ ! -f "$NOTES.html" ] && [ ! -f "$NOTES.md" ]; then
+  scripts/changelog.sh notes "$VERSION" > "$NOTES.md" || {
+    rm -f "$NOTES.md"
+    echo "warning: no CHANGELOG.md section for $VERSION: the update has no release notes" >&2
+  }
+fi
 
 KEY_FLAGS=(--account "$SPARKLE_ACCOUNT")
 if [ -n "${SPARKLE_KEY_FILE:-}" ]; then KEY_FLAGS=(--ed-key-file "$SPARKLE_KEY_FILE"); fi

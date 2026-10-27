@@ -36,11 +36,24 @@ make build-notarized              # Developer ID + the <profile> notarytool prof
 make appcast                      # signs the feed with the Sparkle key in the Keychain (account <app>)
 git push --atomic origin main vX.Y.Z
 gh release create vX.Y.Z build/release/<App>-X.Y.Z.dmg build/release/<App>-X.Y.Z.zip \
-  build/release/SHA256SUMS build/appcast/appcast.xml --title vX.Y.Z --generate-notes --verify-tag
+  build/release/SHA256SUMS build/appcast/appcast.xml --title vX.Y.Z --verify-tag \
+  --notes-file <(scripts/changelog.sh notes X.Y.Z)
 ```
 
 The pushed tag still starts the Release workflow, but it leaves an existing release alone. Create the release right
 after pushing: the workflow tests and builds for several minutes before it would publish its own.
+
+## Release notes
+
+`make bump` adds the release's section to `CHANGELOG.md` (`scripts/changelog.sh`) and commits it with `VERSION`: the
+Conventional Commits since the previous release (a stable release counts from the previous stable one), grouped as
+breaking changes (`feat!:` or a `BREAKING CHANGE:` footer), features (`feat`), fixes (`fix`) and performance (`perf`).
+Other types (`chore`, `build`, `ci`, `docs`, `refactor`, `style`, `test`) are left out, so write user-facing changes as
+`feat`, `fix` or `perf` with a subject that reads well in a list. That section is the GitHub release's description and,
+embedded in `appcast.xml`, what Sparkle's update window shows.
+
+To reword the notes before releasing: `make bump V=patch` (no `PUSH`), edit `CHANGELOG.md`, `git commit --amend`,
+`git tag -fa vX.Y.Z`, then `git push --atomic origin main vX.Y.Z`.
 
 ## Update feed
 

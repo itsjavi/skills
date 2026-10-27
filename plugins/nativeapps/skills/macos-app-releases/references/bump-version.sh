@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Bumps VERSION, commits it and tags the commit vX.Y.Z (the tag release.yml builds).
+# Bumps VERSION, adds the release's CHANGELOG.md section (scripts/changelog.sh), commits both and tags the
+# commit vX.Y.Z (the tag release.yml builds). To reword the notes, run it without --push, edit CHANGELOG.md,
+# `git commit --amend`, `git tag -fa vX.Y.Z` and push.
 #
 #   scripts/bump-version.sh <major|minor|patch|X.Y.Z|X.Y.Z-beta.N> [--push]
 #
@@ -16,7 +18,7 @@ cd "$(dirname "$0")/.."
 APP_NAME="<App>"
 BRANCH="main"
 
-usage() { sed -n '4,10s/^# \{0,1\}//p' "$0" >&2; exit 64; }
+usage() { sed -n '6,12s/^# \{0,1\}//p' "$0" >&2; exit 64; }
 fail() { echo "✗ $*" >&2; exit 1; }
 
 target="" push=0
@@ -84,11 +86,18 @@ if [ "$push" = 1 ]; then
 fi
 
 if [ "$retag" = 1 ]; then
+  # Its notes too, unless CHANGELOG.md has them already.
+  if ! grep -q "^## $next (" CHANGELOG.md 2>/dev/null; then
+    scripts/changelog.sh add "$next" >/dev/null
+    git add CHANGELOG.md
+    git commit -q -m "chore(release): $tag"
+  fi
   git tag -a "$tag" -m "$APP_NAME $next"
   echo "✓ Tagged $tag on the current commit (VERSION is already $next)"
 else
   echo "$next" > VERSION
-  git add VERSION
+  scripts/changelog.sh add "$next" >/dev/null
+  git add VERSION CHANGELOG.md
   git commit -q -m "chore(release): $tag"
   git tag -a "$tag" -m "$APP_NAME $next"
   echo "✓ $current → $next, committed and tagged $tag"

@@ -41,8 +41,9 @@ entitlements basics are in the `macos-app-development` skill.
 | ------------------------------------------------------------------ | -------------------- | ------------------------------------------------------------------------------ |
 | [build-app.sh](references/build-app.sh)                            | `scripts/`           | Assembles the `.app`, embeds and thins Sparkle, signs nested code              |
 | [release.sh](references/release.sh)                                | `scripts/`           | App, zip, DMG, `SHA256SUMS`; notarizes and staples, or ad-hoc + what's missing |
-| [appcast.sh](references/appcast.sh)                                | `scripts/`           | Downloads the live feed, adds and signs the new item                           |
-| [bump-version.sh](references/bump-version.sh)                      | `scripts/`           | `VERSION`, commit, `vX.Y.Z` tag, optional atomic push                          |
+| [appcast.sh](references/appcast.sh)                                | `scripts/`           | Downloads the live feed, adds and signs the new item with its release notes    |
+| [bump-version.sh](references/bump-version.sh)                      | `scripts/`           | `VERSION`, `CHANGELOG.md` section, commit, `vX.Y.Z` tag, optional atomic push  |
+| [changelog.sh](references/changelog.sh)                            | `scripts/`           | `CHANGELOG.md` sections from Conventional Commits; prints a version's notes    |
 | [ci-select-xcode.sh](references/ci-select-xcode.sh)                | `scripts/`           | Picks the newest Xcode 26+ on the runner                                       |
 | [release.yml](references/release.yml), [ci.yml](references/ci.yml) | `.github/workflows/` | Tag-driven release; tests and a release build on PRs and main                  |
 | [release.mk](references/release.mk)                                | `Makefile`           | `app`, `release`, `build-notarized`, `install-notarized`, `appcast`, `bump`    |
@@ -121,6 +122,15 @@ left: `grep -rnE '<(App|app|bundle id|owner|repo|profile)>' scripts .github Make
 "Template from…" notes, which name them too). Then `make release` builds ad-hoc and lists what's missing, which proves
 the pipeline before any credential is involved. Adjust the Test steps in both workflows to the app's packages.
 
+**Release notes come from the commits.** `make bump` adds the release's `CHANGELOG.md` section (`changelog.sh`): the
+Conventional Commits since the previous release (a stable one counts from the previous stable tag, so it includes its
+betas), as breaking changes (`feat!:`, `BREAKING CHANGE:`), features, fixes and performance; other types stay out. That
+section is the GitHub release's body (`release.yml`) and, written next to the zip as `<App>-X.Y.Z.md`, the update's
+notes in `appcast.xml`, which Sparkle's update window renders (`sparkle:format="markdown"`). So the project's commit
+subjects must be Conventional Commits that read well in a list. Backfill releases made before this with
+`scripts/changelog.sh section X.Y.Z <previous tag> <tag>`. To reword notes, bump without `PUSH`, edit, amend,
+`git tag -fa`.
+
 ## 5. GitHub setup (the user runs these)
 
 1. Restrict the `release` environment to `v*` tags:
@@ -152,8 +162,9 @@ the pipeline before any credential is involved. Adjust the Test steps in both wo
    ```
 
 GitHub personal accounts have no account-wide Actions secrets: each repository needs its own copy (the same values work
-for every app of the team). Every secret is optional: without them the workflow publishes an ad-hoc release without a
-feed and says so in the notes.
+for every app of the team). One app-specific password can serve every app; one per repository (named after it) lets the
+user revoke one without breaking the others. `APPLE_TEAM_ID` isn't secret (it's in every signature): `--body <TEAMID>`.
+Every secret is optional: without them the workflow publishes an ad-hoc release without a feed and says so in the notes.
 
 ## 6. First release and verification
 
@@ -187,7 +198,8 @@ make build-notarized       # Keychain identity + <profile>; stops without an ide
 make appcast               # Keychain Sparkle key, account <app>
 git push --atomic origin main vX.Y.Z
 gh release create vX.Y.Z build/release/<App>-X.Y.Z.dmg build/release/<App>-X.Y.Z.zip \
-  build/release/SHA256SUMS build/appcast/appcast.xml --title vX.Y.Z --generate-notes --verify-tag
+  build/release/SHA256SUMS build/appcast/appcast.xml --title vX.Y.Z --verify-tag \
+  --notes-file <(scripts/changelog.sh notes X.Y.Z)
 ```
 
 The tag push still starts the workflow, which tests and builds for minutes, then finds the release and leaves its files
@@ -212,6 +224,9 @@ feed) and the user deletes that release (`gh release delete vX.Y.Z` keeps the ta
   published the last release.
 - **A wrong key fails silently.** `generate_appcast` only warns and writes the item unsigned when the key doesn't match
   `SUPublicEDKey`; `appcast.sh` fails instead.
+- **`--generate-notes` is nearly empty** for a project that commits straight to main: GitHub lists merged pull requests,
+  so the body is just a compare link. The `CHANGELOG.md` section is the notes; `--generate-notes` is only the workflow's
+  fallback when a version has none.
 - **Shallow clones break updates.** Without `fetch-depth: 0` the build number is 1 and Sparkle sees an older build.
 - **The tag must equal `VERSION`**: tag with `make bump` only.
 - **CI keychain**: a temporary keychain with `set-key-partition-list` (or codesign waits on an invisible prompt), added
@@ -233,6 +248,7 @@ feed) and the user deletes that release (`gh release delete vX.Y.Z` keeps the ta
 - [ ] Sparkle embedded and signed nested-first; `codesign --verify --deep --strict` passes; Dev/Test have no feed.
 - [ ] `Resources/SparklePublicKey.txt` committed; the private key backed up outside the repo.
 - [ ] Templates copied, no placeholders left, ad-hoc `make release` lists what's missing.
+- [ ] Commits follow Conventional Commits; `CHANGELOG.md` starts with the first release (or is backfilled).
 - [ ] `release` environment limited to `v*` tags with six secrets, or the Mac route documented.
 - [ ] First release: four assets, `spctl` and `stapler` pass, signed appcast item.
 - [ ] Second release: an installed older build updates in place through Check for Updates….
