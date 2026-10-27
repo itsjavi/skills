@@ -11,6 +11,7 @@ load the same bundled skills.
 
 - [macos-app-development](skills/macos-app-development/SKILL.md)
 - [macos-app-icons](skills/macos-app-icons/SKILL.md)
+- [macos-app-releases](skills/macos-app-releases/SKILL.md)
 
 ## Maintenance
 

@@ -1,0 +1,9 @@
+interface:
+  display_name: "macOS App Releases"
+  short_description: "Sign, notarize and ship Mac apps with Sparkle updates"
+  default_prompt:
+    "Use $macos-app-releases to set up Developer ID signing, notarization, GitHub Releases and Sparkle updates for this
+    Mac app, with a tag-driven release workflow and a local fallback."
+
+policy:
+  allow_implicit_invocation: true

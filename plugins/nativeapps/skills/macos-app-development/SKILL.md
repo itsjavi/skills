@@ -264,7 +264,8 @@ snapshot taken at drag start and register one step at the end. After an external
 
 ## 7. Distribution and updates (Developer ID)
 
-**(planned)** — decided and researched, not yet run end to end:
+The full workflow (scripts, release CI, secrets, verification, pitfalls) is in the `macos-app-releases` skill; it's
+proven end to end with GitHub Releases hosting. Bucket hosting for private repos is still **(planned)**.
 
 - Sign with `codesign --force --options runtime --timestamp --sign "Developer ID Application: …"`, nested code first
   (helpers, Sparkle's XPC services and `Updater.app`, the framework, then the app). Add entitlements only when a feature

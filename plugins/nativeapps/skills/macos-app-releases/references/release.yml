@@ -1,0 +1,145 @@
+# Pushing a vX.Y.Z tag builds <App> for Apple silicon and publishes a GitHub release named after the tag with the DMG,
+# the zip, SHA256SUMS and Sparkle's appcast.xml, which installed copies read through
+# releases/latest/download/appcast.xml. A vX.Y.Z-<pre-release> tag (v2.1.0-beta.1) publishes a GitHub pre-release
+# with no feed, so installed copies never update to it. A release that already exists (published from a Mac) is left
+# alone. Every secret is optional; see docs/releasing.md.
+# Template from the macos-app-releases skill: replace <App> and the Test step's commands.
+name: Release
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+", "v[0-9]+.[0-9]+.[0-9]+-*"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # The image ci.yml tests on (Xcode 26, the macOS 26 SDK). Use a real image label: one that matches no runner
+    # leaves the job queued.
+    runs-on: macos-26
+    timeout-minutes: 60
+    # Protected environment: its secrets only reach tag builds that pass its rules (v* tags).
+    environment: release
+    env:
+      APP_NAME: "<App>"
+      TAG: ${{ github.ref_name }}
+      # Secrets can't appear in `if:` conditions, so the steps test these flags instead.
+      HAS_DEVELOPER_ID: ${{ secrets.DEVELOPER_ID_P12 != '' }}
+      HAS_NOTARY: ${{ secrets.APPLE_ID != '' && secrets.APPLE_APP_PASSWORD != '' && secrets.APPLE_TEAM_ID != '' }}
+      HAS_SPARKLE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY != '' }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # the build number is the commit count
+
+      - name: Version from the tag
+        run: |
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::$TAG isn't a vX.Y.Z or vX.Y.Z-<pre-release> tag"
+            exit 1
+          fi
+          version="${TAG#v}"
+          if [ "$version" != "$(tr -d '[:space:]' < VERSION)" ]; then
+            echo "::error::The tag says $version but ./VERSION says $(cat VERSION): bump VERSION in the tagged commit"
+            exit 1
+          fi
+          prerelease=false
+          if [[ "$version" == *-* ]]; then prerelease=true; fi
+          { echo "VERSION=$version"; echo "PRERELEASE=$prerelease"; echo "KEYCHAIN=$RUNNER_TEMP/release.keychain-db"; } >> "$GITHUB_ENV"
+
+      - name: Select Xcode
+        run: ./scripts/ci-select-xcode.sh
+
+      - name: Test
+        # As ci.yml runs them. Shared runners are slower than a Mac and show legacy scroll bars: keep timing bounds
+        # loose and UI expectations independent of system settings, or the tag run fails.
+        timeout-minutes: 30
+        run: swift test --disable-keychain
+
+      - name: Import the Developer ID certificate
+        if: env.HAS_DEVELOPER_ID == 'true'
+        env:
+          P12: ${{ secrets.DEVELOPER_ID_P12 }}
+          P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+        run: |
+          password="$(uuidgen)"
+          security create-keychain -p "$password" "$KEYCHAIN"
+          security set-keychain-settings -lut 3600 "$KEYCHAIN"
+          security unlock-keychain -p "$password" "$KEYCHAIN"
+          echo "$P12" | base64 --decode > "$RUNNER_TEMP/developer-id.p12"
+          security import "$RUNNER_TEMP/developer-id.p12" -k "$KEYCHAIN" -P "$P12_PASSWORD" -T /usr/bin/codesign
+          rm "$RUNNER_TEMP/developer-id.p12"
+          # Lets codesign use the key without a UI prompt, which would hang the job.
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$password" "$KEYCHAIN" >/dev/null
+          # Add it to the search list (codesign and find-identity look there), keeping the others.
+          read -ra others <<< "$(security list-keychains -d user | tr -d '"' | xargs)"
+          security list-keychains -d user -s "$KEYCHAIN" "${others[@]}"
+          identity="$(security find-identity -v -p codesigning "$KEYCHAIN" | sed -n 's/.*"\(Developer ID Application: .*\)"/\1/p' | head -1)"
+          if [ -z "$identity" ]; then
+            echo "::error::DEVELOPER_ID_P12 holds no Developer ID Application identity"
+            exit 1
+          fi
+          echo "DEVELOPER_ID=$identity" >> "$GITHUB_ENV"
+
+      - name: Store notarization credentials
+        if: env.HAS_DEVELOPER_ID == 'true' && env.HAS_NOTARY == 'true'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          xcrun notarytool store-credentials release-ci --keychain "$KEYCHAIN" \
+            --apple-id "$APPLE_ID" --password "$APPLE_APP_PASSWORD" --team-id "$APPLE_TEAM_ID"
+          { echo "NOTARY_PROFILE=release-ci"; echo "NOTARY_KEYCHAIN=$KEYCHAIN"; } >> "$GITHUB_ENV"
+
+      - name: Build
+        run: make release
+
+      # Starts from the newest stable release's feed (GitHub's latest release is never a pre-release)
+      # and adds this build, linked to this release's zip.
+      - name: Update the appcast
+        if: env.HAS_SPARKLE_KEY == 'true' && env.PRERELEASE == 'false'
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          key="$RUNNER_TEMP/sparkle.key"
+          printf '%s' "$SPARKLE_PRIVATE_KEY" > "$key"
+          SPARKLE_KEY_FILE="$key" make appcast
+          rm "$key"
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          files=("build/release/$APP_NAME-$VERSION.dmg" "build/release/$APP_NAME-$VERSION.zip" build/release/SHA256SUMS)
+          if [ -f build/appcast/appcast.xml ]; then files+=(build/appcast/appcast.xml); fi
+          notes="$RUNNER_TEMP/notes.md"
+          if [ -n "${NOTARY_PROFILE:-}" ]; then
+            echo "Signed with Developer ID, notarized and stapled." > "$notes"
+          else
+            echo "⚠ **Not notarized**: ad-hoc signed. On another Mac, the first launch needs System Settings ▸ Privacy & Security ▸ Open Anyway." > "$notes"
+          fi
+          if [ "$PRERELEASE" = true ]; then
+            echo "Pre-release: installed copies don't update to it." >> "$notes"
+          elif [ "$HAS_SPARKLE_KEY" != 'true' ]; then
+            echo "No appcast: SPARKLE_PRIVATE_KEY isn't set." >> "$notes"
+          fi
+          printf '\nCheck a download with `shasum -a 256 -c SHA256SUMS --ignore-missing`.\n' >> "$notes"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            # Published already (e.g. a notarized build from a Mac, docs/releasing.md): replacing its files would
+            # break the feed's signatures, and a build without secrets would replace notarized files with ad-hoc ones.
+            echo "::notice::$TAG is already released; leaving its files as they are"
+          else
+            flags=(--title "$TAG" --notes-file "$notes" --generate-notes --verify-tag)
+            if [ "$PRERELEASE" = true ]; then flags+=(--prerelease); fi
+            gh release create "$TAG" "${files[@]}" "${flags[@]}"
+          fi
+
+      - name: Remove the keychain
+        if: always() && env.HAS_DEVELOPER_ID == 'true'
+        run: security delete-keychain "$KEYCHAIN" || true

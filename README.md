@@ -85,6 +85,8 @@ Reusable plugins for Codex, Claude Desktop and Claude Code, with shared skills m
   macOS apps in Swift (SwiftUI + AppKit, Swift 6, macOS 26+).
 - [macos-app-icons](plugins/nativeapps/skills/macos-app-icons/SKILL.md): Design and build macOS app icons and in-app
   icon tiles procedurally, with no image generator.
+- [macos-app-releases](plugins/nativeapps/skills/macos-app-releases/SKILL.md): Ship native SwiftPM macOS apps outside
+  the Mac App Store, with Developer ID signing, notarization, GitHub Releases and Sparkle 2 updates.
 - [react-development](plugins/webcraft/skills/react-development/SKILL.md): Build, debug, refactor, and review React web
   apps, components, and hooks.
 - [react-router](plugins/webcraft/skills/react-router/SKILL.md): Build applications with React Router in Framework,
