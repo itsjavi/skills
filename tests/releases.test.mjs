@@ -15,20 +15,6 @@ const manifests = names.flatMap((name) =>
   ["codex", "claude"].map((platform) => `plugins/${name}/.${platform}-plugin/plugin.json`)
 )
 const versionFiles = manifests.map((path) => ({ path, field: "version" }))
-for (const name of names) {
-  for (const [relative, field] of [
-    ["package.json", "version"],
-    ["skills/setup-agent-workspace/release.json", "release"],
-  ]) {
-    const path = `plugins/${name}/${relative}`
-    try {
-      await readFile(join(source, path))
-      versionFiles.push({ path, field })
-    } catch (error) {
-      if (error.code !== "ENOENT") throw error
-    }
-  }
-}
 
 async function fixture(t) {
   const directory = await mkdtemp(join(tmpdir(), "skills release test "))

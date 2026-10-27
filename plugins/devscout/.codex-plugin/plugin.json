@@ -1,23 +1,23 @@
 {
   "name": "devscout",
   "version": "0.1.4",
-  "description": "Discover agent skills and library documentation, maintain Backlog.md plans and write changelogs for development workflows.",
+  "description": "Discover agent skills, maintain Backlog.md plans and write changelogs for development workflows.",
   "author": { "name": "Javi" },
   "homepage": "https://github.com/itsjavi/skills/tree/main/plugins/devscout",
   "repository": "https://github.com/itsjavi/skills",
   "license": "MIT",
   "skills": "./skills/",
-  "keywords": ["docs", "discovery", "planning", "backlog", "changelog"],
+  "keywords": ["discovery", "skills", "planning", "backlog", "changelog"],
   "interface": {
     "displayName": "DevScout",
     "shortDescription": "Find guidance and maintain development plans.",
-    "longDescription": "Discover agent skills and library documentation, maintain Backlog.md plans and write changelogs for development workflows.",
+    "longDescription": "Discover agent skills, maintain Backlog.md plans and write changelogs for development workflows.",
     "developerName": "Javi",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "brandColor": "#36C9EC",
     "defaultPrompt": [
-      "Find the current official documentation for this library.",
+      "Find an installable agent skill for this workflow.",
       "Update this project's Backlog.md tasks and decisions.",
       "Prepare a changelog from the changes in this branch."
     ],
