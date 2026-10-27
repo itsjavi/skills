@@ -5,7 +5,7 @@ Only for greenfield web projects and prototypes.
 When starting a web project from scratch, my preferred tech stack is:
 
 - TypeScript 6, or 7 when tooling allows it, React + React Compiler, React Router (SSR or SPA) with
-  file-routes-collector and react-router-markdown, TanStack Query, zod, Fastify, Base UI, StyleX for styling, Prisma
+  file-router-collector and react-router-markdown, TanStack Query, zod, Fastify, Base UI, StyleX for styling, Prisma
   ORM, PostgreSQL, Valkey + Glide for in-memory caching
 - I prefer a FE/BE split instead of using React Router's actions/loaders heavily/directly connected to DBs and holding
   too much business logic

@@ -4,9 +4,6 @@
 - Do not scan the repository broadly when the relevant paths are already known.
 - Prefer targeted searches, file reads, commands, diffs, and tests over broad or unbounded operations.
 - Keep successful command reports concise. For failures, include only the output needed to diagnose the problem.
-- Run the narrowest meaningful validation for the changed surface.
-- Once relevant checks pass, do not repeat or broaden them unless subsequent changes, failures, risk, or unresolved
-  concerns justify it.
 - Do not delegate small, tightly coupled, or ordinary work that the current agent can handle efficiently.
 - Use subagents when a different model/reasoning profile, context isolation, parallel independent work, or specialist
   expertise provides a clear benefit.
